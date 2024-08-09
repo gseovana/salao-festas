@@ -26,8 +26,8 @@ Pablo Goncalves Barbosa<br/>
 Vinicius Andrade Costa<br/> 
 
 ## Tecnologias utilizadas
-**Back-end:** Python<br/>
-**Front-end:** Flask (Framework Python)<br/>
+**Back-end:** Python e Flask<br/>
+**Front-end:** JavaScript e Boostrap<br/>
 **Banco de dados:** SQLite<br/>
 
 ## Backlog do produto
