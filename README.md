@@ -18,7 +18,7 @@ As funcionalidades do sistema incluem:
 - Consultar calendário de eventos
 
 ## Membros da equipe e papel
-Andre Luis Magalhaes Santos<br/> 
+Andre Luis Magalhaes Santos**(BD | Back-end)**<br/> 
 Geovana Silva de Oliveira **(Full-stack | BD)**<br/> 
 Jessica de Sousa Costa<br/> 
 Nicolas de Oliveira Gomes<br/> 
@@ -63,10 +63,23 @@ Vinicius Andrade Costa<br/>
 - Implementar lógica de CRUD de agendamentos de visita no backend
 - Integrar as telas de CRUD com a lógica do backend
 - Integrar com o banco de dados
-- 
+  
 #### História 3: Como usuário cliente, gostaria de ver o calendário de agendamento de visitas com as datas disponíveis.
+- Criar tela de calendário
+- Implementar lógica para indicar dias disponíveis no backend
+- Integrar a tela com a lógica do backend
+- Integrar com o banco de dados
+
 #### História 4: Como usuário administrador, gostaria de alterar e deletar qualquer agendamento de visita.
+- Criar tela de adiministrar eventos
+- Implementar lógica para alterar e deletar agendamentos de visita no backend
+- Integrar a tela com a lógica do backend
+- integrar com o banco de dados
 #### História 5: Como usuário administrador, gostaria de criar, ler, atualizar e deletar eventos.
+- Criar telas de CRUD de evento
+- Implementar lógicas de CRUD de evento no backend
+- Integrar as telas de CRUD com a lógica do backend
+- Integrar com o banco de dados 
 #### História 6: Como usuário administrador, gostaria de criar, ler, atualizar e deletar pagamentos.
 #### História 7: Como usuário administrador, gostaria de criar, ler, atualizar e deletar "kits mobília".
 #### História 8: Como usuário administrador, gostaria de criar, ler, atualizar e deletar parceiros.
