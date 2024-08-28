@@ -9,12 +9,29 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container">
+          <a class="navbar-brand" href="#">
+            <img src="./" alt="" width="30" height="24">
+          </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Agendar visita</a>
+            </li>
+          </ul>
+        </div>
+    </nav>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="imagens/salao-festas.jpg" class="d-block w-100">
+        <a class="btn btn-primary" href="{{ url_for('cliente.form_cliente') }}">Agende sua visita</a>
+    </div>/
 
     <div class="container">
-      <h1 class="text-center">Gestão de Clientes</h1>
 
-      <!-- Formulario add cliente -->
-      <div c-container="{{ url_for('cliente.form_cliente') }}"></div>
+      <h1 class="text-center">Gestão de Clientes</h1>
 
       <hr>
       <!-- Lista de clientes -->

@@ -1,0 +1,159 @@
+@import '../abstract/variables';
+@import '../components/inputs';
+
+.administrators {
+  height: 100vh;
+  background-color: #121212;
+
+  .forms {
+    width: 100%;
+    display: flex;
+    margin-top: 3rem;
+    justify-content: space-around;
+
+    form:nth-child(1) {
+
+      h1 {
+        font-family: "Press Start 2P";
+        font-size: 2rem;
+        color: #2BF6FA;
+        margin-bottom: 0.7rem;
+      }
+
+      label {
+        width: 100%;
+        font-family: "Poppins";
+        font-size: 1.3rem;
+        color: white;
+        margin-bottom: 1.4rem;
+        margin-top: 1.5rem;
+      }
+
+      input {
+        width: 100%;
+        font-family: "Poppins";
+        padding: 0.4rem 0.4rem 0.4rem 1.4rem;
+        margin-left: 0.6rem;
+      }
+
+      button {
+        margin-top: 4rem;
+        display: block;
+        width: 35%;
+        padding: 0.6rem 0.6rem 0.6rem 0.6rem;
+        font-family: "Poppins";
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        background: linear-gradient(to right, #2BF6FA, #AB61F5, #580475);
+        border: none;
+        border-radius: 3%;
+        transition: 0.5s;
+      }
+    }
+
+    form:nth-child(2) {
+
+      h1 {
+        font-family: "Press Start 2P";
+        font-size: 2rem;
+        color: #2BF6FA;
+        margin-bottom: 0.7rem;
+      }
+
+      label {
+        width: 100%;
+        font-family: "Poppins";
+        font-size: 1.3rem;
+        color: white;
+        margin-bottom: 1.4rem;
+        margin-top: 1.5rem;
+      }
+
+      input {
+        width: 100%;
+        font-family: "Poppins";
+        padding: 0.4rem 0.4rem 0.4rem 1.4rem;
+        margin-left: 0.6rem;
+      }
+
+      button {
+        margin-top: 4rem;
+        display: block;
+        width: 35%;
+        padding: 0.6rem 0.6rem 0.6rem 0.6rem;
+        font-family: "Poppins";
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        background: linear-gradient(to right, #2BF6FA, #AB61F5, #580475);
+        border: none;
+        border-radius: 3%;
+        transition: 0.5s;
+      }
+    }
+  }
+
+  .deletion {
+    padding-bottom: 3rem;
+
+    h1 {
+      font-family: $text-default;
+      font-size: 1.5rem;
+
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 3rem;
+      padding-bottom: 3rem;
+
+      font-family: $text-default;
+      color: white;
+
+      thead {
+      
+        tr {
+          margin-bottom: 1rem;
+        }
+      }
+
+      tbody {
+
+        tr {
+          margin-bottom: 1rem;
+          height: 5rem;
+          background-color: #1E1E1E;
+
+          td:nth-child(1) {
+            width: 10%;
+            padding-left: 2.5rem;
+            padding-top: -1.5rem;
+          }
+
+          td:nth-child(2) {
+            width: 10%;
+            padding: .5rem .5rem .5rem .5rem;
+
+            img {
+              height: 55px;
+              margin-top: 0.3rem;
+              margin-bottom: -1.5rem;
+            }
+          }
+
+          td:nth-child(3) {
+            width: 30%;
+            padding: .5rem .5rem .5rem .5rem;
+          }
+
+          td:nth-child(4) {
+            width: 50%;
+            padding: .5rem .5rem .5rem .5rem;
+          }
+        }
+      }
+    }
+  }
+}

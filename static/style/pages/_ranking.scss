@@ -1,0 +1,65 @@
+@import '../abstract/variables';
+
+.ranking {
+    height: 100%;
+    padding: 2rem;
+
+    h1 {
+        font-family: $text-default;
+        font-size: 1.5rem;
+        
+        color: white;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 3rem;
+
+        font-family: $text-default;
+        color: white;
+
+        thead {
+
+            th {
+                padding-left: 1rem;
+                padding-bottom: 1.4rem;
+            }
+        }
+
+
+        tbody {     
+
+            tr {
+                height: 5rem;
+                background-color: #1E1E1E;
+                
+                td:nth-child(1) {
+                    width: 10%;
+                    padding-left: 2.5rem;
+                    padding-top: -1.5rem;
+                }
+
+                td:nth-child(2) {
+                    width: 10%;
+                    padding: .5rem .5rem .5rem .5rem;
+
+                    img{
+                        height: 55px;
+                        margin-top: 0.3rem;
+                        margin-bottom: -1.5rem;
+                    }
+                }
+
+                td:nth-child(3) {
+                    width: 30%;
+                    padding: .5rem .5rem .5rem .5rem;
+                }
+
+                td:nth-child(4) {
+                    width: 50%;
+                    padding: .5rem .5rem .5rem .5rem;
+                }
+            }
+        }
+    }
+}

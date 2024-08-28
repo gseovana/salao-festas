@@ -1,0 +1,74 @@
+@import '../../abstract/variables';
+@import '../../components/inputs';
+@import '../../components/btns';
+
+.login {
+    background-color: $bg-gamerank;
+
+    &__form {
+        display: flex;
+        align-items: center;
+
+        height: 100vh; /* ocupa a página inteira*/
+
+        fieldset {
+            width: 50%;
+            margin-bottom: 4rem;
+            padding-left: 6rem;
+
+            h1 {                
+                font-family: $title-gamerank;
+                font-size: 2.8rem;
+
+                color: $cyan-gamerank;
+
+                margin-bottom: .7rem;
+            }
+            h1::after {
+                content: '|';
+                margin-left: 5px;
+                opacity: 1;
+                animation: pisca .7s infinite;
+            }
+
+            @keyframes pisca {
+                0%, 100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0;
+                }
+            }
+
+            label {
+                width: 100%;
+
+                font-family: $text-default;
+                font-size: 1.3rem;
+
+                color: white;
+
+                margin-bottom: 1.4rem;
+                margin-top: 1.5rem;
+            }
+
+            input {
+                @include input-default();
+            }
+
+            button {
+            
+                margin-top: 4rem;
+                @include btn-gradient();
+            }
+
+            a {
+                font-family: $title-gamerank;
+                color: $cyan-gamerank;
+
+                margin-left: 1.5rem;
+            }
+        }
+    }
+}
