@@ -12,7 +12,7 @@ app.secret_key = secrets.token_hex(16)
 
 # Cria um cursor
 def get_connection():
-    return sqlite3.connect('salao_festas.db')
+    return sqlite3.connect('instance/salao_festas.db')
     
 
 '''def get_users_names():
@@ -216,17 +216,35 @@ def login():
             flash('CPF ou senha não fornecidos. Tente novamente!', 'warning')
             return redirect(url_for('login'))
 
+        password_file_path = 'instance/passwords.txt'
+
+        if not os.path.exists(password_file_path):
+            flash('Cliente não existe ou credenciais incorretas. Tente novamente!')
+            return redirect(url_for('login'))
+
+        stored_password = None
+        with open(password_file_path, 'r') as file:
+            for line in file:
+                stored_cpf, stored_hashed_password = line.strip().split(',')
+                if stored_cpf == cpf:
+                    stored_password = stored_hashed_password
+                    break
+
+        if stored_password is None or not bcrypt.checkpw(senha.encode('utf-8'), stored_password.encode('utf-8')):
+            flash('Cliente não existe ou credenciais incorretas. Tente novamente!')
+            return redirect(url_for('login'))
+
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute('SELECT cpf FROM cliente WHERE cpf = ?', (cpf,))
+            cursor.execute('SELECT * FROM cliente WHERE cpf = ?', (cpf,))
             cliente = cursor.fetchone()
 
             if cliente is None:
-                flash('Cliente não existe ou credenciais incorretas. Tente novamente!')
+                flash('Usuário não existe ou credenciais incorretas. Tente novamente!')
                 return redirect(url_for('login'))
             else:
                 cpf = cliente
-                session['cpf'] = cpf
+                session['cpf'] = cliente
                 flash('Login bem sucedido!', 'success')
                 if cpf == '000.000.000-00':
                     return redirect(url_for('adminpage'))  # Redireciona para a página do administrador se o nome do usuário for 'admin'
@@ -234,7 +252,6 @@ def login():
                     return redirect(url_for('home'))
 
     return render_template('html/register/login.html')
-
 
 @app.context_processor
 def inject_active():
@@ -283,16 +300,16 @@ def cadastrar():
         #Inserindo no bd
         with get_connection() as conn:
             try:
-                cursor = conn.cursor()  
-                cursor.execute('INSERT INTO cliente (cpf, nome, celular, endereco) VALUES (?, ?, ?, ?)', (cpf, nome, celular, endereco))
-                conn.commit() 
+                    cursor = conn.cursor()  
+                    cursor.execute('INSERT INTO cliente (cpf, nome, celular, endereco) VALUES (?, ?, ?, ?)', (cpf, nome, celular, endereco))
+                    conn.commit() 
 
-                with open('passwords.txt', 'a') as f:
-                    f.write(f"{cpf},{hashed_senha.decode('utf-8')}\n")
+                    with open('instance/passwords.txt', 'a') as f:
+                        f.write(f"{cpf},{hashed_senha.decode('utf-8')}\n")
 
-                flash('Cliente cadastrado com sucesso!', 'success')
+                    flash('Cliente cadastrado com sucesso!', 'success')
             except:
-                flash('Erro ao cadastrar cliente. Tente novamente!', 'error')
+                    flash('Erro ao cadastrar cliente. Tente novamente!', 'error')
 
     return render_template('html/pages/cliente/cadastrar.html')
 
