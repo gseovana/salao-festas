@@ -1,0 +1,77 @@
+{%block content%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+</head>
+<body class="register">
+    
+        {%for message in get_flashed_messages()%}
+            <div class="alert alert-warning" role="alert">
+                {{ message }}
+            </div>
+<!--         {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if 'warning' in message %}
+                        <div class="alert alert-warning" role="alert">
+                            {{ message }}
+                        </div>
+                    {% elif 'error' in message %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% elif 'success' in message %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {%endif%}
+        {%endwith%} -->
+        {%endfor%}
+    
+
+    <form class="register__form" method="GET" action="{{ url_for('cadastrar') }}">
+        <fieldset>
+            <h1 g-id="title">Perfil</h1>
+
+            <div class="mb-3 row">
+                <label for="nome" class="col-sm-2">Nome:</label>
+                <input type="text" class="form-control" placeholder="Nome" name="nome" value="{{ cliente[1] }}">
+            </div>
+            <div class="mb-3 row">
+                <label for="cpf" class="col-sm-2">CPF:</label>
+                <input type="text" class="form-control" placeholder="cpf" name="cpf" value="{{ cliente[0] }}">
+            </div>
+            <div class="mb-3 row">
+                <label for="celular" class="col-sm-2">Celular:</label>
+                <input type="text" class="form-control" placeholder="celular" name="celular" value="{{ cliente[2] }}">
+            </div>
+            <div class="mb-3 row">
+                <label for="endereco" class="col-sm-2">Endereço:</label>
+                <input type="text" class="form-control" placeholder="endereco" name="endereco" value="{{ cliente[3] }}">
+            </div>
+
+            <div class="d-flex align-items-end">
+                <button type="submit">
+                    Atualizar
+                </button>
+                <a g-id="redirection" href="javascript:history.back()">Voltar</a>
+            </div>
+        </fieldset>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
+{%endblock content%}

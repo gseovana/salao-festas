@@ -203,7 +203,9 @@ def create_game(nome_jogo, lancamento_jogo, genero_jogo, descricao_curta, descri
 @app.route('/home')
 @app.route('/')
 def home():
-    return render_template('html/pages/homepage.html')
+    cliente_logado = 'nome_cliente' in session
+    nome_cliente = session.get('nome_cliente', '')
+    return render_template('html/pages/homepage.html', cliente_logado=cliente_logado, nome_cliente=nome_cliente)
 
 #LOGIN
 @app.route('/login', methods=['GET', 'POST'])
@@ -243,15 +245,23 @@ def login():
                 flash('Usuário não existe ou credenciais incorretas. Tente novamente!')
                 return redirect(url_for('login'))
             else:
-                cpf = cliente
-                session['cpf'] = cliente
+                session['cpf'] = cliente[0]
+                session['nome_cliente'] = cliente[1]
                 flash('Login bem sucedido!', 'success')
                 if cpf == '000.000.000-00':
+                    #session['nome_cliente'] = request.form['nome_cliente']
                     return redirect(url_for('adminpage'))  # Redireciona para a página do administrador se o nome do usuário for 'admin'
                 else:
-                    return redirect(url_for('home'))
-
+                    #session['nome_cliente'] = request.form['nome_cliente']
+                    return render_template('html/pages/cliente/dashboard_cliente.html')
     return render_template('html/register/login.html')
+
+#LOGOUT
+@app.route('/logout')
+def logout():
+    session.pop('cpf', None)
+    session.pop('nome_cliente', None)
+    return redirect(url_for('home'))
 
 @app.context_processor
 def inject_active():
@@ -312,6 +322,25 @@ def cadastrar():
                     flash('Erro ao cadastrar cliente. Tente novamente!', 'error')
 
     return render_template('html/pages/cliente/cadastrar.html')
+
+#PERFIL CLIENTE
+@app.route('/cliente/perfil', methods=['GET', 'POST'])
+def perfil():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT cpf, nome, celular, endereco FROM cliente WHERE cpf = ?', (cpf,))
+        cliente = cursor.fetchone()
+
+    if not cliente:
+        flash('Cliente não encontrado.', 'danger')
+        return redirect(url_for('home'))
+
+    return render_template('html/pages/cliente/perfil.html', cliente=cliente)
 
 
 #@app.route('/categories')
