@@ -53,19 +53,21 @@ $(document).ready(function() {
     });
 
     $(".btn-danger").click(function() {
-        let gameID = $(this).data("id");
-
+        let data = $(this).data("data");
+        let horario = $(this).data("horario");
+    
         $.ajax({
-            url: '/delete_game',
-            type: 'delete',
+            url: '/cancelar_agendamento',
+            type: 'post',
             data: {
-                'game_id': gameID
+                'data': data,
+                'horario': horario
             },
             success: function(response) {
-                alert("Jogo deletado com sucesso!");
+                alert("Agendamento deletado com sucesso!");
             },
             error: function(response) {
-                alert("Houve um erro ao deletar jogo.");
+                alert("Houve um erro ao deletar o agendamento.");
             }
         });
     });

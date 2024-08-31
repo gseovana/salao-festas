@@ -392,6 +392,8 @@ def agendamentos_cliente():
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM visitacao WHERE cliente_cpf = ?', (cpf,))
         agendamentos = cursor.fetchall()
+        for agendamento in agendamentos:
+            print(agendamento)  # Debug statement
 
     return render_template('html/pages/cliente/agendamentos-cliente.html', agendamentos=agendamentos)
 
@@ -414,7 +416,7 @@ def novo_agendamento():
 
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO visitacao (data, hora, cliente_cpf) VALUES (?, ?, ?)', (data, hora, cpf))
+            cursor.execute('INSERT INTO visitacao (data, horario, cliente_cpf) VALUES (?, ?, ?)', (data, hora, cpf))
             conn.commit()
             flash('Agendamento criado com sucesso!', 'success')
             return redirect(url_for('agendamentos_cliente'))
@@ -422,18 +424,20 @@ def novo_agendamento():
     return render_template('html/pages/cliente/formulario-agendamento.html')
 
 #DELETAR AGENDAMENTO
-@app.route('/cliente/agendamentos/deletar', methods=['POST'])
-def deletar_agendamento():
+@app.route('/cliente/agendamentos/cancelar', methods=['POST'])
+def cancelar_agendamento():
     cpf = session.get('cpf')
     if not cpf:
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('login'))
 
-    id_agendamento = request.form.get('id_agendamento')
+    data_agendamento = request.form.get('data')
+    hora_agendamento = request.form.get('hora')
+
 
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('DELETE FROM visitacao WHERE id = ? AND cliente_cpf = ?', (id_agendamento, cpf))
+        cursor.execute('DELETE FROM visitacao WHERE data=? AND horario=?', (data_agendamento, hora_agendamento))
         conn.commit()
 
     flash('Agendamento deletado com sucesso!', 'success')
