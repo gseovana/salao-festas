@@ -32,10 +32,10 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        {% if cliente_logado %}
+                        {% if session.cpf %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ nome_cliente }}
+                                    {{ session.nome_cliente }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
@@ -44,9 +44,6 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                                 </ul>
-                            </li>
-                            <li>
-                                <a class="{{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Tela inicial</a>
                             </li>
                         {% else %}
                             <li>

@@ -221,7 +221,7 @@ def login():
         password_file_path = 'instance/passwords.txt'
 
         if not os.path.exists(password_file_path):
-            flash('Cliente não existe ou credenciais incorretas. Tente novamente!')
+            flash('Erro ao fazer login. Tente novamente!')
             return redirect(url_for('login'))
 
         stored_password = None
@@ -250,10 +250,10 @@ def login():
                 flash('Login bem sucedido!', 'success')
                 if cpf == '000.000.000-00':
                     #session['nome_cliente'] = request.form['nome_cliente']
-                    return redirect(url_for('adminpage'))  # Redireciona para a página do administrador se o nome do usuário for 'admin'
+                    return redirect(url_for('adminpage'))  
                 else:
                     #session['nome_cliente'] = request.form['nome_cliente']
-                    return render_template('html/pages/cliente/dashboard_cliente.html')
+                    return redirect(url_for('dashboard_cliente'))  
     return render_template('html/register/login.html')
 
 #LOGOUT
@@ -342,6 +342,43 @@ def perfil():
 
     return render_template('html/pages/cliente/perfil.html', cliente=cliente)
 
+@app.route('/cliente/dashboard_cliente')
+def dashboard_cliente():
+    return render_template('html/pages/cliente/dashboard_cliente.html')
+
+#ATUALIZAR CLIENTE
+@app.route('/cliente/atualizar', methods=['GET', 'POST'])
+def atualizar():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        celular = request.form['celular']
+        endereco = request.form['endereco']
+
+        if nome == "":
+            flash('Preencha o campo Nome!', 'warning')
+        elif celular == "":
+            flash('Preencha o campo Celular!', 'warning')
+        elif endereco == "":
+            flash('Preencha o campo Endereço!', 'warning')
+
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('UPDATE cliente SET nome = ?, celular = ?, endereco = ? WHERE cpf = ?', (nome, celular, endereco, cpf))
+            conn.commit()
+            flash('Cliente atualizado com sucesso!', 'success')
+            return redirect(url_for('perfil'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT cpf, nome, celular, endereco FROM cliente WHERE cpf = ?', (cpf,))
+        cliente = cursor.fetchone()
+
+    return render_template('html/pages/cliente/atualizar.html', cliente=cliente)
 
 #@app.route('/categories')
 #def categories():
