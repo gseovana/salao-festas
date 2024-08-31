@@ -340,11 +340,11 @@ def perfil():
         flash('Cliente não encontrado.', 'danger')
         return redirect(url_for('home'))
 
-    return render_template('html/pages/cliente/perfil.html', cliente=cliente)
+    return render_template('html/pages/cliente/perfil-cliente.html', cliente=cliente)
 
-@app.route('/cliente/dashboard_cliente')
+@app.route('/cliente/dashboard-cliente')
 def dashboard_cliente():
-    return render_template('html/pages/cliente/dashboard_cliente.html')
+    return render_template('html/pages/cliente/dashboard-cliente.html')
 
 #ATUALIZAR CLIENTE
 @app.route('/cliente/atualizar', methods=['GET', 'POST'])
@@ -379,6 +379,65 @@ def atualizar():
         cliente = cursor.fetchone()
 
     return render_template('html/pages/cliente/atualizar.html', cliente=cliente)
+
+#LISTAR TODOS AGENDAMENTOS DE VISITAÇÃO DO CLIENTE
+@app.route('/cliente/agendamentos')
+def agendamentos_cliente():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM visitacao WHERE cliente_cpf = ?', (cpf,))
+        agendamentos = cursor.fetchall()
+
+    return render_template('html/pages/cliente/agendamentos-cliente.html', agendamentos=agendamentos)
+
+#CRIAR NOVO AGENDAMENTO
+@app.route('/cliente/agendamentos/novo', methods=['GET', 'POST'])
+def novo_agendamento():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        data = request.form['data']
+        hora = request.form['hora']
+
+        if data == "":
+            flash('Preencha o campo Data!', 'warning')
+        elif hora == "":
+            flash('Preencha o campo Hora!', 'warning')
+
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO visitacao (data, hora, cliente_cpf) VALUES (?, ?, ?)', (data, hora, cpf))
+            conn.commit()
+            flash('Agendamento criado com sucesso!', 'success')
+            return redirect(url_for('agendamentos_cliente'))
+
+    return render_template('html/pages/cliente/formulario-agendamento.html')
+
+#DELETAR AGENDAMENTO
+@app.route('/cliente/agendamentos/deletar', methods=['POST'])
+def deletar_agendamento():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    id_agendamento = request.form.get('id_agendamento')
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM visitacao WHERE id = ? AND cliente_cpf = ?', (id_agendamento, cpf))
+        conn.commit()
+
+    flash('Agendamento deletado com sucesso!', 'success')
+    return redirect(url_for('agendamentos_cliente'))
 
 #@app.route('/categories')
 #def categories():
@@ -440,27 +499,6 @@ def atualizar():
 
     #games = get_games_dict()
     #return render_template('html/pages/adminpage.html', games=games)
-
-""" @app.route('/submit_data', methods=['POST'])
-def submit_data():
-    nome = request.form['nome']
-    ano_lancamento = request.form['ano_lancamento']
-    genero = request.form['genero']
-    descricao_curta = request.form['descricao_curta']
-    descricao_completa = request.form['descricao_completa']
-    url_imagem = request.form['url_imagem']
-
-    with get_connection() as conn:
-        try:
-            cursor = conn.cursor()
-            cursor.execute('INSERT INTO jogos (nome, ano_lancamento, genero, descricao_curta, descricao_completa, url_imagem) VALUES (?, ?, ?, ?, ?, ?)', (nome, ano_lancamento, genero, descricao_curta, descricao_completa, url_imagem))
-            conn.commit()
-            flash('Dados inseridos com sucesso!', 'success')
-        except:
-            flash('Erro ao inserir os dados. Tente novamente!', 'error')
-
-    return redirect(url_for('adminpage'))
-# inserção dos jogos está aqui """
 
 #@app.route('/add_to_wishlist', methods=['POST'])
 #def add_to_wishlist():

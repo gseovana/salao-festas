@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Agendamentos</h1>
+<div class="container">
+    <form action="{{ url_for('novo_agendamento') }}" method="GET">
+      <button type="submit" class="btn btn-primary">Agendar visita</button>
+    </form>
+    <table class="table">
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Hora</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for agendamento in agendamentos %}
+              <td>{{ agendamento.data }}</td>
+              <td>{{ agendamento.horario }}</td>
+              <td>
+                <form action="{{ url_for('cancelar_agendamento', id=agendamento.id) }}" method="POST">
+                  <button type="submit" class="btn btn-danger">Cancelar</button>
+                </form>
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+{% endblock %}

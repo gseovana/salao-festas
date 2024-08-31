@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}  
+
+<div class="container mt-5">
+    <form action="{{ url_for('novo_agendamento') }}" method="POST">
+        <div class="form-group">
+            <label for="data">Data</label>
+            <input type="date" name="data" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="hora">Hora</label>
+            <input type="time" name="hora" class="form-control" id="hora">
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+{% endblock %}
+   
