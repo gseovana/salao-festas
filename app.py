@@ -407,16 +407,16 @@ def novo_agendamento():
 
     if request.method == 'POST':
         data = request.form['data']
-        hora = request.form['hora']
+        horario = request.form['horario']
 
         if data == "":
             flash('Preencha o campo Data!', 'warning')
-        elif hora == "":
+        elif horario == "":
             flash('Preencha o campo Hora!', 'warning')
 
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO visitacao (data, horario, cliente_cpf) VALUES (?, ?, ?)', (data, hora, cpf))
+            cursor.execute('INSERT INTO visitacao (data, horario, cliente_cpf) VALUES (?, ?, ?)', (data, horario, cpf))
             conn.commit()
             flash('Agendamento criado com sucesso!', 'success')
             return redirect(url_for('agendamentos_cliente'))
@@ -432,17 +432,29 @@ def cancelar_agendamento():
         return redirect(url_for('login'))
 
     data_agendamento = request.form.get('data')
-    hora_agendamento = request.form.get('hora')
+    hora_agendamento = request.form.get('horario')
 
+    print(f"Received data: {data_agendamento}, hora: {hora_agendamento}")  # Debug statement
 
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('DELETE FROM visitacao WHERE data=? AND horario=?', (data_agendamento, hora_agendamento))
-        conn.commit()
+    if not data_agendamento or not hora_agendamento:
+        flash('Dados inválidos para cancelar o agendamento.', 'danger')
+        return redirect(url_for('agendamentos_cliente'))
 
-    flash('Agendamento deletado com sucesso!', 'success')
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM visitacao WHERE data=? AND horario=?', (data_agendamento, hora_agendamento))
+            conn.commit()
+
+            if cursor.rowcount == 0:
+                flash('Nenhum agendamento encontrado para deletar.', 'warning')
+            else:
+                flash('Agendamento deletado com sucesso!', 'success')
+    except Exception as e:
+        print(f"Error deleting agendamento: {e}")  # Debug statement
+        flash('Houve um erro ao deletar o agendamento.', 'danger')
+
     return redirect(url_for('agendamentos_cliente'))
-
 #@app.route('/categories')
 #def categories():
 #    games = get_games()

@@ -52,23 +52,27 @@ $(document).ready(function() {
         });
     });
 
-    $(".btn-danger").click(function() {
-        let data = $(this).data("data");
-        let horario = $(this).data("horario");
+    $(document).ready(function() {
+        $(".btn-danger").click(function() {
+            let data = $(this).data("data");
+            let horario = $(this).data("hora");
     
-        $.ajax({
-            url: '/cancelar_agendamento',
-            type: 'post',
-            data: {
-                'data': data,
-                'horario': horario
-            },
-            success: function(response) {
-                alert("Agendamento deletado com sucesso!");
-            },
-            error: function(response) {
-                alert("Houve um erro ao deletar o agendamento.");
-            }
+            $.ajax({
+                url: '/cliente/agendamentos/cancelar',
+                type: 'post',
+                data: {
+                    'data': data,
+                    'horario': horario
+                },
+                success: function(response) {
+                    alert("Agendamento deletado com sucesso!");
+                    location.reload(); // Reload the page to reflect changes
+                },
+                error: function(response) {
+                    alert("Houve um erro ao deletar o agendamento.");
+                    console.log(response); // Log the error response for debugging
+                }
+            });
         });
     });
 

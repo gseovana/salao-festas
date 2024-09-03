@@ -19,9 +19,10 @@
               <td>{{ agendamento[0] }}</td>
               <td>{{ agendamento[1] }}</td>
               <td>
-                <form action="{{ url_for('cancelar_agendamento') }}" method="POST">
+                <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()">
                   <input type="hidden" name="data" value="{{ agendamento[0] }}">
                   <input type="hidden" name="horario" value="{{ agendamento[1] }}">
+                  <button type="submit" class="btn btn-light" >Cancelar</button>
                 </form>
               </td>
           </tr>
@@ -29,4 +30,9 @@
         </tbody>
       </table>
 </div>
+<script>
+  function confirmCancel() {
+      return confirm("Você tem certeza que deseja cancelar este agendamento?");
+  }
+</script>
 {% endblock %}
