@@ -380,6 +380,8 @@ def atualizar():
 
     return render_template('html/pages/cliente/atualizar.html', cliente=cliente)
 
+############################ AGENDAMENTOS CLIENTE ################################
+
 #LISTAR TODOS AGENDAMENTOS DE VISITAÇÃO DO CLIENTE
 @app.route('/cliente/agendamentos')
 def agendamentos_cliente():
@@ -455,6 +457,12 @@ def cancelar_agendamento():
         flash('Houve um erro ao deletar o agendamento.', 'danger')
 
     return redirect(url_for('agendamentos_cliente'))
+
+########################## ROTAS EVENTO ###################################
+@app.route('/cliente/eventos')
+def novo_evento():
+    return render_template('html/pages/cliente/eventos-cliente.html')
+
 #@app.route('/categories')
 #def categories():
 #    games = get_games()
