@@ -1,39 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Eventos</h1>
+<h1>Meus eventos</h1>
 <div class="container">
-    <form action="{{ url_for('novo_evento') }}" method="GET">
-      <button type="submit" class="btn btn-primary">Agendar visita</button>
-    </form>
     <table class="table">
         <thead>
           <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Tipo</th>
             <th scope="col">Data</th>
-            <th scope="col">Hora</th>
-            <th>Ações</th>
+            <th scope="col">Horário</th>
           </tr>
         </thead>
         <tbody>
-          {% for agendamento in agendamentos %}
+          {% for evento in eventos %}
           <tr>
-              <td>{{ agendamento[0] }}</td>
-              <td>{{ agendamento[1] }}</td>
-              <td>
-                <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()">
-                  <input type="hidden" name="data" value="{{ agendamento[0] }}">
-                  <input type="hidden" name="horario" value="{{ agendamento[1] }}">
-                  <button type="submit" class="btn btn-light" >Cancelar</button>
-                </form>
-              </td>
+              <td>{{ evento[0] }}</td>
+              <td>{{ evento[1] }}</td>
+              <td>{{ evento[2] }}</td>
+              <td>{{ evento[3] }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 </div>
-<script>
-  function confirmCancel() {
-      return confirm("Você tem certeza que deseja cancelar este agendamento?");
-  }
-</script>
 {% endblock %}

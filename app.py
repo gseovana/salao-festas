@@ -394,8 +394,6 @@ def agendamentos_cliente():
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM visitacao WHERE cliente_cpf = ?', (cpf,))
         agendamentos = cursor.fetchall()
-        for agendamento in agendamentos:
-            print(agendamento)  # Debug statement
 
     return render_template('html/pages/cliente/agendamentos-cliente.html', agendamentos=agendamentos)
 
@@ -459,9 +457,23 @@ def cancelar_agendamento():
     return redirect(url_for('agendamentos_cliente'))
 
 ########################## ROTAS EVENTO ###################################
-@app.route('/cliente/eventos')
-def novo_evento():
-    return render_template('html/pages/cliente/eventos-cliente.html')
+
+@app.route('/cliente/eventos', methods=['GET'])
+def eventos_cliente():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM evento WHERE cliente_cpf = ?', (cpf,))
+        eventos = cursor.fetchall()
+
+    return render_template('html/pages/cliente/eventos-cliente.html', eventos=eventos)
+        
+
+    
 
 #@app.route('/categories')
 #def categories():
