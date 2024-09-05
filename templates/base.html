@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <title>Lutilê</title>
+    <title>Salão de festas Lutilê</title>
 </head>
 <body class="home">
     <header>
@@ -33,11 +33,44 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         {% if session.cpf %}
+                            {% if session.cpf == '000.000.000-00' %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ session.nome_cliente }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ url_for('dashboard_admin') }}">Tela inicial</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('agendamentos_admin') }}">Agendamentos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('eventos_admin') }}">Eventos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('clientes_admin') }}">Clientes</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('pagamentos_admin') }}">Pagamentos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ session.nome_cliente }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ url_for('dashboard_cliente') }}">Tela inicial</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('agendamentos_cliente') }}">Agendamentos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('eventos_cliente') }}">Eventos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ session.nome_cliente }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="{{ url_for('dashboard_cliente') }}">Tela inicial</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('agendamentos_cliente') }}">Agendamentos</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('eventos_cliente') }}">Eventos</a></li>

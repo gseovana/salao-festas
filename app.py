@@ -250,7 +250,7 @@ def login():
                 flash('Login bem sucedido!', 'success')
                 if cpf == '000.000.000-00':
                     #session['nome_cliente'] = request.form['nome_cliente']
-                    return redirect(url_for('adminpage'))  
+                    return redirect(url_for('dashboard_admin'))  
                 else:
                     #session['nome_cliente'] = request.form['nome_cliente']
                     return redirect(url_for('dashboard_cliente'))  
@@ -318,13 +318,15 @@ def cadastrar():
                         f.write(f"{cpf},{hashed_senha.decode('utf-8')}\n")
 
                     flash('Cliente cadastrado com sucesso!', 'success')
+                    return redirect(url_for('login'))
             except:
                     flash('Erro ao cadastrar cliente. Tente novamente!', 'error')
 
-    return render_template('html/pages/cliente/cadastrar.html')
+    return render_template('html/pages/cliente/formulario-cliente.html')
 
 #PERFIL CLIENTE
 @app.route('/cliente/perfil', methods=['GET', 'POST'])
+@app.route('/admin/perfil', methods=['GET'])
 def perfil():
     cpf = session.get('cpf')
     if not cpf:
@@ -340,7 +342,7 @@ def perfil():
         flash('Cliente não encontrado.', 'danger')
         return redirect(url_for('home'))
 
-    return render_template('html/pages/cliente/perfil-cliente.html', cliente=cliente)
+    return render_template('html/pages/cliente/perfil.html', cliente=cliente)
 
 @app.route('/cliente/dashboard-cliente')
 def dashboard_cliente():
@@ -472,8 +474,15 @@ def eventos_cliente():
 
     return render_template('html/pages/cliente/eventos-cliente.html', eventos=eventos)
         
-
+################################### ROTAS ADMIN ########################################
+@app.route('/dashboard-admin', methods=['GET', 'POST'])
+def dashboard_admin():
+    return render_template('html/pages/admin/dashboard-admin.html')
     
+@app.route('/admin/clientes', methods=['GET'])
+def clientes_admin():
+    clientes = get_clientes()
+    return render_template('html/pages/admin/clientes-admin.html', clientes=clientes)
 
 #@app.route('/categories')
 #def categories():
