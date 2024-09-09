@@ -18,53 +18,26 @@
     <header>
         
         <nav class="navbar navbar-expand-md">
-            <div class="container-fluid">
-                <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="logo">
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        
-                </div>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        {% if session.cpf %}
-                            {% if session.cpf == '000.000.000-00' %}
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ session.nome_cliente }}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="{{ url_for('dashboard_admin') }}">Tela inicial</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('agendamentos_admin') }}">Agendamentos</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('eventos_admin') }}">Eventos</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('clientes_admin') }}">Clientes</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('pagamentos_admin') }}">Pagamentos</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                                    </ul>
-                                </li>
-                            {% else %}
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ session.nome_cliente }}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="{{ url_for('dashboard_cliente') }}">Tela inicial</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('agendamentos_cliente') }}">Agendamentos</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('eventos_cliente') }}">Eventos</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                                    </ul>
-                                </li>
-                            {% endif %}
-
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if session.cpf %}
+                        {% if session.cpf == '000.000.000-00' %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ session.nome_cliente }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="{{ url_for('dashboard_admin') }}">Tela inicial</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('agendamentos_admin') }}">Agendamentos</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('eventos_admin') }}">Eventos</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('clientes_admin') }}">Clientes</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('pagamentos_admin') }}">Pagamentos</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ session.nome_cliente }}
@@ -78,16 +51,16 @@
                                     <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                                 </ul>
                             </li>
-                        {% else %}
-                            <li>
-                                <a class="{{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Tela inicial</a>
-                            </li>
-                            <li>
-                                <a class="{{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Agende uma visita</a>
-                            </li>
                         {% endif %}
-                    </ul>
-                </div>
+                    {% else %}
+                        <li>
+                            <a class="{{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Tela inicial</a>
+                        </li>
+                        <li>
+                            <a class="{{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Agende uma visita</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </nav>
 

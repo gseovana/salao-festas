@@ -3,6 +3,9 @@
 {% block content %}
 <h1>Meus eventos</h1>
 <div class="container">
+   
+    <a href="{{ url_for('novo_evento') }}">Novo evento</a>
+       
     <table class="table">
         <thead>
           <tr>
@@ -16,13 +19,15 @@
         <tbody>
           {% for evento in eventos %}
           <tr>
-              <td>{{ evento[0] }}</td>
+              <td>{{ evento[3] }}</td>
+              <td>{{ evento[4] }}</td>
               <td>{{ evento[1] }}</td>
               <td>{{ evento[2] }}</td>
-              <td>{{ evento[3] }}</td>
-                <td>
-                    <a href="{{ url_for('editar_evento', data_evento=evento[3]) }}">Editar</a>
-                    <a href="{{ url_for('deletar_evento', horario_evento=evento[4]) }}">Deletar</a>
+              <td>
+                <a href="{{ url_for('visualizar_evento', data_evento=evento[1], horario_evento=evento[2]) }}" role="button">Visualizar</a>
+                <a href="{{ url_for('atualizar_evento', data_evento=evento[1], horario_evento=evento[2]) }}"  role="button">Editar</a>
+                <a href="{{ url_for('cancelar_evento', data_evento=evento[1], horario_evento=evento[2]) }}"  role="button">Deletar</a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

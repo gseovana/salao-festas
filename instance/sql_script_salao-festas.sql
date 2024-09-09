@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `cliente` (
   `cpf` VARCHAR(11) NOT NULL,
-  `nome` VARCHAR(100) NOT NULL,
+  `nome_cliente` VARCHAR(100) NOT NULL,
   `celular` VARCHAR(14) NOT NULL,
   `endereco` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`cpf`)
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `visitacao` (
 CREATE TABLE IF NOT EXISTS `evento` (
   `data` DATE NOT NULL,
   `horario` VARCHAR(45) NOT NULL,
-  `nome` VARCHAR(50) NOT NULL,
+  `nome_evento` VARCHAR(50) NOT NULL,
   `tipo` VARCHAR(45) NOT NULL,
   `cliente_cpf` VARCHAR(11) NOT NULL,
   PRIMARY KEY (`data`, `horario`),

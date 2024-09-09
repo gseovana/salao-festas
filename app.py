@@ -93,9 +93,16 @@ def get_lista_de_desejos_by_user_id(user_id):
 def get_agendamentos_dict():
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM visitacao')
-        games = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
-        return games
+        cursor.execute('SELECT data, horario, cpf, nome FROM visitacao, cliente WHERE visitacao.cliente_cpf = cliente.cpf')
+        todos_agendamentos = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
+        return todos_agendamentos
+
+def get_clientes_dict():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM cliente')
+        clientes = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
+        return clientes    
 
 '''def add_avaliacao(user_id, id_jogo, nota, comentario):
     with get_connection() as conn:
@@ -342,7 +349,7 @@ def perfil():
         flash('Cliente não encontrado.', 'danger')
         return redirect(url_for('home'))
 
-    return render_template('html/pages/cliente/perfil.html', cliente=cliente)
+    return render_template('html/pages/perfil.html', cliente=cliente)
 
 @app.route('/cliente/dashboard-cliente')
 def dashboard_cliente():
@@ -483,6 +490,140 @@ def dashboard_admin():
 def clientes_admin():
     clientes = get_clientes()
     return render_template('html/pages/admin/clientes-admin.html', clientes=clientes)
+
+@app.route('/admin/agendamentos', methods=['GET'])
+def agendamentos_admin():
+    todos_agendamentos = get_agendamentos_dict()
+    print(todos_agendamentos)
+
+    return render_template('html/pages/admin/agendamentos-admin.html', todos_agendamentos=todos_agendamentos)
+
+
+@app.route('/admin/eventos', methods=['GET'])
+def eventos_admin():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT evento.data, evento.horario, evento.nome AS evento_nome, evento.tipo, cliente.cpf, cliente.nome AS cliente_nome FROM evento JOIN cliente ON evento.cliente_cpf = cliente.cpf')
+        eventos_joined = cursor.fetchall()
+
+    return render_template('html/pages/admin/eventos-admin.html', eventos_joined=eventos_joined)
+
+@app.route('/admin/eventos/novo', methods=['GET', 'POST'])
+def novo_evento():
+    if request.method == 'POST':
+        data = request.form['data_evento']
+        horario = request.form['horario_evento']
+        nome = request.form['nome_evento']
+        tipo = request.form['tipo_evento']
+        cliente_cpf = request.form['cliente_evento']
+
+        if nome == "":
+            flash('Preencha o campo Nome!', 'warning')
+        elif data == "":
+            flash('Preencha o campo Data!', 'warning')
+        elif horario == "":
+            flash('Preencha o campo Horário!', 'warning')
+        elif tipo == "":
+            flash('Preencha o campo Tipo!', 'warning')
+        elif cliente_cpf == "":
+            flash('Preencha o campo CPF do cliente!', 'warning')
+
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO evento (data, horario, nome, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data, horario, nome, tipo, cliente_cpf))
+            conn.commit()
+            flash('Evento criado com sucesso!', 'success')
+            return redirect(url_for('eventos_admin'))
+
+    return render_template('html/pages/admin/formulario-evento.html')
+
+@app.route('/admin/eventos/visualizar', methods=['GET', 'POST'])
+def visualizar_evento():
+    data = request.form.get('data')
+    horario = request.form.get('horario')
+
+    if not data or not horario:
+        flash('Dados inválidos para visualizar o evento.', 'danger')
+        return redirect(url_for('eventos_admin'))
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM evento WHERE data = ? AND horario = ?', (data, horario))
+        evento = cursor.fetchone()
+
+    return render_template('html/pages/admin/visualizar-evento.html', evento=evento)
+
+
+@app.route('/admin/eventos/atualizar', methods=['GET', 'POST'])
+def atualizar_evento():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        data = request.form['data']
+        horario = request.form['horario']
+        nome = request.form['nome']
+        tipo = request.form['tipo']
+        cliente_cpf = request.form['cliente_cpf']
+
+        if nome == "":
+            flash('Preencha o campo Nome!', 'warning')
+        elif data == "":
+            flash('Preencha o campo Data!', 'warning')
+        elif horario == "":
+            flash('Preencha o campo Horário!', 'warning')
+        elif tipo == "":
+            flash('Preencha o campo Descrição!', 'warning')
+        elif cliente_cpf == "":
+            flash('Preencha o campo CPF do cliente!', 'warning')
+
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('UPDATE evento SET data = ?, horario = ?, nome = ?, tipo=?, cpf_cliente=? WHERE data=? AND horario=?', (data, horario, nome, cpf, data, horario))
+            conn.commit()
+            flash('Cliente atualizado com sucesso!', 'success')
+            return redirect(url_for('perfil'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM evento WHERE data = ? AND horario=?', (data, horario))
+        evento = cursor.fetchone()
+
+    return render_template('html/pages/admin/formulario-eventos.html', evento=evento)
+
+@app.route('/admin/eventos/cancelar', methods=['POST'])
+def cancelar_evento():
+    data_evento = request.form.get('data')
+    hora_evento = request.form.get('horario')
+
+    print(f"Received data: {data_evento}, hora: {hora_evento}")  # Debug statement
+
+    if not data_evento or not hora_evento:
+        flash('Dados inválidos para cancelar o evento.', 'danger')
+        return redirect(url_for('eventos_admin'))
+    
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM evento WHERE data=? AND horario=?', (data_evento, hora_evento))
+            conn.commit()
+
+            if cursor.rowcount == 0:
+                flash('Nenhum evento encontrado para deletar.', 'warning')
+            else:
+                flash('Evento deletado com sucesso!', 'success')
+    except Exception as e:
+        print(f"Error deleting evento: {e}")
+        flash('Houve um erro ao deletar o evento.', 'danger')
+    
+
+@app.route('/admin/pagamentos', methods=['GET', 'POST'])
+def pagamentos_admin():
+    return render_template('html/pages/admin/pagamentos-admin.html')
+
+
 
 #@app.route('/categories')
 #def categories():

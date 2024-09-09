@@ -13,10 +13,20 @@
         </div>
         <div class="form-group">
             <label for="data_evento">Data</label>
-            <input type="time" name="data_evento" class="form-control" id="data_evento">
+            <input type="date" name="data_evento" class="form-control" id="data_evento">
         </div>
         <div class="form-group">
             <label for="horario_evento">Horário</label>
             <input type="time" name="horario_evento" class="form-control" id="horario_evento">
         </div>
+        <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <select name="cliente_evento" class="form-select" id="cliente">
+                <option selected>Selecione um cliente</option>
+                {% for evento_joined in eventos_joined %}
+                <option value="{{ evento_joined[4] }}">{{ evento_joined[4] }} - {{ evento_joined[5] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
 {% endblock %}
