@@ -3,82 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.11.3/main.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.3/main.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
     <title>Salão de festas Lutilê</title>
 </head>
-<body class="home">
+<body>
     <header>
-        
-        <nav class="navbar navbar-expand-md">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    {% if session.cpf %}
-                        {% if session.cpf == '000.000.000-00' %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ session.nome_cliente }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ url_for('dashboard_admin') }}">Tela inicial</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('agendamentos_admin') }}">Agendamentos</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('eventos_admin') }}">Eventos</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('clientes_admin') }}">Clientes</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('pagamentos_admin') }}">Pagamentos</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                                </ul>
-                            </li>
+        <nav class="navbar navbar-expand-md navbar-light" class="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Salão de festas Lutilê" height="50">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        {% if session.cpf %}
+                            {% if session.cpf == '000.000.000-00' %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ session.nome_cliente }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ url_for('dashboard_admin') }}">Tela inicial</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('agendamentos_admin') }}">Agendamentos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('eventos_admin') }}">Eventos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('clientes_admin') }}">Clientes</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('pagamentos_admin') }}">Pagamentos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ session.nome_cliente }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ url_for('dashboard_cliente') }}">Tela inicial</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('agendamentos_cliente') }}">Agendamentos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('eventos_cliente') }}">Eventos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
                         {% else %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ session.nome_cliente }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ url_for('dashboard_cliente') }}">Tela inicial</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('agendamentos_cliente') }}">Agendamentos</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('eventos_cliente') }}">Eventos</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                                </ul>
+                            <li class="nav-item">
+                                <a class="nav-link {{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Tela inicial</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Agende uma visita</a>
                             </li>
                         {% endif %}
-                    {% else %}
-                        <li>
-                            <a class="{{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Tela inicial</a>
-                        </li>
-                        <li>
-                            <a class="{{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Agende uma visita</a>
-                        </li>
-                    {% endif %}
-                </ul>
+                    </ul>
+                </div>
             </div>
         </nav>
-
     </header>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info" role="alert">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
     
     <main>
         {% block content %}
-
-
-        {% endblock content %}
+        {% endblock %}
     </main>
 
-    <footer>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-iOaCbLjFv7LvpcO6R7Y5WIvZqfSNrOSNc0q9ZoT5Ff3iXw5oLsqYwOp8JODKSoaB" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // Hide flash messages after 5 seconds
+        setTimeout(function() {
+            var flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                message.style.display = 'none';
+            });
+        }, 3000);
+    </script>
 
-        <script src="/static/js/index.js"></script>  
-    </footer>
+        <footer class="mt-4">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.11.3/main.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.3/main.min.js"></script>
+            <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+        </footer>
 </body>
 </html>

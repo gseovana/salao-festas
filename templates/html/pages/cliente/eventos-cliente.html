@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Meus eventos</h1>
-<div class="container">
-    <table class="table">
+<h1 class="text-center">Meus eventos</h1>
+<div class="container d-flex flex-column align-items-center">
+    <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Data</th>
-            <th scope="col">Horário</th>
+            <th scope="col" class="text-center">Nome</th>
+            <th scope="col" class="text-center">Tipo</th>
+            <th scope="col" class="text-center">Data</th>
+            <th scope="col" class="text-center">Horário</th>
           </tr>
         </thead>
         <tbody>
           {% for evento in eventos %}
           <tr>
-              <td>{{ evento[0] }}</td>
-              <td>{{ evento[1] }}</td>
-              <td>{{ evento[2] }}</td>
-              <td>{{ evento[3] }}</td>
+              <td class="text-center">{{ evento[2] }}</td>
+              <td class="text-center">{{ evento[3] }}</td>
+              <td class="text-center">{{ evento[0] }}</td>
+              <td class="text-center">{{ evento[1] }}</td>
           </tr>
           {% endfor %}
         </tbody>

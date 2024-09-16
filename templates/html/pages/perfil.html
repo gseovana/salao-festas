@@ -1,66 +1,40 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 
-{%block content%}
-<body class="register">
+{% block content %}
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="w-50">
+            <form class="register__form border p-4 rounded" method="POST" action="{{ url_for('atualizar') }}">
+                <fieldset>
+                    <h1 id="title" class="text-center mb-4">Perfil</h1>
     
-        {%for message in get_flashed_messages()%}
-            <div class="alert alert-warning" role="alert">
-                {{ message }}
-            </div>
-<!--         {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    {% if 'warning' in message %}
-                        <div class="alert alert-warning" role="alert">
-                            {{ message }}
-                        </div>
-                    {% elif 'error' in message %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ message }}
-                        </div>
-                    {% elif 'success' in message %}
-                        <div class="alert alert-success" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {%endif%}
-        {%endwith%} -->
-        {%endfor%}
-    
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input type="text" class="form-control" id="nome" placeholder="Nome" name="nome" value="{{ cliente[1] }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf" class="form-label">CPF:</label>
+                        <input type="text" class="form-control" id="cpf" placeholder="CPF" name="cpf" value="{{ cliente[0] }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="celular" class="form-label">Celular:</label>
+                        <input type="text" class="form-control" id="celular" placeholder="Celular" name="celular" value="{{ cliente[2] }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="endereco" class="form-label">Endereço:</label>
+                        <input type="text" class="form-control" id="endereco" placeholder="Endereço" name="endereco" value="{{ cliente[3] }}">
+                    </div>
 
-    <form class="register__form" method="POST" action="{{ url_for('atualizar') }}">
-        <fieldset>
-            <h1 g-id="title">Perfil</h1>
-
-            <div class="mb-3 row">
-                <label for="nome" class="col-sm-2">Nome:</label>
-                <input type="text" class="form-control" placeholder="Nome" name="nome" value="{{ cliente[1] }}">
-            </div>
-            <div class="mb-3 row">
-                <label for="cpf" class="col-sm-2">CPF:</label>
-                <input type="text" class="form-control" placeholder="cpf" name="cpf" value="{{ cliente[0] }}">
-            </div>
-            <div class="mb-3 row">
-                <label for="celular" class="col-sm-2">Celular:</label>
-                <input type="text" class="form-control" placeholder="celular" name="celular" value="{{ cliente[2] }}">
-            </div>
-            <div class="mb-3 row">
-                <label for="endereco" class="col-sm-2">Endereço:</label>
-                <input type="text" class="form-control" placeholder="endereco" name="endereco" value="{{ cliente[3] }}">
-            </div>
-
-            <div class="d-flex align-items-end">
-                <button type="submit">
-                    Atualizar
-                </button>
-                <a g-id="redirection" href="javascript:history.back()">Voltar</a>
-            </div>
-        </fieldset>
-    </form>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a id="redirection" href="{{ url_for('dashboard_cliente') }}" class="btn btn-secondary">Voltar</a>
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
-</html>
-{%endblock content%}
+{% endblock content %}

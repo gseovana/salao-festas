@@ -1,7 +1,7 @@
 import secrets
 import bcrypt
 import os
-from flask import Flask, render_template, request, flash, redirect, url_for, session, abort
+from flask import Flask, jsonify, render_template, request, flash, redirect, url_for, session, abort
 import sqlite3
 
 
@@ -275,6 +275,27 @@ def inject_active():
     def is_active(endpoint): #recebe o endpoint (rota) e verifica se é igual o endpoint atual, se for ele retorna a classeactive, se não retorna vazio
         return 'active' if request.endpoint == endpoint else ''
     return dict(is_active=is_active)
+
+@app.route('/cliente/dashboard-cliente')
+@app.route('/admin/dashboard-admin')
+def get_events():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT nome, data FROM evento')
+        eventos = cursor.fetchall()
+
+    eventos_list = [{"title": evento[0], "start": evento[1]} for evento in eventos]
+
+    return render_template('html/pages/cliente/dashboard-cliente.html', eventos=eventos_list)
+
+
+   # events = [
+    #    {"title": "Evento 1", "start": "2023-10-01"},
+     #   {"title": "Agendamento 1", "start": "2023-10-02"},
+      #  {"title": "Evento 2", "start": "2023-10-03"}
+        # Add more events here
+    #]
+    #return jsonify(events)
 
 #CADASTRAR CLIENTE
 @app.route('/cliente/cadastrar', methods=['GET', 'POST'])
