@@ -1,25 +1,24 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<h1>Todos os clientes</h1>
-<div class="container">
-       
-    <table class="table">
+<h1 class="text-center">Todos os clientes</h1>
+<div class="container d-flex flex-column align-items-center">
+    <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">CPF</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Celular</th>
-            <th scope="col">Endereço</th>
+            <th scope="col" class="text-center">CPF</th>
+            <th scope="col" class="text-center">Nome</th>
+            <th scope="col" class="text-center">Celular</th>
+            <th scope="col" class="text-center">Endereço</th>
           </tr>
         </thead>
         <tbody>
           {% for cliente in clientes %}
           <tr>
-              <td>{{ cliente[0] }}</td>
-              <td>{{ cliente[1] }}</td>
-              <td>{{ cliente[2] }}</td>
-              <td>{{ cliente[3] }}</td>
+              <td class="text-center">{{ cliente[0] }}</td>
+              <td class="text-center">{{ cliente[1] }}</td>
+              <td class="text-center">{{ cliente[2] }}</td>
+              <td class="text-center">{{ cliente[3] }}</td>
           </tr>
           {% endfor %}
         </tbody>

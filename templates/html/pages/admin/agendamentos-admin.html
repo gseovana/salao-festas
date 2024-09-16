@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Agendamentos de visita</h1>
-<div class="container">
-    <table class="table">
+<h1 class="text-center">Agendamentos de visita</h1>
+<div class="container d-flex flex-column align-items-center">
+    <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Data</th>
-            <th scope="col">Hora</th>
-            <th>Nome cliente</th>
-            <th>CPF cliente</th>
-            <th>Ações</th>
+            <th scope="col" class="text-center">Data</th>
+            <th scope="col" class="text-center">Hora</th>
+            <th scope="col" class="text-center">Nome cliente</th>
+            <th scope="col" class="text-center">CPF cliente</th>
+            <th scope="col" class="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
           {% for agendamento in todos_agendamentos %}
           <tr>
-              <td>{{ agendamento.data }}</td>
-              <td>{{ agendamento.horario }}</td>
-              <td>{{ agendamento.nome }}</td>
-              <td>{{ agendamento.cpf }}</td>
-              <td>
-                <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()">
-                  <input type="hidden" name="data" value="{{ agendamento[0] }}">
-                  <input type="hidden" name="horario" value="{{ agendamento[1] }}">
-                  <button type="submit" class="btn btn-light" >Cancelar</button>
+              <td class="text-center">{{ agendamento.data }}</td>
+              <td class="text-center">{{ agendamento.horario }}</td>
+              <td class="text-center">{{ agendamento.nome }}</td>
+              <td class="text-center">{{ agendamento.cpf }}</td>
+              <td class="text-center">
+                <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()" class="d-inline">
+                  <input type="hidden" name="data" value="{{ agendamento.data }}">
+                  <input type="hidden" name="horario" value="{{ agendamento.horario }}">
+                  <button type="submit" class="btn btn-light">Cancelar</button>
                 </form>
               </td>
           </tr>

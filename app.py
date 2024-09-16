@@ -524,56 +524,73 @@ def agendamentos_admin():
 def eventos_admin():
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT evento.data, evento.horario, evento.nome AS evento_nome, evento.tipo, cliente.cpf, cliente.nome AS cliente_nome FROM evento JOIN cliente ON evento.cliente_cpf = cliente.cpf')
-        eventos_joined = cursor.fetchall()
+        cursor.execute('SELECT * FROM evento JOIN cliente ON evento.cliente_cpf = cliente.cpf')
+        eventos = cursor.fetchall()
 
-    return render_template('html/pages/admin/eventos-admin.html', eventos_joined=eventos_joined)
+    return render_template('html/pages/admin/eventos-admin.html', eventos=eventos)
 
 @app.route('/admin/eventos/novo', methods=['GET', 'POST'])
 def novo_evento():
     if request.method == 'POST':
-        data = request.form['data_evento']
-        horario = request.form['horario_evento']
-        nome = request.form['nome_evento']
-        tipo = request.form['tipo_evento']
-        cliente_cpf = request.form['cliente_evento']
+        data_evento = request.form.get('data_evento', '')
+        horario_evento = request.form.get('horario_evento', '')
+        nome_evento = request.form.get('nome_evento', '')
+        tipo_evento = request.form.get('tipo_evento', '')
+        cliente_cpf = request.form.get('cliente_evento', '')
 
-        if nome == "":
+        if nome_evento == "":
             flash('Preencha o campo Nome!', 'warning')
-        elif data == "":
+        elif data_evento == "":
             flash('Preencha o campo Data!', 'warning')
-        elif horario == "":
+        elif horario_evento == "":
             flash('Preencha o campo Horário!', 'warning')
-        elif tipo == "":
+        elif tipo_evento == "":
             flash('Preencha o campo Tipo!', 'warning')
         elif cliente_cpf == "":
             flash('Preencha o campo CPF do cliente!', 'warning')
+        else:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('INSERT INTO evento (data, horario, nome, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data_evento, horario_evento, nome_evento, tipo_evento, cliente_cpf))
+                conn.commit()
+                flash('Evento criado com sucesso!', 'success')
+                return redirect(url_for('eventos_admin'))
+        
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT cpf, nome FROM cliente')
+        conn.commit()
+        clientes = cursor.fetchall()
 
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute('INSERT INTO evento (data, horario, nome, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data, horario, nome, tipo, cliente_cpf))
-            conn.commit()
-            flash('Evento criado com sucesso!', 'success')
-            return redirect(url_for('eventos_admin'))
+    return render_template('html/pages/admin/formulario-evento.html', clientes=clientes)
 
-    return render_template('html/pages/admin/formulario-evento.html')
-
-@app.route('/admin/eventos/visualizar', methods=['GET', 'POST'])
+@app.route('/admin/eventos/visualizar', methods=['GET','POST'])
 def visualizar_evento():
-    data = request.form.get('data')
-    horario = request.form.get('horario')
+    data_evento = request.form.get('data_evento')
+    horario_evento = request.form.get('horario_evento')
 
-    if not data or not horario:
+    print(f"Received data: {data_evento}, hora: {horario_evento}")  # Debug statement
+
+    if not data_evento or not horario_evento:
         flash('Dados inválidos para visualizar o evento.', 'danger')
         return redirect(url_for('eventos_admin'))
     
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM evento WHERE data = ? AND horario = ?', (data, horario))
-        evento = cursor.fetchone()
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM evento WHERE data = ? AND horario = ?', (data_evento, horario_evento))
+            evento = cursor.fetchone()
+            print(f"Fetched event: {evento}")  # Debug statement
 
-    return render_template('html/pages/admin/visualizar-evento.html', evento=evento)
+        if not evento:
+            flash('Evento não encontrado.', 'warning')
+            return redirect(url_for('eventos_admin'))
 
+        return render_template('html/pages/admin/visualizar-evento.html', evento=evento)
+    except Exception as e:
+        print(f"Error: {e}")  # Debug statement
+        flash('Erro ao acessar o banco de dados.', 'danger')
+        return redirect(url_for('eventos_admin'))
 
 @app.route('/admin/eventos/atualizar', methods=['GET', 'POST'])
 def atualizar_evento():

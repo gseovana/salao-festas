@@ -1,33 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Meus eventos</h1>
-<div class="container">
-   
-    <a href="{{ url_for('novo_evento') }}">Novo evento</a>
-       
-    <table class="table">
+<h1 class="text-center">Eventos marcados</h1>
+<div class="container d-flex flex-column align-items-center">
+    <div class="w-100 d-flex justify-content-end mb-3">
+        <a href="{{ url_for('novo_evento') }}" class="btn btn-primary">Novo evento</a>
+    </div>
+    <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Data</th>
-            <th scope="col">Horário</th>
-            <th scope="col">Ações</th>
+            <th scope="col" class="text-center">Nome</th>
+            <th scope="col" class="text-center">Tipo</th>
+            <th scope="col" class="text-center">Data</th>
+            <th scope="col" class="text-center">Horário</th>
+            <th scope="col" class="text-center">Cliente</th>
+            <th scope="col" class="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
           {% for evento in eventos %}
           <tr>
-              <td>{{ evento[3] }}</td>
-              <td>{{ evento[4] }}</td>
-              <td>{{ evento[1] }}</td>
-              <td>{{ evento[2] }}</td>
-              <td>
-                <a href="{{ url_for('visualizar_evento', data_evento=evento[1], horario_evento=evento[2]) }}" role="button">Visualizar</a>
-                <a href="{{ url_for('atualizar_evento', data_evento=evento[1], horario_evento=evento[2]) }}"  role="button">Editar</a>
-                <a href="{{ url_for('cancelar_evento', data_evento=evento[1], horario_evento=evento[2]) }}"  role="button">Deletar</a>
-            </td>
+              <td class="text-center">{{ evento[2] }}</td>
+              <td class="text-center">{{ evento[3] }}</td>
+              <td class="text-center">{{ evento[0] }}</td>
+              <td class="text-center">{{ evento[1] }}</td>
+              <td class="text-center">{{ evento[6] }}</td>
+              <td class="text-center">
+                <a href="{{ url_for('atualizar_evento', data_evento=evento[0], horario_evento=evento[1]) }}" class="btn btn-light" role="button">Editar</a>
+                <a href="{{ url_for('cancelar_evento', data_evento=evento[0], horario_evento=evento[1]) }}" class="btn btn-light" role="button">Deletar</a>
+              </td>
           </tr>
           {% endfor %}
         </tbody>
