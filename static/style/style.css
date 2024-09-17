@@ -16,7 +16,7 @@
     color: #555555
 }
 .carousel-1,.carousel-2,.carousel-3 {
-    height: 82vh;
+    height: 90vh;
 }
 .carousel-1 {
     /* background-image: url(../static/imgs/imgs_carousel/img-1.jpg); */
@@ -82,7 +82,7 @@ body {
 }
 
 .btn-login {
-    background-color: #BF7534;
+    background-color: #d9863e;
 }
 
 .btn-login:hover {
@@ -90,7 +90,7 @@ body {
 }
 
 .btn-cadastre a{
-    color: #BF7534;
+    color: #d9863e;
 }
 
 .btn-cadastre a:hover{
