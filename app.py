@@ -668,6 +668,32 @@ def cancelar_evento():
 def pagamentos_admin():
     return render_template('html/pages/admin/pagamentos-admin.html')
 
+@app.route('/admin/pagamentos/novo', methods=['GET', 'POST'])
+def novo_pagamento():
+    if request.method == 'POST':
+        forma = request.form['forma_pagamento']
+        valor = request.form['valor_pagamento']
+        cliente_cpf = request.form['cliente_pagamento']
+
+        if data == "":
+            flash('Preencha o campo Data!', 'warning')
+        elif valor == "":
+            flash('Preencha o campo Valor!', 'warning')
+        elif cliente_cpf == "":
+            flash('Preencha o campo CPF do cliente!', 'warning')
+        else:
+            try:
+                with get_connection() as conn:
+                    cursor = conn.cursor()
+                    cursor.execute('INSERT INTO pagamento (data, valor, cliente_cpf) VALUES (?, ?, ?)', (data, valor, cliente_cpf))
+                    conn.commit()
+                    flash('Pagamento criado com sucesso!', 'success')
+                    return redirect(url_for('pagamentos_admin'))
+            except Exception as e:
+                flash(f'Erro ao criar o pagamento: {e}', 'danger')
+
+    clientes = get_clientes()
+    return render_template('html/pages/admin/formulario-pagamento.html', clientes=clientes)
 
 
 #@app.route('/categories')
