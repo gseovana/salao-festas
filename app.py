@@ -666,34 +666,57 @@ def cancelar_evento():
 
 @app.route('/admin/pagamentos', methods=['GET', 'POST'])
 def pagamentos_admin():
-    return render_template('html/pages/admin/pagamentos-admin.html')
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM pagamento')
+        pagamentos = cursor.fetchall()
+      
+
+    return render_template('html/pages/admin/pagamentos-admin.html', pagamentos=pagamentos)
 
 @app.route('/admin/pagamentos/novo', methods=['GET', 'POST'])
 def novo_pagamento():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
     if request.method == 'POST':
-        forma = request.form['forma_pagamento']
-        valor = request.form['valor_pagamento']
-        cliente_cpf = request.form['cliente_pagamento']
+        forma_pagto = request.form['forma_pagto']
+        qtd_parcelas = request.form['qtd_parcelas']
+        evento = request.form['evento']
+        valor = request.form['valor']
+        data = request.form['data']
 
-        if data == "":
-            flash('Preencha o campo Data!', 'warning')
-        elif valor == "":
-            flash('Preencha o campo Valor!', 'warning')
-        elif cliente_cpf == "":
-            flash('Preencha o campo CPF do cliente!', 'warning')
-        else:
-            try:
-                with get_connection() as conn:
-                    cursor = conn.cursor()
-                    cursor.execute('INSERT INTO pagamento (data, valor, cliente_cpf) VALUES (?, ?, ?)', (data, valor, cliente_cpf))
-                    conn.commit()
-                    flash('Pagamento criado com sucesso!', 'success')
-                    return redirect(url_for('pagamentos_admin'))
-            except Exception as e:
-                flash(f'Erro ao criar o pagamento: {e}', 'danger')
+        try:
+            evento_data, evento_horario = evento.split(',')
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    'INSERT INTO pagamento (forma_pagto, qtd_parcelas, evento_data, evento_horario, valor, data_pagto) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+                    (forma_pagto, qtd_parcelas, evento_data, evento_horario, valor, data)
+                )
+                conn.commit()
+                #flash('Pagamento criado com sucesso!', 'success')
+                print('Pagamento criado com sucesso!')
+                return redirect(url_for('pagamentos_admin'))
+        except Exception as e:
+            flash(f'Erro ao criar o pagamento: {e}', 'danger')
+   
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT data, horario, nome FROM evento')
+        eventos = cursor.fetchall()
+        
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM pagamento')
+        pagamentos = cursor.fetchall()
+        print(pagamentos)
 
-    clientes = get_clientes()
-    return render_template('html/pages/admin/formulario-pagamento.html', clientes=clientes)
+    return render_template('html/pages/admin/formulario-pagamento.html', eventos=eventos, pagamentos=pagamentos)
 
 
 #@app.route('/categories')
