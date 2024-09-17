@@ -1,3 +1,31 @@
 {% extends 'base.html'%}
 {% block content %}
-<h1>Todos os pagamentos</h1>
+
+<h1 class="text-center">Pagamentos</h1>
+<div class="container d-flex flex-column align-items-center">
+    <div class="w-100 d-flex justify-content-end mb-3">
+        <a href="{{ url_for('novo_pagamento') }}" class="btn btn-primary">Novo pagamento</a>
+    </div>
+    <table class="table table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Forma</th>
+            <th scope="col" class="text-center">Qtd. parcelas</th>
+            <th scope="col" class="text-center">Evento</th>
+            <th scope="col" class="text-center">Cliente</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cliente in clientes %}
+          <tr>
+              <td class="text-center">{{ pagamento[0] }}</td>
+              <td class="text-center">{{ pagamento[1] }}</td>
+              <td class="text-center">{{ pagamento[2] }}</td>
+              <td class="text-center">{{ pagamento[3] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+{% endblock %}
