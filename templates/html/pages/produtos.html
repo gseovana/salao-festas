@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+        <div class="w-75">
+            <div class="bg-white border p-4 rounded">
+                <h2 class="text-center mb-4">Nossos Kits</h2>
+                <div class="row">
+                    <!-- Kit de Casamento -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <img src="{{ url_for('static', filename='imgs/imgs_carousel/img-1.jpg') }}" class="card-img-top" alt="Kit de Casamento">
+                            <div class="card-body">
+                                <h5 class="card-title">Kit de Casamento</h5>
+                                <p class="card-text">Um pacote completo para tornar seu casamento inesquecível.</p>
+                                <p class="card-text"><strong>Preço:</strong> R$ 1.500,00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kit de Aniversário -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <img src="{{ url_for('static', filename='imgs/imgs_carousel/img-3.jpg') }}" class="card-img-top" alt="Kit de Aniversário">
+                            <div class="card-body">
+                                <h5 class="card-title">Kit de Aniversário</h5>
+                                <p class="card-text">Tudo o que você precisa para celebrar um aniversário com estilo.</p>
+                                <p class="card-text"><strong>Preço:</strong> R$ 800,00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Voltar -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a id="redirection" href="{{ url_for('dashboard_cliente') }}" class="btn btn btn-login">Voltar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+{% endblock content %}
