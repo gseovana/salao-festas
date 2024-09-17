@@ -40,6 +40,39 @@
     background-repeat: no-repeat;
 }
 
+/* Make the text overlay fixed */
+.fixed-overlay {
+    position: fixed;
+    top: 50%; /* Start positioning from the center vertically */
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    transform: translateY(-50%); /* Center vertically, adjust as needed */
+    pointer-events: none; /* So that carousel controls still work */
+}
+
+/* Adjust the position based on the carousel controls' height */
+.fixed-overlay h1 {
+    text-align: center;
+    margin-top: 150px; /* Adjust this value to align with the arrows */
+    font-weight: 500; /* Define como semibold */
+    text-shadow: 
+        -1px -1px 0 #000,  
+        -1px -1px 0 #000,  
+        -1px -1px 0 #000,  
+        -1px  1px 0 #000;  /* Cria um contorno preto */
+}
+
+.fixed-overlay .subtitle {
+    font-size: 1.5rem; /* Smaller font size */
+    text-shadow: 
+         0px  0px 0 #fffcfc,  
+         0px  0px 0 #ffffff,  
+        -1px  1px 0 #000,  
+         1px  1px 0 #000;  /* Same shadow for the subtitle */
+    font-weight: 200; /* Normal weight */
+}
+
 .teste1 {
     width: 100%;
     height: 100%;
@@ -78,8 +111,10 @@
 }
 
 body {
-    overflow-y: hidden;
+    overflow-y: auto;
 }
+
+/* Ajustar a largura do box branco e adicionar margem automática para centralizar */
 
 .btn-login {
     background-color: #d9863e;
