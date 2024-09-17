@@ -622,13 +622,28 @@ def editar_evento(data, horario):
             flash(f'Erro ao carregar o evento: {e}', 'danger')
             return redirect(url_for('eventos_admin'))
         
+@app.route('/admin/eventos/deletar/<data>/<horario>', methods=['POST'])
+def deletar_evento(data, horario):
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM evento WHERE data = ? AND horario = ?', (data, horario))
+            conn.commit()
+            flash('Evento deletado com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao deletar o evento: {e}', 'danger')
+
+    return redirect(url_for('eventos_admin'))
                 
 @app.route('/admin/eventos/cancelar', methods=['POST'])
 def cancelar_evento():
     data_evento = request.form.get('data')
     hora_evento = request.form.get('horario')
-
-    print(f"Received data: {data_evento}, hora: {hora_evento}")  # Debug statement
 
     if not data_evento or not hora_evento:
         flash('Dados inválidos para cancelar o evento.', 'danger')
@@ -643,7 +658,7 @@ def cancelar_evento():
             if cursor.rowcount == 0:
                 flash('Nenhum evento encontrado para deletar.', 'warning')
             else:
-                flash('Evento deletado com sucesso!', 'success')
+                flash('Evento cancelado com sucesso!', 'success')
     except Exception as e:
         print(f"Error deleting evento: {e}")
         flash('Houve um erro ao deletar o evento.', 'danger')

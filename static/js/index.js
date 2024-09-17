@@ -65,16 +65,17 @@ $(document).ready(function() {
                     'horario': horario
                 },
                 success: function(response) {
-                    alert("Agendamento deletado com sucesso!");
+                    alert("Cancelado com sucesso!");
                     location.reload(); // Reload the page to reflect changes
                 },
                 error: function(response) {
-                    alert("Houve um erro ao deletar o agendamento.");
+                    alert("Houve um erro ao cancelar.");
                     console.log(response); // Log the error response for debugging
                 }
             });
         });
     });
+
 
     $(".btn-update").click(function() {
         let gameID = $('[g-id="id"]').val();
