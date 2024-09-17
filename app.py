@@ -224,9 +224,9 @@ def produtos():
 def servicos():
     return render_template('html/pages/servicos.html')
 
-# CONTATOS
+# CONTATO
 @app.route('/contato')
-def contatos():
+def contato():
     return render_template('html/pages/contato.html')
 
 #LOGIN

@@ -115,15 +115,6 @@ body {
 }
 
 /* Ajustar a largura do box branco e adicionar margem automática para centralizar */
-.bg-white {
-    width: 80%; /* Ajuste conforme necessário */
-    max-width: 900px; /* Largura máxima do box */
-    height: 100vh; /* Altura do box */
-    padding: 2rem; /* Ajuste o espaçamento interno conforme necessário */
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-}
 
 .btn-login {
     background-color: #d9863e;

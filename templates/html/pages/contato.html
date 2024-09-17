@@ -5,22 +5,6 @@
     <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
         <div class="bg-white border rounded">
             <div class="p-4">
-                <h2 class="text-center mb-4">Entre em Contato</h2>
-                <form method="POST" action="/enviar_contato">
-                    <div class="mb-3">
-                        <label for="nome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="mensagem" class="form-label">Mensagem</label>
-                        <textarea class="form-control" id="mensagem" name="mensagem" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar</button>
-                </form>
                 <div class="mt-4">
                     <h4>Informações de Contato</h4>
                     <p><strong>Endereço:</strong> Rua Exemplo, 123 - Cidade, Estado</p>
@@ -30,7 +14,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <a id="redirection" href="{{ url_for('dashboard_cliente') }}" class="btn btn-secondary">Voltar</a>
+                <a id="redirection" href="{{ url_for('home') }}" class="btn btn btn-login">Voltar</a>
             </div>
         </div>
     </div>
