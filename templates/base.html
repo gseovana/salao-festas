@@ -15,10 +15,10 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-md navbar-light" class="navbar">
+        <nav class="navbar navbar-expand-md" class="navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Salão de festas Lutilê" height="50">
+                <a class="navbar-brand ms-5" href="{{url_for('home')}}">
+                    <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Salão de festas Lutilê" height="80">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -58,14 +58,27 @@
                                 </li>
                             {% endif %}
                         {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link {{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Tela inicial</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Agende uma visita</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Home</a>
+                        </li>
+                        <span class = "separador nav-link">|</span> <!-- Separador -->
+                        <li class="nav-item">
+                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Produtos</a>
+                        </li>
+                        <span class = "separador nav-link">|</span> <!-- Separador -->
+                        <li class="nav-item nav-item">
+                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Serviços</a>
+                        </li>
+                        <span class = "separador nav-link">|</span> <!-- Separador -->
+                        <li class="nav-item">
+                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Contato</a>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{{url_for('login')}}" method="get">
+                                <button class="nav-link button_agendar" type="submit">Agende uma visita</button>
+                            </form>
+                        </li>
                         {% endif %}
-                    </ul>
                 </div>
             </div>
         </nav>
