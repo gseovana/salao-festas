@@ -1,4 +1,64 @@
 .navbar{
-    background-color: #f7efcd;
+    background-color: #ffffff;
     color: #fff;
+}
+
+.navbar a{
+    color: #000000;
+}
+
+.navbar a:hover {
+    color: #555555
+}
+.carousel-1,.carousel-2,.carousel-3 {
+    height: 82vh;
+}
+.carousel-1 {
+    /* background-image: url(../static/imgs/imgs_carousel/img-1.jpg); */
+    background-image: url(../imgs/imgs_carousel/img-1.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.carousel-2 {
+    background-image: url(../imgs/imgs_carousel/img-2.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.carousel-3 {
+    background-image: url(../imgs/imgs_carousel/img-3.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.teste1 {
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+    display: flex;
+
+}
+
+.widht-full {
+    width: 100vw;
+    background-color: red;
+}
+
+.button_agendar {
+    border-radius: 50px;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 10px !important;
+}
+
+.button_agendar:hover {
+    color: #d8d8d8;
+}
+
+.separador {
+    color: #000000;
 }
