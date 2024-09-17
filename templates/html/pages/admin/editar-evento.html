@@ -3,41 +3,40 @@
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="w-50">
-        <form action="{{ url_for('novo_evento') }}" method="POST" class="border p-4 rounded">
-            {% if evento %}
-                <h1 class="text-center mb-4">Atualizar evento</h1>
-            {% else %}
-                <h1 class="text-center mb-4">Novo evento</h1>
-            {% endif %}
+        <form action="{{ url_for('editar_evento', data=evento[0], horario=evento[1]) }}" method="POST" class="border p-4 rounded">
+            <h1 class="text-center mb-4">Editar evento</h1>
             <div class="form-group mb-3">
                 <label for="nome_evento">Nome</label>
-                <input name="nome_evento" class="form-control">
+                <input name="nome_evento" value="{{ evento[2] if evento else '' }}" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label for="tipo_evento">Tipo</label>
-                <input name="tipo_evento"  class="form-control">
+                <input name="tipo_evento" value="{{ evento[3] }}" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label for="data_evento">Data</label>
-                <input type="date" name="data_evento" class="form-control" id="data_evento">
+                <input type="date" name="data_evento" value="{{ evento[0] }}" class="form-control" id="data_evento">
             </div>
             <div class="form-group mb-3">
                 <label for="horario_evento">Horário</label>
-                <input type="time" name="horario_evento" class="form-control" id="horario_evento">
+                <input type="time" name="horario_evento" value="{{ evento[1] }}" class="form-control" id="horario_evento">
             </div>
             <div class="form-group mb-3">
                 <label for="cliente">Cliente</label>
                 <select name="cliente_evento" class="form-select" id="cliente_evento">
-                    <option selected>Selecione um cliente</option>
+                    <option value="{{ evento[4] }}" selected>{{ evento[4] }} - {{ evento[5] }}</option>
+                    
                     {% for cliente in clientes %}
+                        {% if cliente[0] != evento[4] %}
                         <option value="{{ cliente[0] }}">{{ cliente[0] }} - {{ cliente[1] }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
             <div class="text-end">
-                    <button class="btn btn-primary" type="submit">
-                        Criar
-                    </button>
+                <button class="btn btn-primary" type="submit">
+                        Atualizar
+                </button>
             </div>
         </form>
     </div>
