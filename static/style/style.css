@@ -69,3 +69,30 @@
 .separador {
     color: #000000;
 }
+
+.bg-img {
+    background-image: url(../imgs/imgs_carousel/img-1.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+body {
+    overflow-y: hidden;
+}
+
+.btn-login {
+    background-color: #BF7534;
+}
+
+.btn-login:hover {
+    background-color: #f8ac69;
+}
+
+.btn-cadastre a{
+    color: #BF7534;
+}
+
+.btn-cadastre a:hover{
+    color: #f8ac69;
+}
