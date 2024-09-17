@@ -27,7 +27,7 @@
                     <ul class="navbar-nav ms-auto">
                         {% if session.cpf %}
                             {% if session.cpf == '000.000.000-00' %}
-                                <li class="nav-item dropdown">
+                                <li class="nav-item dropdown me-5">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ session.nome_cliente }}
                                     </a>
@@ -46,7 +46,7 @@
                                     </ul>
                                 </li>
                             {% else %}
-                                <li class="nav-item dropdown">
+                                <li class="nav-item dropdown me-5">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ session.nome_cliente }}
                                     </a>
@@ -89,10 +89,24 @@
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-      <div class="alert alert-info" role="alert">
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
+      <div class="modal{{ category }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
       </div>
     {% endif %}
   {% endwith %}
@@ -105,11 +119,13 @@
     <script>
         // Hide flash messages after 5 seconds
         setTimeout(function() {
-            var flashMessages = document.querySelectorAll('.flash-message');
-            flashMessages.forEach(function(message) {
-                message.style.display = 'none';
-            });
-        }, 3000);
+            let alert = document.querySelector('.alert');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+            }
+        }, 5000);
+
     </script>
 
         <footer class="mt-4">

@@ -2,9 +2,9 @@
 
 {% block content %}
 <body>
-    <div class="container d-flex justify-content-center align-items-center vh-50">
+    <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
         <div class="w-50">
-            <form class="register__form border p-4 rounded" method="POST" action="{{ url_for('atualizar') }}">
+            <form class="bg-white register__form border p-4 rounded" method="POST" action="{{ url_for('atualizar') }}">
                 <fieldset>
                     <h1 id="title" class="text-center mb-4">Perfil</h1>
     
@@ -27,7 +27,7 @@
 
                     <div class="d-flex justify-content-between align-items-center">
                         <a id="redirection" href="{{ url_for('dashboard_cliente') }}" class="btn btn-secondary">Voltar</a>
-                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                        <button type="submit" class="btn btn btn-login">Atualizar</button>
                     </div>
                 </fieldset>
             </form>

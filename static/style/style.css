@@ -16,7 +16,7 @@
     color: #555555
 }
 .carousel-1,.carousel-2,.carousel-3 {
-    height: 82vh;
+    height: 90vh;
 }
 .carousel-1 {
     /* background-image: url(../static/imgs/imgs_carousel/img-1.jpg); */
@@ -68,4 +68,35 @@
 
 .separador {
     color: #000000;
+}
+
+.bg-img {
+    background-image: url(../imgs/imgs_carousel/img-1.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+body {
+    overflow-y: hidden;
+}
+
+.btn-login {
+    background-color: #d9863e;
+}
+
+.btn-login:hover {
+    background-color: #f8ac69;
+}
+
+.btn-cadastre a{
+    color: #d9863e;
+}
+
+.btn-cadastre a:hover{
+    color: #f8ac69;
+}
+
+.dashboard {
+    color: #ffffff;
 }

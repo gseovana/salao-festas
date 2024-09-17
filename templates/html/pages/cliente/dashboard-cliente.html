@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h1 class="my-4">Dashboard</h1>
+<div class="bg-img min-vh-100">
+    <h1 class="dashboard">Dashboard</h1>
     <div id="calendar"></div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var eventos = {{ eventos | tojson | safe }};
+        // Certifique-se de que 'eventos' está corretamente renderizado como um JSON válido
+        var eventos = JSON.parse('{{ eventos | tojson | safe }}');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             events: eventos
@@ -17,4 +18,5 @@
         calendar.render();
     });
 </script>
+
 {% endblock %}
