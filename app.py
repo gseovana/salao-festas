@@ -214,6 +214,21 @@ def home():
     nome_cliente = session.get('nome_cliente', '')
     return render_template('html/pages/homepage.html', cliente_logado=cliente_logado, nome_cliente=nome_cliente)
 
+# Página de Produtos
+@app.route('/produtos')
+def produtos():
+    return render_template('html/pages/produtos.html')
+
+# Pagina de serviços
+@app.route('/servicos')
+def servicos():
+    return render_template('html/pages/servicos.html')
+
+# CONTATOS
+@app.route('/contato')
+def contatos():
+    return render_template('html/pages/contato.html')
+
 #LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():

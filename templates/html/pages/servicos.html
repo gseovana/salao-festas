@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+        <div class="container">
+            <div class="bg-white border p-4 rounded text-center">
+                <h2 class="mb-4">Nossos Serviços</h2>
+                <div class="row justify-content-center">
+                    <!-- Serviço 1 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{ url_for('static', filename='imgs/imgs_carousel/img-2.jpg') }}" class="card-img-top" alt="Serviço 1">
+                            <div class="card-body">
+                                <h5 class="card-title">Serviço de Decoração</h5>
+                                <p class="card-text">Transforme seu evento com nossa decoração personalizada e elegante.</p>
+                                <p class="card-text"><strong>Preço:</strong> R$ 500,00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Serviço 2 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{ url_for('static', filename='imgs/imgs_carousel/img-3.jpg') }}" class="card-img-top" alt="Serviço 2">
+                            <div class="card-body">
+                                <h5 class="card-title">Buffet Completo</h5>
+                                <p class="card-text">Oferecemos um buffet completo com opções variadas para agradar a todos.</p>
+                                <p class="card-text"><strong>Preço:</strong> R$ 2.000,00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Serviço 3 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{ url_for('static', filename='imgs/imgs_carousel/img-1.jpg') }}" class="card-img-top" alt="Serviço 3">
+                            <div class="card-body">
+                                <h5 class="card-title">Fotografia Profissional</h5>
+                                <p class="card-text">Capture os momentos mais especiais do seu evento com nossa equipe de fotografia.</p>
+                                <p class="card-text"><strong>Preço:</strong> R$ 1.200,00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a id="redirection" href="{{ url_for('home') }}" class="btn ss mt-4">Voltar</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+{% endblock content %}
