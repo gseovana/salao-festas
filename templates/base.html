@@ -58,20 +58,20 @@
                                 </li>
                             {% endif %}
                         {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link {{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">Home</a>
+                        <li class="nav-item me-5 ms-5">
+                            <a class="nav-link {{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">HOME</a>
                         </li>
                         <span class = "separador nav-link">|</span> <!-- Separador -->
-                        <li class="nav-item">
-                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Produtos</a>
+                        <li class="nav-item me-5 ms-5">
+                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">PRODUTOS</a>
                         </li>
                         <span class = "separador nav-link">|</span> <!-- Separador -->
-                        <li class="nav-item nav-item">
-                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Serviços</a>
+                        <li class="nav-item me-5 ms-5">
+                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">SERVIÇOS</a>
                         </li>
                         <span class = "separador nav-link">|</span> <!-- Separador -->
-                        <li class="nav-item">
-                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">Contato</a>
+                        <li class="nav-item me-5 ms-5">
+                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('login')}}">CONTATO</a>
                         </li>
                         <li class="nav-item">
                             <form action="{{url_for('login')}}" method="get">
