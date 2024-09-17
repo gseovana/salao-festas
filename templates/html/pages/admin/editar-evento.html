@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="w-50">
-        <form action="{{ url_for('editar_evento', data=evento[1], horario=evento[2]) }}" method="POST" class="border p-4 rounded">
+        <form action="{{ url_for('editar_evento', data=evento[0], horario=evento[1]) }}" method="POST" class="border p-4 rounded">
             <h1 class="text-center mb-4">Editar evento</h1>
             <div class="form-group mb-3">
                 <label for="nome_evento">Nome</label>

@@ -583,9 +583,9 @@ def editar_evento(data, horario):
 
         if nome == "":
             flash('Preencha o campo Nome!', 'warning')
-        elif data == "":
+        elif nova_data == "":
             flash('Preencha o campo Data!', 'warning')
-        elif horario == "":
+        elif novo_horario == "":
             flash('Preencha o campo Horário!', 'warning')
         elif tipo == "":
             flash('Preencha o campo Tipo!', 'warning')
@@ -595,7 +595,8 @@ def editar_evento(data, horario):
             try:
                 with get_connection() as conn:
                     cursor = conn.cursor()
-                    cursor.execute('UPDATE evento SET data = ?, horario = ?, nome = ?, tipo=?, cliente_cpf=? WHERE data=? AND horario=?', (nova_data, novo_horario, nome, tipo, cliente_cpf, data, horario))
+                    print(horario)
+                    cursor.execute('UPDATE evento SET data = ?, horario = ?, nome = ?, tipo = ?, cliente_cpf = ? WHERE data = ? AND horario = ?', (nova_data, novo_horario, nome, tipo, cliente_cpf, data, horario))
                     conn.commit()
                     flash('Evento atualizado com sucesso!', 'success')
                     return redirect(url_for('eventos_admin'))
@@ -605,17 +606,21 @@ def editar_evento(data, horario):
         return redirect(url_for('eventos_admin'))        
     
     else:
+        try:
             with get_connection() as conn:
                 cursor = conn.cursor()
-                cursor.execute('SELECT evento.data, evento.horario, evento.nome, evento.tipo, cliente.cpf, cliente.nome FROM evento JOIN cliente ON evento.cliente_cpf=cliente.cpf WHERE data=? AND horario=?', (data, horario))
+                cursor.execute('SELECT evento.data, evento.horario, evento.nome, evento.tipo, cliente.cpf, cliente.nome FROM evento JOIN cliente ON evento.cliente_cpf = cliente.cpf WHERE evento.data = ? AND evento.horario = ?', (data, horario))
                 evento = cursor.fetchone()
-                clientes=get_clientes()
+                clientes = get_clientes()
 
                 if evento:
                     return render_template('html/pages/admin/editar-evento.html', evento=evento, clientes=clientes)
                 else:
                     flash('Evento não encontrado.', 'warning')
                     return redirect(url_for('eventos_admin'))
+        except Exception as e:
+            flash(f'Erro ao carregar o evento: {e}', 'danger')
+            return redirect(url_for('eventos_admin'))
         
                 
 @app.route('/admin/eventos/cancelar', methods=['POST'])
