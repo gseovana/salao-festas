@@ -20,7 +20,7 @@ As funcionalidades do sistema incluem:
 ## Membros da equipe e papel
 Andre Luis Magalhaes Santos **(BD | Back-end)**<br/> 
 Geovana Silva de Oliveira **(Full-stack | BD)**<br/> 
-Jessica de Sousa Costa<br/> 
+Jessica de Sousa Costa **(Front-end | UI/UX)**<br/> 
 Nicolas de Oliveira Gomes<br/> 
 Pablo Goncalves Barbosa<br/> 
 Vinicius Andrade Costa<br/> 
