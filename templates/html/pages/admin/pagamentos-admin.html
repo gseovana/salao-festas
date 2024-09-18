@@ -12,20 +12,35 @@
             <th scope="col" class="text-center">Forma</th>
             <th scope="col" class="text-center">Qtd. parcelas</th>
             <th scope="col" class="text-center">Evento</th>
-            <th scope="col" class="text-center">Cliente</th>
+            <th scope="col" class="text-center">Valor total</th>
+            <th scope="col" class="text-center">Data</th>
+            <th scope="col" class="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
-          {% for cliente in clientes %}
+          {% for pagamento in pagamentos %}
           <tr>
-              <td class="text-center">{{ pagamento[0] }}</td>
+              <td class="text-center" hidden>{{ pagamento[0] }}</td>
               <td class="text-center">{{ pagamento[1] }}</td>
               <td class="text-center">{{ pagamento[2] }}</td>
-              <td class="text-center">{{ pagamento[3] }}</td>
+              <td class="text-center">{{ pagamento[7] }}</td>
+              <td class="text-center">{{ pagamento[5] }}</td>
+              <td class="text-center">{{ pagamento[6] }}</td>
+              <td class="text-center">
+                  <a href="{{ url_for('editar_pagamento', id_pagto=pagamento[0]) }}" class="btn btn-warning">Editar</a>
+                  <form action="{{ url_for('deletar_pagamento', id_pagto=pagamento[0]) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                  </form>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 </div>
+
+<script>
+    function confirmDelete() {
+        return confirm('Tem certeza que deseja excluir este pagamento?');
+    }
+</script>
 
 {% endblock %}

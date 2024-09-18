@@ -687,9 +687,8 @@ def pagamentos_admin():
     
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM pagamento')
+        cursor.execute('SELECT pagamento.id_pagto, pagamento.forma_pagto, pagamento.qtd_parcelas, pagamento.evento_data, pagamento.evento_horario, pagamento.valor, pagamento.data_pagto, evento.nome FROM evento JOIN pagamento ON evento_data=data AND evento_horario=horario')
         pagamentos = cursor.fetchall()
-      
 
     return render_template('html/pages/admin/pagamentos-admin.html', pagamentos=pagamentos)
 
@@ -711,12 +710,11 @@ def novo_pagamento():
             with get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute(
-                    'INSERT INTO pagamento (forma_pagto, qtd_parcelas, evento_data, evento_horario, valor, data_pagto) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+                    'INSERT INTO pagamento (forma_pagto, qtd_parcelas, evento_data, evento_horario, valor, data_pagto) VALUES (?, ?, ?, ?, ?, ?)', 
                     (forma_pagto, qtd_parcelas, evento_data, evento_horario, valor, data)
                 )
                 conn.commit()
-                #flash('Pagamento criado com sucesso!', 'success')
-                print('Pagamento criado com sucesso!')
+                flash('Pagamento criado com sucesso!', 'success')
                 return redirect(url_for('pagamentos_admin'))
         except Exception as e:
             flash(f'Erro ao criar o pagamento: {e}', 'danger')
@@ -725,14 +723,64 @@ def novo_pagamento():
         cursor = conn.cursor()
         cursor.execute('SELECT data, horario, nome FROM evento')
         eventos = cursor.fetchall()
+
+    return render_template('html/pages/admin/formulario-pagamento.html', eventos=eventos)
+
+@app.route('/admin/pagamentos/editar/<int:id_pagto>', methods=['GET', 'POST'])
+def editar_pagamento(id_pagto):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        forma_pagto = request.form['forma_pagto']
+        qtd_parcelas = request.form['qtd_parcelas']
+        evento = request.form['evento']
+        valor = request.form['valor']
+        data = request.form['data']
+
+        try:
+            evento_data, evento_horario = evento.split(',')
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    'UPDATE pagamento SET forma_pagto = ?, qtd_parcelas = ?, evento_data = ?, evento_horario = ?, valor = ?, data_pagto = ? WHERE id_pagto = ?', 
+                    (forma_pagto, qtd_parcelas, evento_data, evento_horario, valor, data, id_pagto)
+                )
+                conn.commit()
+                flash('Pagamento atualizado com sucesso!', 'success')
+                return redirect(url_for('pagamentos_admin'))
+        except Exception as e:
+            flash(f'Erro ao atualizar o pagamento: {e}', 'danger')
+   
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT data, horario, nome FROM evento')
+        eventos = cursor.fetchall()
         
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM pagamento')
-        pagamentos = cursor.fetchall()
-        print(pagamentos)
+        cursor.execute('SELECT * FROM pagamento WHERE id_pagto = ?', (id_pagto,))
+        pagamento = cursor.fetchone()
+        print(pagamento)
 
-    return render_template('html/pages/admin/formulario-pagamento.html', eventos=eventos, pagamentos=pagamentos)
+    return render_template('html/pages/admin/editar-pagamento.html',id_pagto=id_pagto, eventos=eventos, pagamento=pagamento)
 
+@app.route('/admin/pagamentos/deletar/<int:id_pagto>', methods=['POST'])
+def deletar_pagamento(id_pagto):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM pagamento WHERE id_pagto = ?', (id_pagto,))
+            conn.commit()
+            flash('Pagamento deletado com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao deletar o pagamento: {e}', 'danger')
+
+    return redirect(url_for('pagamentos_admin'))
 
 #@app.route('/categories')
 #def categories():
