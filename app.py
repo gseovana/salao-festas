@@ -782,6 +782,98 @@ def deletar_pagamento(id_pagto):
 
     return redirect(url_for('pagamentos_admin'))
 
+@app.route('/admin/parceiros', methods=['GET', 'POST'])
+def parceiros_admin():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM parceiro')
+        parceiros = cursor.fetchall()
+
+    return render_template('html/pages/admin/parceiros-admin.html', parceiros=parceiros)
+
+@app.route('/admin/parceiros/novo', methods=['GET', 'POST'])
+def novo_parceiro():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        celular = request.form['celular']
+
+        # Input validation
+        if not nome or not celular:
+            flash('Todos os campos são obrigatórios.', 'warning')
+            return redirect(url_for('parceiros_admin'))
+
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('INSERT INTO parceiro (nome, celular) VALUES (?, ?)', (nome, celular))
+                conn.commit()
+                flash('Parceiro criado com sucesso!', 'success')
+        except Exception as e:
+            flash(f'Erro ao criar o parceiro: {e}', 'danger')
+
+        return redirect(url_for('parceiros_admin'))
+
+    return render_template('html/pages/admin/formulario-parceiro.html')
+
+@app.route('/admin/parceiros/editar/<int:id_parceiro>', methods=['GET', 'POST'])
+def editar_parceiro(id_parceiro):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        celular = request.form['celular']
+
+        # Input validation
+        if not nome or not celular:
+            flash('Todos os campos são obrigatórios.', 'warning')
+            return redirect(url_for('parceiros_admin'))
+
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('UPDATE parceiro SET nome = ?, celular = ? WHERE id_parceiro = ?', (nome, celular, id_parceiro))
+                conn.commit()
+                flash('Parceiro atualizado com sucesso!', 'success')
+        except Exception as e:
+            flash(f'Erro ao atualizar o parceiro: {e}', 'danger')
+
+        return redirect(url_for('parceiros_admin'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM parceiro WHERE id_parceiro = ?', (id_parceiro,))
+        parceiro = cursor.fetchone()
+
+    return render_template('html/pages/admin/editar-parceiro.html', id_parceiro=id_parceiro, parceiro=parceiro)
+
+@app.route('/admin/parceiros/deletar/<int:id_parceiro>', methods=['POST'])
+def deletar_parceiro(id_parceiro):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM parceiro WHERE id_parceiro = ?', (id_parceiro,))
+            conn.commit()
+            flash('Parceiro deletado com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao deletar o parceiro: {e}', 'danger')
+
+    return redirect(url_for('parceiros_admin'))
+
+
 #@app.route('/categories')
 #def categories():
 #    games = get_games()

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center mt-5">
+    <form action="{{ url_for('novo_parceiro') }}" method="POST" class="w-50 p-4 border rounded">
+        <h1 class="text-center mb-4">Novo Parceiro</h1>
+        <div class="form-group mb-3">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="celular">Celular</label>
+            <input type="text" class="form-control" id="celular" name="celular" required>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('parceiros_admin') }}" class="btn btn-secondary">Voltar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

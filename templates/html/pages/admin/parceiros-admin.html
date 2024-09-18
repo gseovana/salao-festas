@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-center">Parceiros</h1>
+<div class="container d-flex flex-column align-items-center">
+    <div class="w-100 d-flex justify-content-end mb-3">
+        <a href="{{ url_for('novo_parceiro') }}" class="btn btn-primary">Novo parceiro</a>
+    </div>
+    <table class="table table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center" hidden>Id</th>
+            <th scope="col" class="text-center">Nome</th>
+            <th scope="col" class="text-center">Celular</th>
+            <th scope="col" class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for parceiro in parceiros %}
+          <tr>
+              <td class="text-center" hidden>{{ parceiro[0] }}</td>
+              <td class="text-center">{{ parceiro[1] }}</td>
+              <td class="text-center">{{ parceiro[2] }}</td>
+              <td class="text-center">
+                  <a href="{{ url_for('editar_parceiro', id_parceiro=parceiro[0]) }}" class="btn btn-warning">Editar</a>
+                  <form action="{{ url_for('deletar_parceiro', id_parceiro=parceiro[0]) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                  </form>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+<script>
+    function confirmDelete() {
+        return confirm('Tem certeza que deseja excluir este parceiro?');
+    }
+</script>
+
+{% endblock %}
+   
