@@ -873,6 +873,70 @@ def deletar_parceiro(id_parceiro):
 
     return redirect(url_for('parceiros_admin'))
 
+@app.route('/admin/kits-mobilia', methods=['GET'])
+def kits_mobilia_admin():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Fetch all rows
+        cursor.execute('SELECT * FROM kit_mobilia')
+        kits_mobilia = cursor.fetchall()
+        
+        # Fetch the total sum of quantidade
+        cursor.execute('SELECT SUM(quantidade) FROM kit_mobilia')
+        total_quantidade = cursor.fetchone()[0]
+        if total_quantidade is None:
+            total_quantidade = 0
+
+    return render_template('html/pages/admin/kit-mobilia-admin.html', kits_mobilia=kits_mobilia, total_quantidade=total_quantidade)
+
+@app.route('/admin/kits-mobilia/novo', methods=['GET', 'POST'])
+def novo_kit_mobilia():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        quantidade = request.form['quantidade']
+        print(f'Received form data: quantidade={quantidade}')
+
+        if not quantidade:
+            flash('Todos os campos são obrigatórios.', 'warning')
+            return redirect(url_for('novo_kit_mobilia'))
+
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('INSERT INTO kit_mobilia (quantidade) VALUES (?)', (quantidade,))
+                conn.commit()
+                flash('Kit mobília criado com sucesso!', 'success')
+        except Exception as e:
+            flash(f'Erro ao criar o kit mobília: {e}', 'danger')
+
+        return redirect(url_for('kits_mobilia_admin'))
+
+    return render_template('html/pages/admin/formulario-kit-mobilia.html')
+
+@app.route('/admin/kits-mobilia/deletar/<int:id_mobilia>', methods=['POST'])
+def deletar_kit_mobilia(id_mobilia):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM kit_mobilia WHERE id_mobilia = ?', (id_mobilia,))
+            conn.commit()
+            flash('Kit de mobília deletado com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao deletar o kit de mobília: {e}', 'danger')
+
+    return redirect(url_for('kits_mobilia_admin'))
 
 #@app.route('/categories')
 #def categories():
