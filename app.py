@@ -218,8 +218,7 @@ def cadastrar():
     return render_template('html/pages/cliente/formulario-cliente.html')
 
 #PERFIL CLIENTE
-@app.route('/cliente/perfil', methods=['GET', 'POST'])
-@app.route('/admin/perfil', methods=['GET'])
+@app.route('/perfil', methods=['GET', 'POST'])
 def perfil():
     cpf = session.get('cpf')
     if not cpf:
@@ -274,6 +273,19 @@ def atualizar():
         cliente = cursor.fetchone()
 
     return render_template('html/pages/cliente/atualizar.html', cliente=cliente)
+
+@app.route('/cliente/parceiros', methods=['GET'])
+def ver_parceiros_cliente():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM parceiro')
+        parceiros = cursor.fetchall()
+
+    return render_template('html/pages/cliente/parceiros-cliente.html', parceiros=parceiros)
 
 ############################ AGENDAMENTOS CLIENTE ################################
 

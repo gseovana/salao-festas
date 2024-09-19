@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 <body>
@@ -10,19 +10,19 @@
     
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome:</label>
-                        <input type="text" class="form-control" id="nome" placeholder="Nome" name="nome" value="{{ cliente[1] }}">
+                        <input type="text" class="form-control" id="nome" placeholder="Nome" name="nome" value="{{ cliente[1] }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="cpf" class="form-label">CPF:</label>
-                        <input type="text" class="form-control" id="cpf" placeholder="CPF" name="cpf" value="{{ cliente[0] }}">
+                        <input type="text" class="form-control" id="cpf" placeholder="CPF" name="cpf" value="{{ cliente[0] }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="celular" class="form-label">Celular:</label>
-                        <input type="text" class="form-control" id="celular" placeholder="Celular" name="celular" value="{{ cliente[2] }}">
+                        <input type="text" class="form-control" id="celular" placeholder="Celular" name="celular" value="{{ cliente[2] }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="endereco" class="form-label">Endereço:</label>
-                        <input type="text" class="form-control" id="endereco" placeholder="Endereço" name="endereco" value="{{ cliente[3] }}">
+                        <input type="text" class="form-control" id="endereco" placeholder="Endereço" name="endereco" value="{{ cliente[3] }}" required>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
@@ -33,6 +33,43 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById('cpf').addEventListener('input', formatCPF);
+        document.getElementById('celular').addEventListener('input', formatCelular);
+        
+        function formatCPF(event) {
+            const input = event.target;
+            let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+            value = value.substring(0, 11); // Limit to 11 digits
+        
+            // Format the value as CPF
+            if (value.length > 9) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})/, '$1.$2.$3');
+            } else if (value.length > 3) {
+                value = value.replace(/(\d{3})(\d{3})/, '$1.$2');
+            }
+        
+            input.value = value;
+        }
+        
+        function formatCelular(event) {
+            const input = event.target;
+            let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+            value = value.substring(0, 11); // Limit to 11 digits
+        
+            // Format the value as Celular
+            if (value.length > 6) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/(\d{2})(\d{5})/, '($1) $2');
+            }
+        
+            input.value = value;
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>

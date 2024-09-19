@@ -18,4 +18,22 @@
         </div>
     </form>
 </div>
+<script>
+    document.getElementById('celular').addEventListener('input', formatCelular);
+    
+    function formatCelular(event) {
+        const input = event.target;
+        let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+        value = value.substring(0, 11); // Limit to 11 digits
+    
+        // Format the value as Celular
+        if (value.length > 6) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        } else if (value.length > 2) {
+            value = value.replace(/(\d{2})(\d{5})/, '($1) $2');
+        }
+    
+        input.value = value;
+    }
+</script>
 {% endblock %}

@@ -11,11 +11,11 @@
             {% endif %}
             <div class="form-group mb-3">
                 <label for="nome_evento">Nome</label>
-                <input name="nome_evento" class="form-control">
+                <input name="nome_evento" class="form-control" required>
             </div>
             <div class="form-group mb-3">
                 <label for="tipo_evento">Tipo</label>
-                <select name="tipo_evento" id="tipo_evento" class="form-control">
+                <select name="tipo_evento" id="tipo_evento" class="form-control" required>
                     <option value="">Selecione o tipo de evento</option>
                     <option value="Casamento">Casamento</option>
                     <option value="Aniversario">Aniversário</option>
@@ -31,16 +31,16 @@
             </div>
             <div class="form-group mb-3">
                 <label for="data_evento">Data</label>
-                <input type="date" name="data_evento" class="form-control" id="data_evento">
+                <input type="date" name="data_evento" class="form-control" id="data_evento" required>
             </div>
             <div class="form-group mb-3">
                 <label for="horario_evento">Horário</label>
-                <input type="time" name="horario_evento" class="form-control" id="horario_evento">
+                <input type="time" name="horario_evento" class="form-control" id="horario_evento" required>
             </div>
             <div class="form-group mb-3">
-                <label for="cliente">Cliente</label>
-                <select name="cliente_evento" class="form-select" id="cliente_evento">
-                    <option selected>Selecione um cliente</option>
+                <label for="cliente_evento">Cliente</label>
+                <select name="cliente_evento" class="form-select" id="cliente_evento" required>
+                    <option value="" disabled selected>Selecione um cliente</option>
                     {% for cliente in clientes %}
                         <option value="{{ cliente[0] }}">{{ cliente[0] }} - {{ cliente[1] }}</option>
                     {% endfor %}

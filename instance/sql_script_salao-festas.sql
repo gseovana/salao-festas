@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `celular` VARCHAR(14) NOT NULL,
   `endereco` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`cpf`)
-);
+  );
 
 CREATE TABLE IF NOT EXISTS `visitacao` (
   `data` DATE NOT NULL,

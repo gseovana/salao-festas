@@ -23,8 +23,8 @@
         </div>
         <div class="form-group mb-3">
             <label for="evento">Evento</label>
-            <select name="evento" class="form-select" id="evento">
-                <option selected disabled>Selecione um evento</option>
+            <select name="evento" class="form-select" id="evento" required>
+                <option value="" selected disabled>Selecione um evento</option>
                 {% for evento in eventos %}
                 <option value="{{ evento[0] }},{{ evento[1] }}">{{ evento[2] }}</option>
                 {% endfor %}
@@ -32,7 +32,7 @@
         </div>
         <div class="form-group mb-3">
             <label for="valor">Valor total</label>
-            <input type="number" class="form-control" id="valor" name="valor" required>
+            <input class="form-control" id="valor" name="valor" placeholder="Informe o valor">
         </div>
         <div class="form-group mb-3">
             <label for="data">Data</label>
@@ -44,4 +44,5 @@
         </div>
     </form>
 </div>
+
 {% endblock %}

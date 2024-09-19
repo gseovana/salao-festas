@@ -15,9 +15,9 @@
         <tbody>
           {% for agendamento in todos_agendamentos %}
           <tr>
-              <td class="text-center">{{ agendamento.data }}</td>
+              <td class="text-center">{{ agendamento.data | datetime('%d/%m/%Y') }}</td>
               <td class="text-center">{{ agendamento.horario }}</td>
-              <td class="text-center">{{ agendamento.nome }}</td>
+              <td class="text-center">{{ agendamento.nome_cliente }}</td>
               <td class="text-center">{{ agendamento.cpf }}</td>
               <td class="text-center">
                 <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()" class="d-inline">

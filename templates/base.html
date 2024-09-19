@@ -6,7 +6,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.11.3/main.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.3/main.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
@@ -15,9 +14,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-md" class="navbar">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand ms-5" href="{{url_for('home')}}">
+                <a class="navbar-brand ms-5" href="{{ url_for('home') }}">
                     <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Salão de festas Lutilê" height="80">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +39,6 @@
                                         <li><a class="dropdown-item" href="{{ url_for('pagamentos_admin') }}">Pagamentos</a></li>
                                         <li><a class="dropdown-item" href="{{ url_for('kits_mobilia_admin') }}">Kits Mobília</a></li>
                                         <li><a class="dropdown-item" href="{{ url_for('parceiros_admin') }}">Parceiros</a></li>
-
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                                     </ul>
@@ -55,33 +53,35 @@
                                         <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Perfil</a></li>
                                         <li><a class="dropdown-item" href="{{ url_for('agendamentos_cliente') }}">Agendamentos</a></li>
                                         <li><a class="dropdown-item" href="{{ url_for('eventos_cliente') }}">Eventos</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('ver_parceiros_cliente') }}">Nossos parceiros</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                                     </ul>
                                 </li>
                             {% endif %}
                         {% else %}
-                        <li class="nav-item me-5 ms-5">
-                            <a class="nav-link {{is_active('home')}}" aria-current="page" href="{{url_for('home')}}">HOME</a>
-                        </li>
-                        <span class = "separador nav-link">|</span> <!-- Separador -->
-                        <li class="nav-item me-5 ms-5">
-                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('produtos')}}">PRODUTOS</a>
-                        </li>
-                        <span class = "separador nav-link">|</span> <!-- Separador -->
-                        <li class="nav-item me-5 ms-5">
-                            <a class="nav-link {{is_active('login')}}" aria-current="page" href="{{url_for('servicos')}}">SERVIÇOS</a>
-                        </li>
-                        <span class = "separador nav-link">|</span> <!-- Separador -->
-                        <li class="nav-item me-5 ms-5">
-                            <a class="nav-link {{ is_active('login') }}" aria-current="page" href="{{ url_for('contato') }}">CONTATO</a>
-                        </li>
-                        <li class="nav-item">
-                            <form action="{{url_for('login')}}" method="get">
-                                <button class="nav-link button_agendar" type="submit">Agende uma visita</button>
-                            </form>
-                        </li>
+                            <li class="nav-item me-5 ms-5">
+                                <a class="nav-link {{ is_active('home') }}" aria-current="page" href="{{ url_for('home') }}">HOME</a>
+                            </li>
+                            <span class="separador nav-link">|</span> <!-- Separador -->
+                            <li class="nav-item me-5 ms-5">
+                                <a class="nav-link {{ is_active('produtos') }}" aria-current="page" href="{{ url_for('produtos') }}">PRODUTOS</a>
+                            </li>
+                            <span class="separador nav-link">|</span> <!-- Separador -->
+                            <li class="nav-item me-5 ms-5">
+                                <a class="nav-link {{ is_active('servicos') }}" aria-current="page" href="{{ url_for('servicos') }}">SERVIÇOS</a>
+                            </li>
+                            <span class="separador nav-link">|</span> <!-- Separador -->
+                            <li class="nav-item me-5 ms-5">
+                                <a class="nav-link {{ is_active('contato') }}" aria-current="page" href="{{ url_for('contato') }}">CONTATO</a>
+                            </li>
+                            <li class="nav-item">
+                                <form action="{{ url_for('login') }}" method="get">
+                                    <button class="nav-link button_agendar" type="submit">Agende uma visita</button>
+                                </form>
+                            </li>
                         {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -125,16 +125,15 @@
                 alert.classList.add('fade');
             }
         }, 5000);
-
     </script>
 
-        <footer class="mt-4">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.11.3/main.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.3/main.min.js"></script>
-            <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-        </footer>
+    <footer class="mt-4">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.11.3/main.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.3/main.min.js"></script>
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    </footer>
 </body>
 </html>
