@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS `visitacao` (
   PRIMARY KEY (`data`, `horario`, `cliente_cpf`),
   FOREIGN KEY (`cliente_cpf`)
     REFERENCES `cliente` (`cpf`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS `evento` (
@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS `evento` (
   PRIMARY KEY (`data`, `horario`),
   FOREIGN KEY (`cliente_cpf`)
     REFERENCES `cliente` (`cpf`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS `pagamento` (
@@ -36,10 +36,12 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
   `qtd_parcelas` INT NOT NULL,
   `evento_data` DATE NOT NULL,
   `evento_horario` VARCHAR(45) NOT NULL,
+  `valor` DECIMAL(10,2) NOT NULL,
+  `data_pagto` DATE NOT NULL,
   FOREIGN KEY (`evento_data`, `evento_horario`)
     REFERENCES `evento` (`data`, `horario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS `kit_mobilia` (
@@ -54,12 +56,12 @@ CREATE TABLE IF NOT EXISTS `cliente_aluga_mobilia` (
   PRIMARY KEY (`cliente_cpf`, `kit_mobilia_id_mobilia`),
   FOREIGN KEY (`cliente_cpf`)
     REFERENCES `cliente` (`cpf`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   FOREIGN KEY (`kit_mobilia_id_mobilia`)
     REFERENCES `kit_mobilia` (`id_mobilia`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS `parceiro` (

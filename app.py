@@ -1,8 +1,15 @@
+import io
 import secrets
 import bcrypt
 import os
-from flask import Flask, jsonify, render_template, request, flash, redirect, url_for, session, abort
+from flask import Flask, render_template, request, flash, redirect, send_file, url_for, session
 import sqlite3
+from matplotlib.ticker import MaxNLocator
+import pandas as pd
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+import matplotlib.pyplot as plt
 
 
 app = Flask(__name__)#, static_url_path='/static')
@@ -13,45 +20,6 @@ app.secret_key = secrets.token_hex(16)
 # Cria um cursor
 def get_connection():
     return sqlite3.connect('instance/salao_festas.db')
-    
-
-'''def get_users_names():
-    with get_connection() as conn: 
-        cursor = conn.cursor() #usando o cursor em uma mesma thread
-        cursor.execute('SELECT nome from usuario')
-        # Recupere todos os resultados como uma lista de tuplas
-        result = cursor.fetchall()
-
-        names = []
-
-        for r in result:
-            name = r[0] #coluna 0 é a coluna nome armazenada no result
-            names.append(name)
-    
-        return names
-
-def get_username_by_id(user_id):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT nome FROM usuario WHERE id = ?', (user_id,))
-        result = cursor.fetchone()
-        if result:
-            return result[0]
-        else:
-            return None 
-
-def get_categories_infos():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT id, nome, genero, ano_lancamento, descricao_curta, descricao_completa, url_imagem FROM jogos')
-        result = cursor.fetchall()
-
-        infos = []
-
-        for row in result:
-            id, nome, genero, ano_lancamento, descricao_curta, descricao_completa, url_imagem = row
-            infos.append({'id': id, 'nome': nome, 'genero': genero, 'ano_lancamento': ano_lancamento, 'descricao_curta': descricao_curta, 'descricao_completa': descricao_completa, 'url_imagem': url_imagem})
-    return infos'''
 
 def get_clientes():
     with get_connection() as conn:
@@ -61,39 +29,10 @@ def get_clientes():
 
         return clientes
     
-'''def get_wishlist_by_user_id(user_id):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT jogos.id, jogos.nome, jogos.genero, jogos.ano_lancamento, jogos.descricao_curta, jogos.descricao_completa, jogos.url_imagem FROM lista_de_desejos JOIN jogos ON lista_de_desejos.id_jogo = jogos.id WHERE lista_de_desejos.id_usuario = ?', (user_id,))
-        result = cursor.fetchall()
-
-        wishlist = []
-
-        for row in result:
-            id, nome, genero, ano_lancamento, descricao_curta, descricao_completa, url_imagem = row
-            wishlist.append({'id': id, 'nome': nome, 'genero': genero, 'ano_lancamento': ano_lancamento, 'descricao_curta': descricao_curta, 'descricao_completa': descricao_completa, 'url_imagem': url_imagem})
-    
-        return wishlist
-
-def get_lista_de_desejos_by_user_id(user_id):
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT jogos.*
-        FROM lista_de_desejos
-        JOIN jogos ON lista_de_desejos.id_jogo = jogos.id
-        WHERE lista_de_desejos.id_usuario = ?
-    """, (user_id,))
-    rows = cur.fetchall()
-    columns = [column[0] for column in cur.description]
-    lista_de_desejos = [dict(zip(columns, row)) for row in rows]
-    conn.close()
-    return lista_de_desejos
-'''
 def get_agendamentos_dict():
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT data, horario, cpf, nome FROM visitacao, cliente WHERE visitacao.cliente_cpf = cliente.cpf')
+        cursor.execute('SELECT data, horario, cpf, nome_cliente FROM visitacao, cliente WHERE visitacao.cliente_cpf = cliente.cpf')
         todos_agendamentos = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
         return todos_agendamentos
 
@@ -103,107 +42,6 @@ def get_clientes_dict():
         cursor.execute('SELECT * FROM cliente')
         clientes = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
         return clientes    
-
-'''def add_avaliacao(user_id, id_jogo, nota, comentario):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO avaliacao (nota, comentario, id_jogo, id_usuario) VALUES (?, ?, ?, ?)', (nota, comentario, id_jogo, user_id))
-        conn.commit()
-
-        recalcula_media_de_notas(id_jogo)
-
-def get_media_de_notas():
-    with get_connection() as conn:
-        cur = conn.cursor()
-        #caso o valor for NULL, substitui por 0
-        cur.execute("""
-            SELECT id_jogo, COALESCE(AVG(nota), 0.0) as media 
-            FROM avaliacao
-            GROUP BY id_jogo
-        """)
-        result = cur.fetchall()
-
-        media_por_jogo = {}
-
-        for row in result:
-            id_jogo = row[0]
-            media = row[1]
-
-            media_por_jogo[id_jogo] = media
-
-            print(media_por_jogo)  # Debug print
-
-    return media_por_jogo
-
-def update_nota_media():
-    media_por_jogo = get_media_de_notas()
-
-    with get_connection() as conn:
-        cur = conn.cursor()
-        for id_jogo, media in media_por_jogo.items():
-            cur.execute("""
-                UPDATE jogos
-                SET nota_media = ?
-                WHERE id = ?
-            """, (media, id_jogo))
-        conn.commit()
-
-
-def recalcula_media_de_notas(id_jogo):
-    with get_connection() as conn:
-        cur = conn.cursor()
-        #caso o valor for NULL, substitui por 0
-        cur.execute("""
-            SELECT COALESCE(AVG(nota), 0.0) as media 
-            FROM avaliacao
-            WHERE id_jogo = ?
-        """, (id_jogo,))
-        
-        nova_media = cur.fetchone()[0]
-
-        nova_media = round(nova_media, 2) #arredonda para 2 casas decimais
-
-        cur.execute("""
-            UPDATE jogos
-            SET nota_media = ?
-            WHERE id = ?        
-        """, (nova_media, id_jogo))
-        conn.commit()
-
-def recalcula_media_de_notas_all_games():
-    with get_connection() as conn:
-        cur = conn.cursor()
-        cur.execute("SELECT id FROM jogos")
-        todos_os_ids_de_jogos = cur.fetchall()
-
-        for id_jogo in todos_os_ids_de_jogos:
-            recalcula_media_de_notas(id_jogo[0])
-
-
-def get_ranking():
-    with get_connection() as conn:
-        cur = conn.cursor()
-        cur.execute("""
-            SELECT jogos.nome, jogos.url_imagem, jogos.descricao_completa, jogos.nota_media, COUNT(avaliacao.id_jogo) as contagem
-            FROM jogos
-            JOIN avaliacao ON jogos.id = avaliacao.id_jogo
-            GROUP BY jogos.id
-            ORDER BY nota_media DESC, contagem DESC
-        """)
-        columns = [column[0] for column in cur.description]
-        return [dict(zip(columns, row)) for row in cur.fetchall()] 
-
-
- 
-def create_game(nome_jogo, lancamento_jogo, genero_jogo, descricao_curta, descricao_completa, url_imagem):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO jogos (nome, ano_lancamento, genero, descricao_curta, descricao_completa, url_imagem) VALUES (?, ?, ?, ?, ?, ?)',
-                       (nome_jogo, lancamento_jogo, genero_jogo, descricao_curta, descricao_completa, url_imagem))
-        conn.commit()
-
-
-'''
 
 ############################################### ROTAS CLIENTE #################################################
 # PAGINA INICIAL
@@ -296,7 +134,7 @@ def inject_active():
 def get_events():
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT nome, data FROM evento')
+        cursor.execute('SELECT nome_evento, data FROM evento')
         eventos = cursor.fetchall()
 
     eventos_list = [{"title": evento[0], "start": evento[1]} for evento in eventos]
@@ -354,7 +192,7 @@ def cadastrar():
         with get_connection() as conn:
             try:
                     cursor = conn.cursor()  
-                    cursor.execute('INSERT INTO cliente (cpf, nome, celular, endereco) VALUES (?, ?, ?, ?)', (cpf, nome, celular, endereco))
+                    cursor.execute('INSERT INTO cliente (cpf, nome_cliente, celular, endereco) VALUES (?, ?, ?, ?)', (cpf, nome, celular, endereco))
                     conn.commit() 
 
                     with open('instance/passwords.txt', 'a') as f:
@@ -378,7 +216,7 @@ def perfil():
 
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT cpf, nome, celular, endereco FROM cliente WHERE cpf = ?', (cpf,))
+        cursor.execute('SELECT cpf, nome_cliente, celular, endereco FROM cliente WHERE cpf = ?', (cpf,))
         cliente = cursor.fetchone()
 
     if not cliente:
@@ -413,14 +251,14 @@ def atualizar():
 
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute('UPDATE cliente SET nome = ?, celular = ?, endereco = ? WHERE cpf = ?', (nome, celular, endereco, cpf))
+            cursor.execute('UPDATE cliente SET nome_cliente = ?, celular = ?, endereco = ? WHERE cpf = ?', (nome, celular, endereco, cpf))
             conn.commit()
             flash('Cliente atualizado com sucesso!', 'success')
             return redirect(url_for('perfil'))
 
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT cpf, nome, celular, endereco FROM cliente WHERE cpf = ?', (cpf,))
+        cursor.execute('SELECT cpf, nome_cliente, celular, endereco FROM cliente WHERE cpf = ?', (cpf,))
         cliente = cursor.fetchone()
 
     return render_template('html/pages/cliente/atualizar.html', cliente=cliente)
@@ -572,7 +410,7 @@ def novo_evento():
             try:
                 with get_connection() as conn:
                     cursor = conn.cursor()
-                    cursor.execute('INSERT INTO evento (data, horario, nome, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data, horario, nome, tipo, cliente_cpf))
+                    cursor.execute('INSERT INTO evento (data, horario, nome_evento, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data, horario, nome, tipo, cliente_cpf))
                     conn.commit()
                     flash('Evento criado com sucesso!', 'success')
                     return redirect(url_for('eventos_admin'))
@@ -611,7 +449,7 @@ def editar_evento(data, horario):
                 with get_connection() as conn:
                     cursor = conn.cursor()
                     print(horario)
-                    cursor.execute('UPDATE evento SET data = ?, horario = ?, nome = ?, tipo = ?, cliente_cpf = ? WHERE data = ? AND horario = ?', (nova_data, novo_horario, nome, tipo, cliente_cpf, data, horario))
+                    cursor.execute('UPDATE evento SET data = ?, horario = ?, nome_evento = ?, tipo = ?, cliente_cpf = ? WHERE data = ? AND horario = ?', (nova_data, novo_horario, nome, tipo, cliente_cpf, data, horario))
                     conn.commit()
                     flash('Evento atualizado com sucesso!', 'success')
                     return redirect(url_for('eventos_admin'))
@@ -624,7 +462,7 @@ def editar_evento(data, horario):
         try:
             with get_connection() as conn:
                 cursor = conn.cursor()
-                cursor.execute('SELECT evento.data, evento.horario, evento.nome, evento.tipo, cliente.cpf, cliente.nome FROM evento JOIN cliente ON evento.cliente_cpf = cliente.cpf WHERE evento.data = ? AND evento.horario = ?', (data, horario))
+                cursor.execute('SELECT evento.data, evento.horario, evento.nome_evento, evento.tipo, cliente.cpf, cliente.nome_cliente FROM evento JOIN cliente ON evento.cliente_cpf = cliente.cpf WHERE evento.data = ? AND evento.horario = ?', (data, horario))
                 evento = cursor.fetchone()
                 clientes = get_clientes()
 
@@ -687,7 +525,7 @@ def pagamentos_admin():
     
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT pagamento.id_pagto, pagamento.forma_pagto, pagamento.qtd_parcelas, pagamento.evento_data, pagamento.evento_horario, pagamento.valor, pagamento.data_pagto, evento.nome FROM evento JOIN pagamento ON evento_data=data AND evento_horario=horario')
+        cursor.execute('SELECT pagamento.id_pagto, pagamento.forma_pagto, pagamento.qtd_parcelas, pagamento.evento_data, pagamento.evento_horario, pagamento.valor, pagamento.data_pagto, evento.nome_evento FROM evento JOIN pagamento ON evento_data=data AND evento_horario=horario')
         pagamentos = cursor.fetchall()
 
     return render_template('html/pages/admin/pagamentos-admin.html', pagamentos=pagamentos)
@@ -721,7 +559,7 @@ def novo_pagamento():
    
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT data, horario, nome FROM evento')
+        cursor.execute('SELECT data, horario, nome_evento FROM evento')
         eventos = cursor.fetchall()
 
     return render_template('html/pages/admin/formulario-pagamento.html', eventos=eventos)
@@ -755,7 +593,7 @@ def editar_pagamento(id_pagto):
    
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT data, horario, nome FROM evento')
+        cursor.execute('SELECT data, horario, nome_evento FROM evento')
         eventos = cursor.fetchall()
         
         cursor = conn.cursor()
@@ -938,110 +776,90 @@ def deletar_kit_mobilia(id_mobilia):
 
     return redirect(url_for('kits_mobilia_admin'))
 
-#@app.route('/categories')
-#def categories():
-#    games = get_games()
-#    return render_template('html/pages/categories.html', games=games)
+@app.route('/admin/eventos/relatorio')
+def gerar_relatorio_eventos():
+    conn = sqlite3.connect('instance/salao_festas.db')
+
+    eventos_df = pd.read_sql_query("SELECT * FROM evento", conn)
+    pagamentos_df = pd.read_sql_query("SELECT * FROM pagamento", conn)
+
+    eventos_df['data'] = pd.to_datetime(eventos_df['data'], format='%Y-%m-%d')
+    pagamentos_df['evento_data'] = pd.to_datetime(pagamentos_df['evento_data'], infer_datetime_format=True)
+
+    eventos_df['mes'] = eventos_df['data'].dt.to_period('M')
+
+    merged_df = pd.merge(eventos_df, pagamentos_df, left_on=['data', 'horario'], right_on=['evento_data', 'evento_horario'])
+
+    # relatorio 1: eventos por mes
+    ocorrencias_evento = eventos_df.groupby(['mes', 'tipo']).size().unstack(fill_value=0)
+    ax = ocorrencias_evento.plot(kind='bar', stacked=True, figsize=(10, 6))
+
+    # Convert the PeriodIndex to the desired format
+    labels = ocorrencias_evento.index.strftime('%m/%Y')
+
+    ax.set_xlabel('Mês')
+    ax.set_ylabel('Número de eventos')
+    ax.set_title('Eventos por mês')
+    ax.set_xticks(range(len(labels)))  # Set the positions of the ticks
+    ax.set_xticklabels(labels, rotation=45)  # Set the formatted labels
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))  # Ensure y-axis labels are integers
+    plt.tight_layout()
+    plt.savefig('static/ocorrencias_eventos.png')
+    plt.close()
+
+    # relatorio2: receita por tipo de evento
+    receita_por_tipo_evento = merged_df.groupby('tipo')['valor'].sum().reset_index()
+    plt.figure(figsize=(10, 6))
+    plt.bar(receita_por_tipo_evento['tipo'], receita_por_tipo_evento['valor'])
+    plt.xlabel('Tipo de evento')
+    plt.ylabel('Receita')
+    plt.title('Receita por tipo de evento')
+    plt.xticks(ticks=range(len(receita_por_tipo_evento['tipo'])), labels=receita_por_tipo_evento['tipo'], rotation=45)
+    plt.tight_layout()
+    plt.savefig('static/receita_por_tipo_evento.png')
+    plt.close()
+
+    #relatorio3: total de eventos por mes
+    total_eventos_mes = eventos_df.groupby('mes').size()
+
+    # Convert the PeriodIndex to the desired format
+    labels = total_eventos_mes.index.strftime('%m/%Y')
+
+    plt.figure(figsize=(10, 6))
+    plt.pie(total_eventos_mes, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.title('Número total de eventos por mês')
+    plt.tight_layout()
+    plt.savefig('static/total_eventos_por_mes.png')
+    plt.close()
+
+    conn.close()
+
+    # Create PDF
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("Relatório de Eventos", styles['Title']))
+    elements.append(Spacer(1, 12))
+
+    elements.append(Paragraph("Ocorrências de eventos por mês", styles['Heading2']))
+    elements.append(Image('static/ocorrencias_eventos.png', width=500, height=300))
+    elements.append(Spacer(1, 12))
+
+    elements.append(Paragraph("Receita por tipo de evento", styles['Heading2']))
+    elements.append(Image('static/receita_por_tipo_evento.png', width=500, height=300))
+    elements.append(Spacer(1, 12))
+
+    elements.append(Paragraph("Número total de eventos por mês", styles['Heading2']))
+    elements.append(Image('static/total_eventos_por_mes.png', width=500, height=300))
+    elements.append(Spacer(1, 12))
 
 
-#@app.route('/ranking')
-##def ranking():
-#    ranking = get_ranking()
-#    return render_template('html/pages/ranking.html', ranking=ranking)
+    doc.build(elements)
 
-##@app.route('/perfil', methods=['GET', 'POST'])
-#def profile():
- #   if 'id_usuario' in session:
-  #      id_usuario = session['id_usuario']
-   #     usuario_nome = get_username_by_id(id_usuario)
-    #    #lista_de_desejos = get_lista_de_desejos_by_user_id(user_id)
-    #    agendamentos = get_agendamentos_dict()  # Buscar todos os agendamentos do cliente
-    #    if agendamentos is None:
-     #       agendamentos = []
-        #if request.method == 'POST':
-            #id_agendamento = request.form.get('agendamento')
-            #nota = request.form.get('nota')
-            #comentario = request.form.get('comentario')
-            #add_avaliacao(user_id, id_jogo, nota, comentario)
-            #flash('Avaliação enviada com sucesso!', 'success')
-      #      return redirect(url_for('profile'))  # Redireciona para a mesma página
-       # return render_template('html/pages/profile.html', nome=usuario_nome, agendamentos=agendammentos)
-    #else:
-    #    flash('Você precisa fazer login para acessar esta página.', 'warning')
-     ##   return redirect(url_for('login'))
-
-#@app.route('/adminpage', methods=['GET', 'POST'])
-#def adminpage():
-#    if request.method == 'POST':
-#        nome = request.form['nome']
-#        lancamento = request.form['lancamento']
-#        genero = request.form['genero']
-#        descricao_curta = request.form['descricao_curta']
-#        descricao_completa = request.form['descricao_completa']
-#        url_imagem = request.form['url_imagem']
-#
- #       if nome == "":
-  #          flash('Preencha o campo Nome!', 'warning')
-   #     elif lancamento == "":
-    #        flash('Preencha o campo Ano de lançamento!', 'warning')
-     #   elif genero == "":
-      #      flash('Preencha o campo Gênero!', 'warning')
-       # elif descricao_curta == "":
-        #    flash('Preencha o campo Descrição curta!', 'warning')
-        #elif descricao_completa == "":
-        #    flash('Preencha o campo de Descrição completa!', 'warning')
-        #elif url_imagem == "":
-        #    flash('Preencha o campo de URL da imagem!', 'warning')
-
-        #create_game(nome, lancamento, genero, descricao_curta, descricao_completa, url_imagem)
-        #flash(f'Jogo "{nome}" adicionado com sucesso!', 'success')
-
-    #games = get_games_dict()
-    #return render_template('html/pages/adminpage.html', games=games)
-
-#@app.route('/add_to_wishlist', methods=['POST'])
-#def add_to_wishlist():
-#    if 'user_id' not in session:
-#        abort(403)  # Retorna um erro 403 se o usuário não estiver logado
-
-#    game_id = request.form.get('game_id')
-#    user_id = session['user_id']
-
-#    with get_connection() as conn:
-#        cursor = conn.cursor()
-#        cursor.execute('INSERT INTO lista_de_desejos (id_jogo, id_usuario) VALUES (?, ?)', (game_id, user_id))
-#        conn.commit()
-
- #   return '', 204  # Retorna um status 204 (No Content) para indicar que a operação foi bem-sucedida
-
-#@app.route('/delete_game', methods=['DELETE'])
-#def delete_game():
-#    id_jogo = request.form.get('game_id')
-
-   # with get_connection() as conn:   
-   #     cursor = conn.cursor()
-   #     cursor.execute('DELETE FROM jogos WHERE id = ?', (id_jogo,))
-   #     conn.commit()
-    
-   # return '', 204  # Retorna um status 204 (No Content) para indicar que a operação foi bem-sucedida
-
-#@app.route('/update_game', methods=['PUT'])
-#def update_game():  
-#    id_jogo = request.form.get('game_id')
-#    nome_jogo = request.form.get('nome')
-#    lancamento_jogo = request.form.get('lancamento')
-#    genero_jogo = request.form.get('genero')
-#    descricao_curta = request.form.get('descricao_curta')
-#    descricao_completa = request.form.get('descricao_completa')
-#    url_imagem = request.form.get('url')
-
- #   with get_connection() as conn:
-  #      cursor = conn.cursor()
-   #     cursor.execute('UPDATE jogos SET nome = ?, ano_lancamento = ?, genero = ?, descricao_curta = ?, descricao_completa = ?, url_imagem = ? WHERE id = ?', 
-    #                   (nome_jogo, lancamento_jogo, genero_jogo, descricao_curta, descricao_completa, url_imagem, id_jogo))
-    #    conn.commit()
-    
-   # return '', 204
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name='relatorio_eventos.pdf', mimetype='application/pdf')
 
 if __name__ == '__main__':
     #recalcula_media_de_notas_all_games()

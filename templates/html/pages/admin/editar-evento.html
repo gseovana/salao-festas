@@ -11,7 +11,18 @@
             </div>
             <div class="form-group mb-3">
                 <label for="tipo_evento">Tipo</label>
-                <input name="tipo_evento" value="{{ evento[3] }}" class="form-control">
+                <select name="tipo_evento" id="tipo_evento" class="form-control">
+                    <option value="">Selecione o tipo de evento</option>
+                    <option value="Casamento" {% if evento[3] == 'Casamento' %}selected{% endif %}>Casamento</option>
+                    <option value="Aniversario" {% if evento[3] == 'Aniversario' %}selected{% endif %}>Aniversário</option>
+                    <option value="Corporativo" {% if evento[3] == 'Corporativo' %}selected{% endif %}>Corporativo</option>
+                    <option value="Formatura" {% if evento[3] == 'Formatura' %}selected{% endif %}>Formatura</option>
+                    <option value="Debutante" {% if evento[3] == 'Debutante' %}selected{% endif %}>Debutante</option>
+                    <option value="Batizado" {% if evento[3] == 'Batizado' %}selected{% endif %}>Batizado</option>
+                    <option value="Confraternização" {% if evento[3] == 'Confraternização' %}selected{% endif %}>Confraternização</option>
+                    <option value="Cultural" {% if evento[3] == 'Cultural' %}selected{% endif %}>Cultural</option>
+                    <option value="Outros" {% if evento[3] == 'Outros' %}selected{% endif %}>Outros</option>
+                </select>
             </div>
             <div class="form-group mb-3">
                 <label for="data_evento">Data</label>
