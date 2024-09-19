@@ -17,7 +17,7 @@
           <tr>
               <td class="text-center">{{ evento[2] }}</td>
               <td class="text-center">{{ evento[3] }}</td>
-              <td class="text-center">{{ evento[0] }}</td>
+              <td class="text-center">{{ evento[0] | datetime('%d/%m/%Y') }}</td>
               <td class="text-center">{{ evento[1] }}</td>
           </tr>
           {% endfor %}
