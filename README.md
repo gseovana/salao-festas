@@ -21,7 +21,7 @@ As funcionalidades do sistema incluem:
 Andre Luis Magalhaes Santos **(BD | Back-end)**<br/> 
 Geovana Silva de Oliveira **(Full-stack | BD)**<br/> 
 Jessica de Sousa Costa **(Front-end | UI/UX)**<br/> 
-Nicolas de Oliveira Gomes**(Front-end)**<br/> 
+Nicolas de Oliveira Gomes **(Front-end)**<br/> 
 Pablo Goncalves Barbosa<br/> 
 Vinicius Andrade Costa **(Front-end)**<br/> 
 
