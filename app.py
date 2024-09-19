@@ -1,3 +1,4 @@
+from datetime import datetime
 import io
 import secrets
 import bcrypt
@@ -42,7 +43,18 @@ def get_clientes_dict():
         cursor.execute('SELECT * FROM cliente')
         clientes = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
         return clientes    
+    
+def format_datetime(value, format='%d/%m/%Y'):
+    if value is None:
+        return ""
+    # Parse the string into a datetime object
+    try:
+        date_obj = datetime.strptime(value, '%Y-%m-%d')
+        return date_obj.strftime(format)
+    except ValueError:
+        return value  # Return the original value if parsing fails
 
+app.jinja_env.filters['datetime'] = format_datetime
 ############################################### ROTAS CLIENTE #################################################
 # PAGINA INICIAL
 @app.route('/home')
@@ -868,22 +880,17 @@ def gerar_relatorio_pagamentos():
     eventos_df = pd.read_sql_query("SELECT * FROM evento", conn)
     pagamentos_df = pd.read_sql_query("SELECT * FROM pagamento", conn)
 
-    # Convert date columns to datetime
     eventos_df['data'] = pd.to_datetime(eventos_df['data'], format='%Y-%m-%d')
     pagamentos_df['evento_data'] = pd.to_datetime(pagamentos_df['evento_data'], infer_datetime_format=True)
     pagamentos_df['data_pagto'] = pd.to_datetime(pagamentos_df['data_pagto'], infer_datetime_format=True)
 
-    # Extract month and year from date
     eventos_df['mes'] = eventos_df['data'].dt.to_period('M')
     pagamentos_df['mes'] = pagamentos_df['data_pagto'].dt.to_period('M')
 
-    # Merge dataframes
     merged_df = pd.merge(eventos_df, pagamentos_df, left_on=['data', 'horario'], right_on=['evento_data', 'evento_horario'])
 
-    # Ensure 'mes' column is in merged_df
     merged_df['mes'] = merged_df['data_pagto'].dt.to_period('M')
 
-    # Report 1: Payment values per month
     valores = merged_df.groupby('mes')['valor'].sum().reset_index()
     plt.figure(figsize=(10, 6))
     plt.plot(valores['mes'].dt.strftime('%m/%Y'), valores['valor'], marker='o')
@@ -891,7 +898,7 @@ def gerar_relatorio_pagamentos():
     plt.ylabel('Valor pago')
     plt.title('Valores pagos por mês')
     plt.xticks(rotation=45)
-    plt.ylim(0, valores['valor'].max() + 50)  # Ensure y-axis starts from 0 and goes up by 100
+    plt.ylim(0, valores['valor'].max() + 50)  
     plt.yticks(range(0, int(valores['valor'].max() + 50), 50))
     plt.tight_layout()
     plt.savefig('static/valores_pagos.png')
@@ -899,7 +906,6 @@ def gerar_relatorio_pagamentos():
 
     conn.close()
 
-    # Create PDF
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
     styles = getSampleStyleSheet()
@@ -918,5 +924,4 @@ def gerar_relatorio_pagamentos():
     return send_file(buffer, as_attachment=True, download_name='relatorio_pagamentos.pdf', mimetype='application/pdf')
 
 if __name__ == '__main__':
-    #recalcula_media_de_notas_all_games()
     app.run(debug=True)
