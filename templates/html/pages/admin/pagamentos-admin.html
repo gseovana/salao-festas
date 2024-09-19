@@ -4,6 +4,7 @@
 <h1 class="text-center">Pagamentos</h1>
 <div class="container d-flex flex-column align-items-center">
     <div class="w-100 d-flex justify-content-end mb-3">
+        <a href="{{ url_for('gerar_relatorio_pagamentos') }}" class="btn btn-info me-2">Gerar relatório</a>
         <a href="{{ url_for('novo_pagamento') }}" class="btn btn-primary">Novo pagamento</a>
     </div>
     <table class="table table">

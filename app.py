@@ -861,6 +861,62 @@ def gerar_relatorio_eventos():
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name='relatorio_eventos.pdf', mimetype='application/pdf')
 
+@app.route('/admin/pagamentos/relatorio')
+def gerar_relatorio_pagamentos():
+    conn = sqlite3.connect('instance/salao_festas.db')
+
+    eventos_df = pd.read_sql_query("SELECT * FROM evento", conn)
+    pagamentos_df = pd.read_sql_query("SELECT * FROM pagamento", conn)
+
+    # Convert date columns to datetime
+    eventos_df['data'] = pd.to_datetime(eventos_df['data'], format='%Y-%m-%d')
+    pagamentos_df['evento_data'] = pd.to_datetime(pagamentos_df['evento_data'], infer_datetime_format=True)
+    pagamentos_df['data_pagto'] = pd.to_datetime(pagamentos_df['data_pagto'], infer_datetime_format=True)
+
+    # Extract month and year from date
+    eventos_df['mes'] = eventos_df['data'].dt.to_period('M')
+    pagamentos_df['mes'] = pagamentos_df['data_pagto'].dt.to_period('M')
+
+    # Merge dataframes
+    merged_df = pd.merge(eventos_df, pagamentos_df, left_on=['data', 'horario'], right_on=['evento_data', 'evento_horario'])
+
+    # Ensure 'mes' column is in merged_df
+    merged_df['mes'] = merged_df['data_pagto'].dt.to_period('M')
+
+    # Report 1: Payment values per month
+    valores = merged_df.groupby('mes')['valor'].sum().reset_index()
+    plt.figure(figsize=(10, 6))
+    plt.plot(valores['mes'].dt.strftime('%m/%Y'), valores['valor'], marker='o')
+    plt.xlabel('Mês')
+    plt.ylabel('Valor pago')
+    plt.title('Valores pagos por mês')
+    plt.xticks(rotation=45)
+    plt.ylim(0, valores['valor'].max() + 50)  # Ensure y-axis starts from 0 and goes up by 100
+    plt.yticks(range(0, int(valores['valor'].max() + 50), 50))
+    plt.tight_layout()
+    plt.savefig('static/valores_pagos.png')
+    plt.close()
+
+    conn.close()
+
+    # Create PDF
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("Relatório de Pagamentos", styles['Title']))
+    elements.append(Spacer(1, 12))
+
+    elements.append(Paragraph("Valores pagos por mês", styles['Heading2']))
+    elements.append(Image('static/valores_pagos.png', width=500, height=300))
+    elements.append(Spacer(1, 12))
+
+    doc.build(elements)
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name='relatorio_pagamentos.pdf', mimetype='application/pdf')
+
 if __name__ == '__main__':
     #recalcula_media_de_notas_all_games()
     app.run(debug=True)
