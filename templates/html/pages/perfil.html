@@ -27,9 +27,12 @@
 
                     <div class="d-flex justify-content-between align-items-center">
                         <a id="redirection" href="{{ url_for('dashboard_cliente') }}" class="btn btn-secondary">Voltar</a>
-                        <button type="submit" class="btn btn btn-login">Atualizar</button>
+                        <button type="submit" class="btn btn-login">Atualizar</button>
                     </div>
                 </fieldset>
+            </form>
+            <form action="{{ url_for('deletar_cliente', cpf=cliente[0]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta? \nIsso apagará todas as informações de visitação, eventos, pagamentos e aluguel de mobília relacionados à você. Essa ação NÃO poderá ser desfeita.')">
+                <button type="submit" class="btn btn-danger mt-3">Excluir conta</button>
             </form>
         </div>
     </div>

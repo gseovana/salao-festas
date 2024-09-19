@@ -173,7 +173,7 @@ def cadastrar():
         senha = request.form['senha']
         confirmarSenha = request.form['confirmar_senha']
 
-        #exceção de formulário incompleto
+        # Exceção de formulário incompleto
         if nome == "":
             flash('Preencha o campo Nome!', 'warning')
         elif celular == "":
@@ -189,31 +189,31 @@ def cadastrar():
 
         hashed_senha = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
 
-        #exceção de nome inválido
-        for c in get_clientes():
-            if cpf == c:
-                flash('Usuário inválido. Tente novamente!', 'warning') 
-                return redirect(url_for('cadastrar'))
-
-        #exceção de senhas incompatíveis
+        # Exceção de senhas incompatíveis
         if senha != confirmarSenha:
-            flash('As senhas não coincidem. Tente novamente!')
+            flash('As senhas não coincidem. Tente novamente!', 'warning')
             return redirect(url_for('cadastrar'))
-        
-        #Inserindo no bd
+
+        # Inserindo no bd
         with get_connection() as conn:
-            try:
-                    cursor = conn.cursor()  
-                    cursor.execute('INSERT INTO cliente (cpf, nome_cliente, celular, endereco) VALUES (?, ?, ?, ?)', (cpf, nome, celular, endereco))
-                    conn.commit() 
+            cursor = conn.cursor()
+            cursor.execute('SELECT cpf FROM cliente WHERE cpf = ?', (cpf,))
+            cliente = cursor.fetchone()
 
-                    with open('instance/passwords.txt', 'a') as f:
-                        f.write(f"{cpf},{hashed_senha.decode('utf-8')}\n")
+            if cliente:
+                flash('Usuário já existe. Tente novamente!', 'warning')
+                return redirect(url_for('cadastrar'))
+            else:
+                # Insert new cliente with esta_ativo = TRUE
+                cursor.execute('INSERT INTO cliente (cpf, nome_cliente, celular, endereco) VALUES (?, ?, ?, ?)', (cpf, nome, celular, endereco))
+                conn.commit()
+                flash('Cliente cadastrado com sucesso!', 'success')
 
-                    flash('Cliente cadastrado com sucesso!', 'success')
-                    return redirect(url_for('login'))
-            except:
-                    flash('Erro ao cadastrar cliente. Tente novamente!', 'error')
+            # Save the hashed password to the file
+            with open('instance/passwords.txt', 'a') as f:
+                f.write(f"{cpf},{hashed_senha.decode('utf-8')}\n")
+
+            return redirect(url_for('login'))
 
     return render_template('html/pages/cliente/formulario-cliente.html')
 
@@ -274,6 +274,30 @@ def atualizar():
 
     return render_template('html/pages/cliente/atualizar.html', cliente=cliente)
 
+@app.route('/cliente/deletar/<cpf>', methods=['POST'])
+def deletar_cliente(cpf):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM cliente WHERE cpf = ?', (cpf,))
+        conn.commit()
+
+    
+    login_file_path = 'instance/passwords.txt'
+    with open(login_file_path, 'r') as file:
+        lines = file.readlines()
+    
+    with open(login_file_path, 'w') as file:
+        for line in lines:
+            if not line.startswith(cpf + ','):
+                file.write(line)
+    
+    flash('Cliente deletado com sucesso!', 'success')
+    return redirect(url_for('logout'))
+
 @app.route('/cliente/parceiros', methods=['GET'])
 def ver_parceiros_cliente():
     if not session.get('cpf'):
@@ -286,6 +310,8 @@ def ver_parceiros_cliente():
         parceiros = cursor.fetchall()
 
     return render_template('html/pages/cliente/parceiros-cliente.html', parceiros=parceiros)
+
+@app.route('/cliente/kit-mobilia/novo', methods=['GET', 'POST'])
 
 ############################ AGENDAMENTOS CLIENTE ################################
 
