@@ -22,7 +22,7 @@ Andre Luis Magalhaes Santos **(BD | Back-end)**<br/>
 Geovana Silva de Oliveira **(Full-stack | BD)**<br/> 
 Jessica de Sousa Costa **(Front-end | UI/UX)**<br/> 
 Nicolas de Oliveira Gomes **(Front-end)**<br/> 
-Pablo Goncalves Barbosa<br/> 
+Pablo Goncalves Barbosa **(Full-stack | BD)**<br/> 
 Vinicius Andrade Costa **(Front-end)**<br/> 
 
 ## Tecnologias utilizadas
