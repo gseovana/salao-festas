@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-center">Meus aluguéis de mobília</h1>
+<div class="container d-flex flex-column align-items-center">
+    <div class="d-flex justify-content-end mb-3 w-100">
+        <form action="{{ url_for('nova_mobilia_cliente') }}" method="GET">
+            <button type="submit" class="btn btn-primary">Alugar mobília</button>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Tipo</th>
+            <th scope="col" class="text-center">Quantidade</th>
+            <th scope="col" class="text-center">Valor total</th>
+            <th scope="col" class="text-center">Data</th>
+            <th scope="col" class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for mobilia in mobilias_cliente %}
+          <tr>
+              <td class="text-center">{{ mobilia[1] }}</td>
+              <td class="text-center">{{ mobilia[2] }}</td>
+              <td class="text-center">{{ mobilia[3] }}</td>
+              <td class="text-center">{{ mobilia[4] | datetime('%d/%m/%Y')}}</td>
+              <td class="text-center">
+                <form action="{{ url_for('excluir_mobilia_cliente', tipo_mobilia=mobilia[0]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja devolver esta(s) mobília(s)?');">
+                  <button type="submit" class="btn btn-danger">Cancelar</button>
+              </form>
+              </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}

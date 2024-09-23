@@ -14,12 +14,14 @@
         </thead>
         <tbody>
           {% for cliente in clientes %}
+          {% if cliente[0] != '000.000.000-00' %}
           <tr>
               <td class="text-center">{{ cliente[0] }}</td>
               <td class="text-center">{{ cliente[1] }}</td>
               <td class="text-center">{{ cliente[2] }}</td>
               <td class="text-center">{{ cliente[3] }}</td>
           </tr>
+          {% endif %}
           {% endfor %}
         </tbody>
       </table>

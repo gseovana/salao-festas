@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-center">Mobílias alugadas</h1>
+<div class="container d-flex flex-column align-items-center">
+    <div class="w-100 d-flex justify-content-end mb-3">
+        <a href="{{ url_for('mobilias_admin') }}" class="btn btn-info">Voltar</a>
+    </div>
+    <div class="container d-flex flex-column align-items-center">
+        <table class="table table">
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">Nome cliente</th>
+                <th scope="col" class="text-center">CPF cliente</th>
+                <th scope="col" class="text-center">Tipo</th>
+                <th scope="col" class="text-center">Quantidade</th>
+                <th scope="col" class="text-center">Preço</th>
+                <th scope="col" class="text-center">Data aluguel </th>
+                <th scope="col" class="text-center">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for mobilia in mobilias_alugadas %}
+            <tr>
+                <td class="text-center">{{ mobilia[5] }}</td>
+                <td class="text-center">{{ mobilia[0] }}</td>
+                <td class="text-center">{{ mobilia[1] }}</td>
+                <td class="text-center">{{ mobilia[2] }}</td>
+                <td class="text-center">{{ mobilia[3] }}</td>
+                <td class="text-center">{{ mobilia[4] | datetime('%d/%m/%Y') }}</td>
+
+                <td class="text-center">
+                    <form action="{{ url_for('deletar_mobilia_admin', tipo_mobilia=mobilia[0]) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                    <button type="submit" class="btn btn-danger">Devolver</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function confirmDelete() {
+        return confirm('Tem certeza que deseja excluir esse aluguel?');
+    }
+</script>
+{% endblock %}

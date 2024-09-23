@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-center">Mobílias</h1>
+<div class="container d-flex flex-column align-items-center">
+    <div class="w-100 d-flex justify-content-end mb-3">
+        <a href="{{ url_for('mobilias_alugadas_admin') }}" method="GET" class="btn btn-info">Ver aluguéis</a>
+        <a href="{{ url_for('nova_mobilia_admin') }}" class="btn btn-primary">Adicionar mobília</a>
+    </div>
+    <table class="table table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Tipo</th>
+            <th scope="col" class="text-center">Quantidade</th>
+            <th scope="col" class="text-center">Preço</th>
+            <th scope="col" class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for mobilia in mobilias %}
+          <tr>
+              <td class="text-center">{{ mobilia[0] }}</td>
+              <td class="text-center">{{ mobilia[1] }}</td>
+              <td class="text-center">{{ mobilia[2] }}</td>
+              <td class="text-center">
+                <form action="{{ url_for('deletar_mobilia_admin', tipo_mobilia=mobilia[0]) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                  <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+                <form action="{{ url_for('editar_mobilia_admin', tipo_mobilia=mobilia[0]) }}" method="GET" style="display:inline;">
+                    <button type="submit" class="btn btn-warning">Editar</button>
+                </form>
+              </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="mt-3">
+    </div>
+</div>
+
+<script>
+    function confirmDelete() {
+        return confirm('Tem certeza que deseja excluir essa mobília?');
+    }
+</script>
+
+{% endblock %}

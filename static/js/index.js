@@ -65,7 +65,7 @@ $(document).ready(function() {
                     'horario': horario
                 },
                 success: function(response) {
-                    alert("Cancelado com sucesso!");
+                    alert("Realizado com sucesso!");
                     location.reload(); // Reload the page to reflect changes
                 },
                 error: function(response) {

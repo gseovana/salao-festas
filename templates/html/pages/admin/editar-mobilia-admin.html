@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center mt-5">
+    <form action="{{ url_for('editar_mobilia_admin', tipo_mobilia=mobilia[0]) }}" method="POST" class="w-50 p-4 border rounded">
+        <h1 class="text-center mb-4">Editar mobília</h1>
+        <div class="form-group mb-3">
+            <label for="quantidade">Quantidade disponível:</label>
+            <input type="number" class="form-control" id="quantidade" name="quantidade" value="{{ mobilia[1] }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="tipo_mobilia">Tipo: </label>
+                <input type="text" class="form-control" value="{{ mobilia[0] }}" id="tipo_mobilia" name="tipo_mobilia" readonly>
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label for="valor">Preço:</label>
+            <input type="text" class="form-control" id="valor" name="valor" value="{{ mobilia[2] }}" required>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('mobilias_admin') }}" class="btn btn-secondary">Voltar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

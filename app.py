@@ -1,10 +1,12 @@
 from datetime import datetime
+from decimal import Decimal
 import io
 import secrets
 import bcrypt
 import os
 from flask import Flask, render_template, request, flash, redirect, send_file, url_for, session
 import sqlite3
+from sqlite3 import IntegrityError
 from matplotlib.ticker import MaxNLocator
 import pandas as pd
 from reportlab.lib.pagesizes import letter
@@ -29,6 +31,14 @@ def get_clientes():
         clientes = cursor.fetchall()
 
         return clientes
+
+def get_mobilias():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM mobilia')
+        mobilias = cursor.fetchall()
+
+        return mobilias
     
 def get_agendamentos_dict():
     with get_connection() as conn:
@@ -311,7 +321,7 @@ def ver_parceiros_cliente():
 
     return render_template('html/pages/cliente/parceiros-cliente.html', parceiros=parceiros)
 
-@app.route('/cliente/kit-mobilia/novo', methods=['GET', 'POST'])
+@app.route('/cliente/mobilia/novo', methods=['GET', 'POST'])
 
 ############################ AGENDAMENTOS CLIENTE ################################
 
@@ -347,12 +357,20 @@ def novo_agendamento():
         elif horario == "":
             flash('Preencha o campo Hora!', 'warning')
 
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute('INSERT INTO visitacao (data, horario, cliente_cpf) VALUES (?, ?, ?)', (data, horario, cpf))
-            conn.commit()
-            flash('Agendamento criado com sucesso!', 'success')
-            return redirect(url_for('agendamentos_cliente'))
+        try: 
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('INSERT INTO visitacao (data, horario, cliente_cpf) VALUES (?, ?, ?)', (data, horario, cpf))
+                conn.commit()
+                flash('Agendamento criado com sucesso!', 'success')
+        except IntegrityError as e:
+            flash(str(e), 'danger')
+            return render_template('html/pages/cliente/formulario-agendamento.html')
+
+        except Exception as e:
+                flash(f'Erro ao criar o evento: {e}', 'danger')
+                return render_template('html/pages/cliente/formulario-agendamento.html')
+
 
     return render_template('html/pages/cliente/formulario-agendamento.html')
 
@@ -366,8 +384,6 @@ def cancelar_agendamento():
 
     data_agendamento = request.form.get('data')
     hora_agendamento = request.form.get('horario')
-
-    print(f"Received data: {data_agendamento}, hora: {hora_agendamento}")  # Debug statement
 
     if not data_agendamento or not hora_agendamento:
         flash('Dados inválidos para cancelar o agendamento.', 'danger')
@@ -439,6 +455,8 @@ def novo_evento():
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('login'))
 
+    clientes = get_clientes()  # Ensure clientes is fetched before any potential return
+
     if request.method == 'POST':
         data = request.form['data_evento']
         horario = request.form['horario_evento']
@@ -446,28 +464,18 @@ def novo_evento():
         tipo = request.form['tipo_evento']
         cliente_cpf = request.form['cliente_evento']
 
-        if nome == "":
-            flash('Preencha o campo Nome!', 'warning')
-        elif data == "":
-            flash('Preencha o campo Data!', 'warning')
-        elif horario == "":
-            flash('Preencha o campo Horário!', 'warning')
-        elif tipo == "":
-            flash('Preencha o campo Tipo!', 'warning')
-        elif cliente_cpf == "":
-            flash('Preencha o campo CPF do cliente!', 'warning')
-        else:
-            try:
-                with get_connection() as conn:
-                    cursor = conn.cursor()
-                    cursor.execute('INSERT INTO evento (data, horario, nome_evento, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data, horario, nome, tipo, cliente_cpf))
-                    conn.commit()
-                    flash('Evento criado com sucesso!', 'success')
-                    return redirect(url_for('eventos_admin'))
-            except Exception as e:
-                flash(f'Erro ao criar o evento: {e}', 'danger')
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('INSERT INTO evento (data, horario, nome_evento, tipo, cliente_cpf) VALUES (?, ?, ?, ?, ?)', (data, horario, nome, tipo, cliente_cpf))
+                conn.commit()
+                flash('Evento criado com sucesso!', 'success')
+                return redirect(url_for('eventos_admin'))
+        except IntegrityError as e:
+            flash('Conflito detectado: Já existe um agendamento ou evento neste horário.', 'danger')
+        except Exception as e:
+            flash(f'Erro ao criar o evento: {e}', 'danger')
 
-    clientes = get_clientes()
     return render_template('html/pages/admin/formulario-evento.html', clientes=clientes)
 
 @app.route('/admin/eventos/editar/<data>/<horario>', methods=['GET', 'POST'])
@@ -761,8 +769,8 @@ def deletar_parceiro(id_parceiro):
 
     return redirect(url_for('parceiros_admin'))
 
-@app.route('/admin/kits-mobilia', methods=['GET'])
-def kits_mobilia_admin():
+@app.route('/admin/mobilia', methods=['GET'])
+def mobilias_admin():
     if not session.get('cpf'):
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('login'))
@@ -771,46 +779,81 @@ def kits_mobilia_admin():
         cursor = conn.cursor()
         
         # Fetch all rows
-        cursor.execute('SELECT * FROM kit_mobilia')
-        kits_mobilia = cursor.fetchall()
+        cursor.execute('SELECT * FROM mobilia')
+        mobilias = cursor.fetchall()
         
         # Fetch the total sum of quantidade
-        cursor.execute('SELECT SUM(quantidade) FROM kit_mobilia')
+        cursor.execute('SELECT SUM(quantidade) FROM mobilia')
         total_quantidade = cursor.fetchone()[0]
         if total_quantidade is None:
             total_quantidade = 0
 
-    return render_template('html/pages/admin/kit-mobilia-admin.html', kits_mobilia=kits_mobilia, total_quantidade=total_quantidade)
+    return render_template('html/pages/admin/mobilias-admin.html', mobilias=mobilias, total_quantidade=total_quantidade)
 
-@app.route('/admin/kits-mobilia/novo', methods=['GET', 'POST'])
-def novo_kit_mobilia():
+@app.route('/admin/mobilias/novo', methods=['GET', 'POST'])
+def nova_mobilia_admin():
     if not session.get('cpf'):
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('login'))
 
     if request.method == 'POST':
         quantidade = request.form['quantidade']
-        print(f'Received form data: quantidade={quantidade}')
+        tipo_mobilia = request.form['tipo_mobilia']
+        valor = request.form['valor']
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('INSERT INTO mobilia (tipo_mobilia, quantidade, valor) VALUES (?, ?, ?)', (tipo_mobilia, quantidade, valor))
+                conn.commit()
+                flash('Mobília criada com sucesso!', 'success')
+                return redirect(url_for('mobilias_admin'))
+        except Exception as e:
+            flash(f'Erro ao criar o kit mobília: {e}', 'danger')
+            return redirect(url_for('nova_mobilia_admin'))
 
-        if not quantidade:
-            flash('Todos os campos são obrigatórios.', 'warning')
-            return redirect(url_for('novo_kit_mobilia'))
+    try:
+        mobilias = get_mobilias()
+    except Exception as e:
+        flash(f'Erro ao buscar mobília: {e}', 'danger')
+        mobilias = []
+
+    return render_template('html/pages/admin/formulario-mobilia-admin.html', mobilias=mobilias)
+
+@app.route('/admin/mobilias/editar/<tipo_mobilia>', methods=['GET', 'POST'])
+def editar_mobilia_admin(tipo_mobilia):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        quantidade = request.form['quantidade']
+        valor = request.form['valor']
 
         try:
             with get_connection() as conn:
                 cursor = conn.cursor()
-                cursor.execute('INSERT INTO kit_mobilia (quantidade) VALUES (?)', (quantidade,))
+                cursor.execute('UPDATE mobilia SET quantidade = ?, valor = ? WHERE tipo_mobilia = ?', 
+                               (quantidade, valor, tipo_mobilia))
                 conn.commit()
-                flash('Kit mobília criado com sucesso!', 'success')
+                flash('Mobília atualizada com sucesso!', 'success')
         except Exception as e:
-            flash(f'Erro ao criar o kit mobília: {e}', 'danger')
+            flash(f'Erro ao atualizar mobília: {e}', 'danger')
 
-        return redirect(url_for('kits_mobilia_admin'))
+        return redirect(url_for('mobilias_admin'))
 
-    return render_template('html/pages/admin/formulario-kit-mobilia.html')
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM mobilia WHERE tipo_mobilia = ?', (tipo_mobilia,))
+            mobilia = cursor.fetchone()
+    except Exception as e:
+        flash(f'Erro ao buscar o kit de mobília: {e}', 'danger')
+        mobilia = []  
 
-@app.route('/admin/kits-mobilia/deletar/<int:id_mobilia>', methods=['POST'])
-def deletar_kit_mobilia(id_mobilia):
+    return render_template('html/pages/admin/editar-mobilia-admin.html', mobilia=mobilia)
+
+@app.route('/admin/mobilias/deletar/<tipo_mobilia>', methods=['POST'])
+def deletar_mobilia_admin(tipo_mobilia):
     if not session.get('cpf'):
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('login'))
@@ -818,13 +861,139 @@ def deletar_kit_mobilia(id_mobilia):
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute('DELETE FROM kit_mobilia WHERE id_mobilia = ?', (id_mobilia,))
+            cursor.execute('DELETE FROM mobilia WHERE tipo_mobilia = ?', (tipo_mobilia,))
             conn.commit()
-            flash('Kit de mobília deletado com sucesso!', 'success')
+            flash('Mobília deletada com sucesso!', 'success')
     except Exception as e:
-        flash(f'Erro ao deletar o kit de mobília: {e}', 'danger')
+        flash(f'Erro ao deletar mobília: {e}', 'danger')
 
-    return redirect(url_for('kits_mobilia_admin'))
+    return redirect(url_for('mobilias_admin'))
+
+@app.route('/admin/mobilias/alugueis', methods=['GET'])
+def mobilias_alugadas_admin():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+                        SELECT cam.cliente_cpf, cam.tipo_mobilia, cam.qtd_alugada, cam.valor, cam.data_aluguel, c.nome_cliente
+                        FROM cliente_aluga_mobilia cam
+                        JOIN cliente c ON c.cpf = cam.cliente_cpf
+                       ''')
+        mobilias_alugadas = cursor.fetchall()
+        print(mobilias_alugadas)
+
+    return render_template('html/pages/admin/mobilias-alugadas-admin.html', mobilias_alugadas=mobilias_alugadas)
+
+
+@app.route('/cliente/mobilias/', methods=['GET', 'POST'])
+def mobilias_cliente():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM cliente_aluga_mobilia WHERE cliente_aluga_mobilia.cliente_cpf = ?', (session.get('cpf'),))      
+        mobilias_cliente = cursor.fetchall()
+
+
+    return render_template('html/pages/cliente/mobilias-cliente.html', mobilias_cliente=mobilias_cliente)
+
+@app.route('/cliente/mobilias/nova', methods=['GET', 'POST'])
+def nova_mobilia_cliente():
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        tipo_mobilia = request.form['tipo_mobilia']
+        qtd_alugada = int(request.form['qtd_alugada'])
+        data_aluguel = request.form['data_aluguel']
+        
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                
+                cursor.execute('SELECT quantidade FROM mobilia WHERE tipo_mobilia = ?', (tipo_mobilia,))
+                result = cursor.fetchone()
+                
+                if result is None:
+                    flash('Tipo de mobília não encontrado.', 'danger')                            
+                    return redirect(url_for('nova_mobilia_cliente'))
+                
+                quantidade_disponivel = result[0]
+                
+                if qtd_alugada > quantidade_disponivel:
+                    flash('Quantidade solicitada excede a quantidade disponível.', 'danger')
+                    return redirect(url_for('nova_mobilia_cliente'))
+                
+                cursor.execute('SELECT valor FROM mobilia WHERE tipo_mobilia = ?', (tipo_mobilia,))
+                valor = cursor.fetchone()[0]
+
+                qtd_alugada_float = float(qtd_alugada)
+
+                valor_total = valor * qtd_alugada_float
+
+                cursor.execute('INSERT INTO cliente_aluga_mobilia (cliente_cpf, tipo_mobilia, qtd_alugada, valor, data_aluguel) VALUES (?, ?, ?, ?, ?)', 
+                               (session.get('cpf'), tipo_mobilia, qtd_alugada, valor_total, data_aluguel))
+                
+                cursor.execute('UPDATE mobilia SET quantidade = quantidade - ? WHERE tipo_mobilia = ?', 
+                               (qtd_alugada, tipo_mobilia))
+
+                conn.commit()
+                flash('Mobília alugada com sucesso!', 'success')
+                return redirect(url_for('mobilias_cliente'))
+        except Exception as e:
+            flash(f'Erro ao alugar mobília: {e}', 'danger')
+            return redirect(url_for('nova_mobilia_cliente'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT tipo_mobilia, quantidade FROM mobilia')
+            mobilias = cursor.fetchall()
+    except Exception as e:
+        flash(f'Erro ao buscar mobílias: {e}', 'danger')
+        mobilias = []
+
+    return render_template('html/pages/cliente/formulario-mobilia-cliente.html', mobilias=mobilias)
+
+@app.route('/cliente/mobilias/deletar/<tipo_mobilia>', methods=['POST'])
+def excluir_mobilia_cliente(tipo_mobilia):
+    if not session.get('cpf'):
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute('SELECT qtd_alugada FROM cliente_aluga_mobilia WHERE cliente_cpf = ? AND tipo_mobilia = ?', 
+                           (session.get('cpf'), tipo_mobilia))
+            resultado = cursor.fetchone()
+            
+            if resultado is None:
+                flash('Registro de aluguel não encontrado.', 'danger')
+                return redirect(url_for('mobilias_cliente'))
+            
+            qtd_alugada = resultado[0]
+            
+            cursor.execute('DELETE FROM cliente_aluga_mobilia WHERE cliente_cpf = ? AND tipo_mobilia = ?', 
+                           (session.get('cpf'), tipo_mobilia))
+            
+            cursor.execute('UPDATE mobilia SET quantidade = quantidade + ? WHERE tipo_mobilia = ?', 
+                           (qtd_alugada, tipo_mobilia))
+            
+            conn.commit()
+            flash('Mobília devolvida com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao devolver mobília: {e}', 'danger')
+
+    return redirect(url_for('mobilias_cliente'))
+
 
 @app.route('/admin/eventos/relatorio')
 def gerar_relatorio_eventos():
