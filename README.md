@@ -34,7 +34,7 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 
 ## Tecnologias utilizadas
 **Back-end:** Python e Flask<br/>
-**Front-end:** JavaScript e Boostrap<br/>
+**Front-end:** HTML e CSS<br/>
 **Banco de dados:** SQLite<br/>
 
 ## Backlog do produto
