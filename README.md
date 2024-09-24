@@ -13,6 +13,9 @@ Protótipo do projeto: [Figma](https://www.figma.com/design/3fbXBYaMHcIvfDEajtjQ
 ### Objetivo
 O objetivo geral do software proposto é auxiliar os proprietários do salão no processo de agendamento de visitas, locação e pagamentos. Atualmente esses processos trazem desafios aos donos na gestão do estabelecimento, já que ocorrem inteiramente de forma manual.
 
+### Diagramas de classe e de atividades
+Para facilitar a visualização dos diagramas, optamos por salvá-los no formato PNG. Para consultar o diagrama de classes e os diagramas de atividades, acesse a pasta "Diagramas" localizada na raiz do projeto.
+
 ### Funcionalidades
 As funcionalidades do sistema incluem:
 - Login
