@@ -44,25 +44,25 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
     ON UPDATE RESTRICT
 );
 
-CREATE TABLE IF NOT EXISTS `kit_mobilia` (
-  `id_mobilia` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE IF NOT EXISTS `mobilia` (
+  `tipo_mobilia` VARCHAR(45) NOT NULL PRIMARY KEY,
   `quantidade` INT NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `cliente_aluga_mobilia` (
   `cliente_cpf` VARCHAR(11) NOT NULL,
-  `id_mobilia` INTEGER NOT NULL,
+  `tipo_mobilia` VARCHAR(45) NOT NULL,
   `qtd_alugada` INT NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `data_aluguel` DATE NOT NULL,
-  PRIMARY KEY (`cliente_cpf`, `id_mobilia`),
+  PRIMARY KEY (`cliente_cpf`, `tipo_mobilia`),
   FOREIGN KEY (`cliente_cpf`)
     REFERENCES `cliente` (`cpf`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT,
-  FOREIGN KEY (`id_mobilia`)
-    REFERENCES `kit_mobilia` (`id_mobilia`)
+  FOREIGN KEY (`tipo_mobilia`)
+    REFERENCES `mobilia` (`tipo_mobilia`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT
 );
