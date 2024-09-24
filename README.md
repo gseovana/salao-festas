@@ -51,27 +51,27 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 
 ## Backlog da Sprint
 #### História 1: Como usuário cliente, gostaria de me cadastrar, atualizar meus dados, vê-los e deletar minha conta.
-- Configurar ambientes e instalar bibliotecas **(André)(Geovana)(Jéssica)(Nicolas)(Vinicius)(Pablo)**
-- Instalar banco de dados e criar as tabelas **(André)(Geovana)**
-- Testas as rotas da página inicial e de clientes **(Geovana)**
+- Configurar ambientes e instalar bibliotecas
+- Instalar banco de dados e criar as tabelas
+- Testas as rotas da página inicial e de clientes
 - Criar primeira versão tela principal
 - Criar tela de cadastro de cliente
 - Criar telas de CRUD cliente 
-- Implementar lógica do backend **(Geovana)**
-- Integrar as telas com a lógica do backend **(Geovana)**
-- Integrar com banco de dados **(Geovana)**
+- Implementar lógica do backend
+- Integrar as telas com a lógica do backend
+- Integrar com banco de dados
   
 #### História 2: Como usuário cliente, gostaria de criar, ler, atualizar e deletar meus agendamentos de visita.
-- Criar rotas de login e de agendamentos de visita **(Geovana)**
+- Criar rotas de login e de agendamentos de visita
 - Criar tela de login
-- Implementar lógica no backend para logar no sistema **(Geovana)**
-- Integrar a tela de login com a lógica implementada no backend **(Geovana)**
-- Adaptar tela inicial para as views de cliente e administrador **(Geovana)**
-- Criar rotas de agendamento de visita **(Geovana)**
+- Implementar lógica no backend para logar no sistema
+- Integrar a tela de login com a lógica implementada no backend
+- Adaptar tela inicial para as views de cliente e administrador
+- Criar rotas de agendamento de visita
 - Criar telas de CRUD de agendamentos de visita
-- Implementar lógica de CRUD de agendamentos de visita no backend **(Geovana)**
-- Integrar as telas de CRUD com a lógica do backend **(Geovana)**
-- Integrar com o banco de dados **(Geovana)**
+- Implementar lógica de CRUD de agendamentos de visita no backend
+- Integrar as telas de CRUD com a lógica do backend
+- Integrar com o banco de dados
   
 #### História 3: Como usuário cliente, gostaria de ver o calendário de agendamento de visitas com as datas disponíveis.
 - Criar tela de calendário
@@ -81,9 +81,9 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 
 #### História 4: Como usuário administrador, gostaria de alterar e deletar qualquer agendamento de visita.
 - Criar tela de adiministrar agendamentos de visita
-- Implementar lógica para vsiualiar, alterar e deletar agendamentos de visita no backend **(André)**
-- Integrar a tela com a lógica do backend **(André)**
-- Integrar com o banco de dados **(André)**
+- Implementar lógica para vsiualiar, alterar e deletar agendamentos de visita no backend
+- Integrar a tela com a lógica do backend
+- Integrar com o banco de dados
   
 #### História 5: Como usuário administrador, gostaria de criar, ler, atualizar e deletar eventos.
 - Criar telas de CRUD de evento
