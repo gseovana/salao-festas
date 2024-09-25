@@ -99,3 +99,8 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 #### História 8: Como usuário administrador, gostaria de criar, ler, atualizar e deletar parceiros.
 #### História 9: Como usuário administrador, gostaria de gerar relatório dos eventos. 
 #### História 10: Como usuário administrador, gostaria de gerar relatório de pagamentos.
+
+
+
+## Diagramas de Atividade
+![AgendarVisita](https://github.com/user-attachments/assets/78e8f1a8-af8a-49ad-aa7d-aaa4f1f70839)
