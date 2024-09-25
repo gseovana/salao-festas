@@ -124,6 +124,8 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 ![Parceiros](https://github.com/user-attachments/assets/bd13a48f-458d-4508-908c-4f506a5f95e4)
 ![RelatorioEvento](https://github.com/user-attachments/assets/76d581cc-b0d7-403e-8c28-a69a200bfe16)
 ![RelatórioPagamento](https://github.com/user-attachments/assets/ab1a36c2-00db-4101-9280-567b159bd25d)
+## diagrama de classe
+![Class Diagram_page-0001](https://github.com/user-attachments/assets/b44474cb-5368-4284-9d3d-0f6e896ab471)
 
 
 
