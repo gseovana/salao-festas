@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="my-4 text-center">Horários marcados</h1>
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="text-center">
+                Essas são datas e horários <strong>indisponíveis</strong> para novos agendamentos e eventos.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            {% if session.cpf != "000.000.000-00" %}
+                <a href="{{ url_for('novo_agendamento') }}" class="btn btn-primary">Agendar visita</a>
+            {% else %}
+                <a href="{{ url_for('novo_evento') }}" class="btn btn-primary">Novo evento</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% if calendario %}
+            {% for data, items in calendario.items() %}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0 text-center">{{ data | datetime('%d/%m/%Y') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if items %}
+                            <ul class="list-group list-group-flush">
+                                {% for item in items %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ item.horario }} - {{ item.type | capitalize }}
+                                        <span class="badge badge-pill {% if item.type == 'evento' %}badge-success{% else %}badge-info{% endif %}">
+                                            {{ item.type | capitalize }}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">Nenhum evento ou agendamento marcado</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Nenhuma informação disponível</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

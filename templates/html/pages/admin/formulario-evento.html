@@ -25,7 +25,6 @@
                     <option value="Batizado">Batizado</option>
                     <option value="Confraternização">Confraternização</option>
                     <option value="Cultural">Cultural</option>
-
                     <option value="Outros">Outros</option>
                 </select>
             </div>
@@ -42,14 +41,19 @@
                 <select name="cliente_evento" class="form-select" id="cliente_evento" required>
                     <option value="" disabled selected>Selecione um cliente</option>
                     {% for cliente in clientes %}
-                        <option value="{{ cliente[0] }}">{{ cliente[0] }} - {{ cliente[1] }}</option>
+                        {% if cliente[0] != "000.000.000-00" %}
+                            <option value="{{ cliente[0] }}">{{ cliente[0] }} - {{ cliente[1] }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
             <div class="text-end">
-                    <button class="btn btn-primary" type="submit">
-                        Criar
-                    </button>
+                <a href="{{ url_for('eventos_admin') }}" class="btn btn-secondary">
+                    Voltar
+                </a>
+                <button class="btn btn-primary" type="submit">
+                    Salvar
+                </button>
             </div>
         </form>
     </div>

@@ -54,17 +54,67 @@ def get_clientes_dict():
         clientes = [dict(zip([column[0] for column in cursor.description], row)) for row in cursor.fetchall()]
         return clientes    
     
+def get_events():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT data, horario FROM evento')
+        eventos = cursor.fetchall()
+    return eventos
+
+def get_agendamentos():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM visitacao')
+        agendamentos = cursor.fetchall()
+    return agendamentos
+    
+    
 def format_datetime(value, format='%d/%m/%Y'):
     if value is None:
         return ""
-    # Parse the string into a datetime object
     try:
         date_obj = datetime.strptime(value, '%Y-%m-%d')
         return date_obj.strftime(format)
     except ValueError:
-        return value  # Return the original value if parsing fails
-
+        return value  
 app.jinja_env.filters['datetime'] = format_datetime
+
+@app.route('/cliente/dashboard-cliente')
+@app.route('/dashboard-admin', methods=['GET', 'POST'])
+def dashboard():
+    if 'cpf' not in session:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    calendario = get_events_and_agendamentos()
+    return render_template('html/pages/dashboard.html', calendario=calendario)
+
+def get_events_and_agendamentos():
+    todos = {}
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Fetch events
+        cursor.execute('SELECT data, horario FROM evento')
+        events = cursor.fetchall()
+        
+        # Fetch agendamentos
+        cursor.execute('SELECT data, horario FROM visitacao')
+        agendamentos = cursor.fetchall()
+    
+        
+        all_items = [(data, horario, "evento") for data, horario in events] + [(data, horario, "visita") for data, horario in agendamentos]
+        all_items.sort(key=lambda x: x[0])
+
+
+        for item in all_items:
+            data, horario, item_type = item
+            if data not in todos:
+                todos[data] = []
+            todos[data].append({"horario": horario, "type": item_type})
+    
+    return todos
+    
 ############################################### ROTAS CLIENTE #################################################
 # PAGINA INICIAL
 @app.route('/home')
@@ -132,10 +182,10 @@ def login():
                 flash('Login bem sucedido!', 'success')
                 if cpf == '000.000.000-00':
                     #session['nome_cliente'] = request.form['nome_cliente']
-                    return redirect(url_for('dashboard_admin'))  
+                    return redirect(url_for('dashboard'))  
                 else:
                     #session['nome_cliente'] = request.form['nome_cliente']
-                    return redirect(url_for('dashboard_cliente'))  
+                    return redirect(url_for('dashboard'))  
     return render_template('html/register/login.html')
 
 #LOGOUT
@@ -150,27 +200,6 @@ def inject_active():
     def is_active(endpoint): #recebe o endpoint (rota) e verifica se é igual o endpoint atual, se for ele retorna a classeactive, se não retorna vazio
         return 'active' if request.endpoint == endpoint else ''
     return dict(is_active=is_active)
-
-@app.route('/cliente/dashboard-cliente')
-@app.route('/admin/dashboard-admin')
-def get_events():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT nome_evento, data FROM evento')
-        eventos = cursor.fetchall()
-
-    eventos_list = [{"title": evento[0], "start": evento[1]} for evento in eventos]
-
-    return render_template('html/pages/cliente/dashboard-cliente.html', eventos=eventos_list)
-
-
-   # events = [
-    #    {"title": "Evento 1", "start": "2023-10-01"},
-     #   {"title": "Agendamento 1", "start": "2023-10-02"},
-      #  {"title": "Evento 2", "start": "2023-10-03"}
-        # Add more events here
-    #]
-    #return jsonify(events)
 
 #CADASTRAR CLIENTE
 @app.route('/cliente/cadastrar', methods=['GET', 'POST'])
@@ -245,10 +274,6 @@ def perfil():
         return redirect(url_for('home'))
 
     return render_template('html/pages/perfil.html', cliente=cliente)
-
-@app.route('/cliente/dashboard-cliente')
-def dashboard_cliente():
-    return render_template('html/pages/cliente/dashboard-cliente.html')
 
 #ATUALIZAR CLIENTE
 @app.route('/cliente/atualizar', methods=['GET', 'POST'])
@@ -422,10 +447,6 @@ def eventos_cliente():
     return render_template('html/pages/cliente/eventos-cliente.html', eventos=eventos)
         
 ################################### ROTAS ADMIN ########################################
-@app.route('/dashboard-admin', methods=['GET', 'POST'])
-def dashboard_admin():
-    return render_template('html/pages/admin/dashboard-admin.html')
-    
 @app.route('/admin/clientes', methods=['GET'])
 def clientes_admin():
     clientes = get_clientes()
