@@ -124,3 +124,4 @@ inserir_pagamentos(25)
 inserir_clientes_aluga_mobilia(25)
 
 conn.close()
+
