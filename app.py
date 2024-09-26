@@ -388,6 +388,7 @@ def novo_agendamento():
                 cursor.execute('INSERT INTO visitacao (data, horario, cliente_cpf) VALUES (?, ?, ?)', (data, horario, cpf))
                 conn.commit()
                 flash('Agendamento criado com sucesso!', 'success')
+                return redirect(url_for('agendamentos_cliente'))
         except IntegrityError as e:
             flash(str(e), 'danger')
             return render_template('html/pages/cliente/formulario-agendamento.html')
@@ -1151,5 +1152,7 @@ def gerar_relatorio_pagamentos():
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name='relatorio_pagamentos.pdf', mimetype='application/pdf')
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
