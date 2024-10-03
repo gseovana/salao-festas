@@ -135,3 +135,20 @@ body {
 .dashboard {
     color: #ffffff;
 }
+
+
+.dash-img {
+    background-image: url(../imgs/imgs_carousel/img-1.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px; 
+}
+
+.container, .card, .btn {
+    z-index: 1; 
+    position: relative; 
+}
+
