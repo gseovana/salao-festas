@@ -1,39 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-center">Agendamentos de visita</h1>
-<div class="container d-flex flex-column align-items-center">
-    <table class="table table-striped">
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container d-flex flex-column align-items-center">
+    <!-- Aumentando o tamanho do cartão e do conteúdo -->
+    <div class="card p-5" style="width: 80%;">
+
+      <!-- Título maior e mais espaçado -->
+      <h1 class="text-center mb-5" style="font-size: 2.5rem;">Agendamentos de visita</h1>
+
+      <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th scope="col" class="text-center">Data</th>
-            <th scope="col" class="text-center">Hora</th>
-            <th scope="col" class="text-center">Nome cliente</th>
-            <th scope="col" class="text-center">CPF cliente</th>
-            <th scope="col" class="text-center">Ações</th>
+            <th scope="col" class="text-center" style="font-size: 1.2rem;">Data</th>
+            <th scope="col" class="text-center" style="font-size: 1.2rem;">Hora</th>
+            <th scope="col" class="text-center" style="font-size: 1.2rem;">Nome cliente</th>
+            <th scope="col" class="text-center" style="font-size: 1.2rem;">CPF cliente</th>
+            <th scope="col" class="text-center" style="font-size: 1.2rem;">Ações</th>
           </tr>
         </thead>
         <tbody>
           {% for agendamento in todos_agendamentos %}
           <tr>
-              <td class="text-center">{{ agendamento.data | datetime('%d/%m/%Y') }}</td>
-              <td class="text-center">{{ agendamento.horario }}</td>
-              <td class="text-center">{{ agendamento.nome_cliente }}</td>
-              <td class="text-center">{{ agendamento.cpf }}</td>
-              <td class="text-center">
-                <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()" class="d-inline">
-                  <input type="hidden" name="data" value="{{ agendamento.data }}">
-                  <input type="hidden" name="horario" value="{{ agendamento.horario }}">
-                  <button type="submit" class="btn btn-light">Cancelar</button>
-                </form>
-              </td>
+            <td class="text-center" style="font-size: 1.1rem;">{{ agendamento.data | datetime('%d/%m/%Y') }}</td>
+            <td class="text-center" style="font-size: 1.1rem;">{{ agendamento.horario }}</td>
+            <td class="text-center" style="font-size: 1.1rem;">{{ agendamento.nome_cliente }}</td>
+            <td class="text-center" style="font-size: 1.1rem;">{{ agendamento.cpf }}</td>
+            <td class="text-center">
+              <form action="{{ url_for('cancelar_agendamento') }}" method="POST" onsubmit="return confirmCancel()" class="d-inline">
+                <input type="hidden" name="data" value="{{ agendamento.data }}">
+                <input type="hidden" name="horario" value="{{ agendamento.horario }}">
+                <button type="submit" class="btn btn-light" style="font-size: 1rem;">Cancelar</button>
+              </form>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+    </div>
+  </div>
 </div>
+
 <script>
   function confirmCancel() {
-      return confirm("Você tem certeza que deseja cancelar este agendamento?");
+    return confirm("Você tem certeza que deseja cancelar este agendamento?");
   }
 </script>
 {% endblock %}
