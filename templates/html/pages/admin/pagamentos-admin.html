@@ -1,41 +1,48 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<h1 class="text-center">Pagamentos</h1>
-<div class="container d-flex flex-column align-items-center">
-    <div class="w-100 d-flex justify-content-end mb-3">
-        <a href="{{ url_for('gerar_relatorio_pagamentos') }}" class="btn btn-info me-2">Gerar relatório</a>
-        <a href="{{ url_for('novo_pagamento') }}" class="btn btn-primary">Novo pagamento</a>
-    </div>
-    <table class="table table">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Forma</th>
-            <th scope="col" class="text-center">Qtd. parcelas</th>
-            <th scope="col" class="text-center">Evento</th>
-            <th scope="col" class="text-center">Valor total</th>
-            <th scope="col" class="text-center">Data</th>
-            <th scope="col" class="text-center">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for pagamento in pagamentos %}
-          <tr>
-              <td class="text-center" hidden>{{ pagamento[0] }}</td>
-              <td class="text-center">{{ pagamento[1] }}</td>
-              <td class="text-center">{{ pagamento[2] }}</td>
-              <td class="text-center">{{ pagamento[7] }}</td>
-              <td class="text-center">{{ pagamento[5] }}</td>
-              <td class="text-center">{{ pagamento[6] | datetime('%d/%m/%Y')}}</td>
-              <td class="text-center">
-                  <a href="{{ url_for('editar_pagamento', id_pagto=pagamento[0]) }}" class="btn btn-warning">Editar</a>
-                  <form action="{{ url_for('deletar_pagamento', id_pagto=pagamento[0]) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
-                    <button type="submit" class="btn btn-danger">Excluir</button>
-                  </form>
-          </tr>
-          {% endfor %}
-        </tbody>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container d-flex flex-column align-items-center">
+    <!-- Aplicando o estilo de card -->
+    <div class="card p-5" style="width: 80%;">
+      <h1 class="text-center mb-5">Pagamentos</h1>
+      
+      <div class="w-100 d-flex justify-content-end mb-3">
+          <a href="{{ url_for('gerar_relatorio_pagamentos') }}" class="btn btn-info me-2">Gerar relatório</a>
+          <a href="{{ url_for('novo_pagamento') }}" class="btn btn-primary">Novo pagamento</a>
+      </div>
+
+      <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col" class="text-center">Forma</th>
+              <th scope="col" class="text-center">Qtd. parcelas</th>
+              <th scope="col" class="text-center">Evento</th>
+              <th scope="col" class="text-center">Valor total</th>
+              <th scope="col" class="text-center">Data</th>
+              <th scope="col" class="text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pagamento in pagamentos %}
+            <tr>
+                <td class="text-center" hidden>{{ pagamento[0] }}</td>
+                <td class="text-center">{{ pagamento[1] }}</td>
+                <td class="text-center">{{ pagamento[2] }}</td>
+                <td class="text-center">{{ pagamento[7] }}</td>
+                <td class="text-center">{{ pagamento[5] }}</td>
+                <td class="text-center">{{ pagamento[6] | datetime('%d/%m/%Y')}}</td>
+                <td class="text-center">
+                    <a href="{{ url_for('editar_pagamento', id_pagto=pagamento[0]) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ url_for('deletar_pagamento', id_pagto=pagamento[0]) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                      <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+            </tr>
+            {% endfor %}
+          </tbody>
       </table>
+    </div>
+  </div>
 </div>
 
 <script>
