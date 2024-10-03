@@ -1,55 +1,67 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="w-50">
-        <form action="{{ url_for('editar_evento', data=evento[0], horario=evento[1]) }}" method="POST" class="border p-4 rounded">
-            <h1 class="text-center mb-4">Editar evento</h1>
-            <div class="form-group mb-3">
-                <label for="nome_evento">Nome</label>
-                <input name="nome_evento" value="{{ evento[2] if evento else '' }}" class="form-control">
-            </div>
-            <div class="form-group mb-3">
-                <label for="tipo_evento">Tipo</label>
-                <select name="tipo_evento" id="tipo_evento" class="form-control">
-                    <option value="">Selecione o tipo de evento</option>
-                    <option value="Casamento" {% if evento[3] == 'Casamento' %}selected{% endif %}>Casamento</option>
-                    <option value="Aniversario" {% if evento[3] == 'Aniversario' %}selected{% endif %}>Aniversário</option>
-                    <option value="Corporativo" {% if evento[3] == 'Corporativo' %}selected{% endif %}>Corporativo</option>
-                    <option value="Formatura" {% if evento[3] == 'Formatura' %}selected{% endif %}>Formatura</option>
-                    <option value="Debutante" {% if evento[3] == 'Debutante' %}selected{% endif %}>Debutante</option>
-                    <option value="Batizado" {% if evento[3] == 'Batizado' %}selected{% endif %}>Batizado</option>
-                    <option value="Confraternização" {% if evento[3] == 'Confraternização' %}selected{% endif %}>Confraternização</option>
-                    <option value="Cultural" {% if evento[3] == 'Cultural' %}selected{% endif %}>Cultural</option>
-                    <option value="Outros" {% if evento[3] == 'Outros' %}selected{% endif %}>Outros</option>
-                </select>
-            </div>
-            <div class="form-group mb-3">
-                <label for="data_evento">Data</label>
-                <input type="date" name="data_evento" value="{{ evento[0] }}" class="form-control" id="data_evento">
-            </div>
-            <div class="form-group mb-3">
-                <label for="horario_evento">Horário</label>
-                <input type="time" name="horario_evento" value="{{ evento[1] }}" class="form-control" id="horario_evento">
-            </div>
-            <div class="form-group mb-3">
-                <label for="cliente">Cliente</label>
-                <select name="cliente_evento" class="form-select" id="cliente_evento">
-                    <option value="{{ evento[4] }}" selected>{{ evento[4] }} - {{ evento[5] }}</option>
-                    
-                    {% for cliente in clientes %}
-                        {% if cliente[0] != evento[4] %}
-                        <option value="{{ cliente[0] }}">{{ cliente[0] }} - {{ cliente[1] }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="text-end">
-                <button class="btn btn-primary" type="submit">
-                        Atualizar
-                </button>
-            </div>
-        </form>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    
+  
+    <div class="card p-5" style="width: 50%;">
+      
+      <h1 class="text-center mb-5" style="font-size: 2.5rem;">Editar evento</h1>
+      
+   
+      <form action="{{ url_for('editar_evento', data=evento[0], horario=evento[1]) }}" method="POST">
+        <div class="form-group mb-4">
+          <label for="nome_evento" style="font-size: 1.2rem;">Nome</label>
+          <input name="nome_evento" value="{{ evento[2] if evento else '' }}" class="form-control" required>
+        </div>
+        
+        <div class="form-group mb-4">
+          <label for="tipo_evento" style="font-size: 1.2rem;">Tipo</label>
+          <select name="tipo_evento" id="tipo_evento" class="form-control" required>
+            <option value="">Selecione o tipo de evento</option>
+            <option value="Casamento" {% if evento[3] == 'Casamento' %}selected{% endif %}>Casamento</option>
+            <option value="Aniversario" {% if evento[3] == 'Aniversario' %}selected{% endif %}>Aniversário</option>
+            <option value="Corporativo" {% if evento[3] == 'Corporativo' %}selected{% endif %}>Corporativo</option>
+            <option value="Formatura" {% if evento[3] == 'Formatura' %}selected{% endif %}>Formatura</option>
+            <option value="Debutante" {% if evento[3] == 'Debutante' %}selected{% endif %}>Debutante</option>
+            <option value="Batizado" {% if evento[3] == 'Batizado' %}selected{% endif %}>Batizado</option>
+            <option value="Confraternização" {% if evento[3] == 'Confraternização' %}selected{% endif %}>Confraternização</option>
+            <option value="Cultural" {% if evento[3] == 'Cultural' %}selected{% endif %}>Cultural</option>
+            <option value="Outros" {% if evento[3] == 'Outros' %}selected{% endif %}>Outros</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="data_evento" style="font-size: 1.2rem;">Data</label>
+          <input type="date" name="data_evento" value="{{ evento[0] }}" class="form-control" id="data_evento" required>
+        </div>
+        
+        <div class="form-group mb-4">
+          <label for="horario_evento" style="font-size: 1.2rem;">Horário</label>
+          <input type="time" name="horario_evento" value="{{ evento[1] }}" class="form-control" id="horario_evento" required>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="cliente_evento" style="font-size: 1.2rem;">Cliente</label>
+          <select name="cliente_evento" class="form-select" id="cliente_evento" required>
+            <option value="{{ evento[4] }}" selected>{{ evento[4] }} - {{ evento[5] }}</option>
+            
+            {% for cliente in clientes %}
+              {% if cliente[0] != evento[4] %}
+              <option value="{{ cliente[0] }}">{{ cliente[0] }} - {{ cliente[1] }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="text-end">
+          <button class="btn btn-primary" type="submit" style="font-size: 1.1rem;">
+            Atualizar
+          </button>
+        </div>
+      </form>
+      
     </div>
+  </div>
 </div>
 {% endblock %}
