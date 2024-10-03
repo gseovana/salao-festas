@@ -1,46 +1,65 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<div class="container d-flex justify-content-center">
-    <form action="{{ url_for('editar_pagamento', id_pagto=pagamento[0]) }}" method="POST" class="w-50 p-4 border rounded">
-        <h1 class="text-center">Editar pagamento</h1>
-        <div class="form-group">
-            <label for="forma">Forma de pagamento</label>
-            <select class="form-control" id="forma_pagto" name="forma_pagto" required>
-                <option value="" disabled selected>Selecione a forma de pagamento</option>
-                <option value="Cartão" {% if pagamento[1] == 'Cartão' %} selected {% endif %}>Cartão</option>
-                <option value="Dinheiro" {% if pagamento[1] == 'Dinheiro' %} selected {% endif %}>Dinheiro</option>
-            </select>
-        </div>  
-        <div class="form-group">
-            <label for="parcelas">Quantidade de parcelas</label>
-            <select class="form-control" id="qtd_parcelas" name="qtd_parcelas" required>
-                <option value="" disabled selected>Selecione a quantidade de parcelas</option>
-                <option value="1" {% if pagamento[2] == 1 %} selected {% endif %}>1</option>
-                <option value="2" {% if pagamento[2] == 2 %} selected {% endif %}>2</option>
-                <option value="3" {% if pagamento[2] == 3 %} selected {% endif %}>3</option>
-            </select>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    
+    
+    <div class="card p-5" style="width: 50%;">
+      <h1 class="text-center mb-5" style="font-size: 2.5rem;">Editar pagamento</h1>
+
+  
+      <form action="{{ url_for('editar_pagamento', id_pagto=pagamento[0]) }}" method="POST">
+        
+        <div class="form-group mb-4">
+          <label for="forma_pagto" style="font-size: 1.2rem;">Forma de pagamento</label>
+          <select class="form-control" id="forma_pagto" name="forma_pagto" required>
+            <option value="" disabled selected>Selecione a forma de pagamento</option>
+            <option value="Cartão" {% if pagamento[1] == 'Cartão' %} selected {% endif %}>Cartão</option>
+            <option value="Dinheiro" {% if pagamento[1] == 'Dinheiro' %} selected {% endif %}>Dinheiro</option>
+          </select>
         </div>
-        <div class="form-group">
-            <label for="evento">Evento</label>
-            <select name="evento" class="form-select" id="evento">
-                <option selected disabled>Selecione um evento</option>
-                {% for evento in eventos %}
-                <option value="{{ evento[0] }},{{ evento[1] }}" {% if pagamento[3] == evento[0] %} selected {% endif %}>{{ evento[2] }}</option>
-                {% endfor %}
-            </select>
+        
+        <div class="form-group mb-4">
+          <label for="qtd_parcelas" style="font-size: 1.2rem;">Quantidade de parcelas</label>
+          <select class="form-control" id="qtd_parcelas" name="qtd_parcelas" required>
+            <option value="" disabled selected>Selecione a quantidade de parcelas</option>
+            <option value="1" {% if pagamento[2] == 1 %} selected {% endif %}>1</option>
+            <option value="2" {% if pagamento[2] == 2 %} selected {% endif %}>2</option>
+            <option value="3" {% if pagamento[2] == 3 %} selected {% endif %}>3</option>
+          </select>
         </div>
-        <div class="form-group">
-            <label for="valor">Valor total</label>
-            <input type="decimal" class="form-control" id="valor" name="valor" value="{{ pagamento[5] }}" required>
+
+        <div class="form-group mb-4">
+          <label for="evento" style="font-size: 1.2rem;">Evento</label>
+          <select name="evento" class="form-select" id="evento">
+            <option selected disabled>Selecione um evento</option>
+            {% for evento in eventos %}
+            <option value="{{ evento[0] }},{{ evento[1] }}" {% if pagamento[3] == evento[0] %} selected {% endif %}>{{ evento[2] }}</option>
+            {% endfor %}
+          </select>
         </div>
-        <div class="form-group">
-            <label for="data">Data</label>
-            <input type="date" class="form-control" id="data" name="data" value="{{ pagamento[6] }}" required>
+
+        <div class="form-group mb-4">
+          <label for="valor" style="font-size: 1.2rem;">Valor total</label>
+          <input type="decimal" class="form-control" id="valor" name="valor" value="{{ pagamento[5] }}" required>
         </div>
+
+        <div class="form-group mb-4">
+          <label for="data" style="font-size: 1.2rem;">Data</label>
+          <input type="date" class="form-control" id="data" name="data" value="{{ pagamento[6] }}" required>
+        </div>
+
+   
         <div class="d-flex justify-content-between mt-4">
-            <a href="{{ url_for('pagamentos_admin') }}" class="btn btn-secondary">Voltar</a>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="{{ url_for('pagamentos_admin') }}" class="btn btn-secondary" style="font-size: 1.1rem;">Voltar</a>
+          <button type="submit" class="btn btn-primary" style="font-size: 1.1rem;">Salvar</button>
         </div>
-    </form>
+        
+      </form>
+      
+    </div>
+  
+  </div>
 </div>
 {% endblock %}
