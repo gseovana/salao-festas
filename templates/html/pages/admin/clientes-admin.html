@@ -1,30 +1,33 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block content %}
 
-<h1 class="text-center">Todos os clientes</h1>
-<div class="container d-flex flex-column align-items-center">
-    <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">CPF</th>
-            <th scope="col" class="text-center">Nome</th>
-            <th scope="col" class="text-center">Celular</th>
-            <th scope="col" class="text-center">Endereço</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for cliente in clientes %}
-          {% if cliente[0] != '000.000.000-00' %}
-          <tr>
-              <td class="text-center">{{ cliente[0] }}</td>
-              <td class="text-center">{{ cliente[1] }}</td>
-              <td class="text-center">{{ cliente[2] }}</td>
-              <td class="text-center">{{ cliente[3] }}</td>
-          </tr>
-          {% endif %}
-          {% endfor %}
-        </tbody>
-      </table>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container bg-white rounded shadow p-4">
+        <h1 class="text-center mb-4" style="font-size: 2.5rem;">Todos os clientes</h1>
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">CPF</th>
+                    <th scope="col" class="text-center">Nome</th>
+                    <th scope="col" class="text-center">Celular</th>
+                    <th scope="col" class="text-center">Endereço</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                {% if cliente[0] != '000.000.000-00' %}
+                <tr>
+                    <td class="text-center">{{ cliente[0] }}</td>
+                    <td class="text-center">{{ cliente[1] }}</td>
+                    <td class="text-center">{{ cliente[2] }}</td>
+                    <td class="text-center">{{ cliente[3] }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}
