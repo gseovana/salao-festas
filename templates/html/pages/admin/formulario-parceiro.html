@@ -1,38 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container d-flex justify-content-center mt-5">
-    <form action="{{ url_for('novo_parceiro') }}" method="POST" class="w-50 p-4 border rounded">
-        <h1 class="text-center mb-4">Novo Parceiro</h1>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container d-flex flex-column align-items-center">
+   
+    <div class="card p-5" style="width: 80%;">
+     
+      <h1 class="text-center mb-4">Novo Parceiro</h1>
+
+      <form action="{{ url_for('novo_parceiro') }}" method="POST">
         <div class="form-group mb-3">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+          <label for="nome">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" required>
         </div>
         <div class="form-group mb-3">
-            <label for="celular">Celular</label>
-            <input type="text" class="form-control" id="celular" name="celular" required>
+          <label for="celular">Celular</label>
+          <input type="text" class="form-control" id="celular" name="celular" required>
         </div>
+
+      
         <div class="d-flex justify-content-between">
-            <a href="{{ url_for('parceiros_admin') }}" class="btn btn-secondary">Voltar</a>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="{{ url_for('parceiros_admin') }}" class="btn btn-secondary">Voltar</a>
+          <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
-    </form>
+      </form>
+    </div>
+  </div>
 </div>
+
 <script>
     document.getElementById('celular').addEventListener('input', formatCelular);
     
     function formatCelular(event) {
         const input = event.target;
-        let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
-        value = value.substring(0, 11); // Limit to 11 digits
-    
-        // Format the value as Celular
+        let value = input.value.replace(/\D/g, ''); 
+        value = value.substring(0, 11); 
+
+        
         if (value.length > 6) {
             value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
         } else if (value.length > 2) {
             value = value.replace(/(\d{2})(\d{5})/, '($1) $2');
         }
-    
+
         input.value = value;
     }
 </script>
