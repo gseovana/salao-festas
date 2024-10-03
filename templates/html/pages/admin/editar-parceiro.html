@@ -1,20 +1,30 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="container d-flex justify-content-center mt-5">
-    <form action="{{ url_for('editar_parceiro', id_parceiro=parceiro[0]) }}" method="POST" class="w-50 p-4 border rounded">
-        <h1 class="text-center mb-4">Editar parceiro</h1>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container d-flex flex-column align-items-center">
+   
+    <div class="card p-5" style="width: 80%;">
+     
+      <h1 class="text-center mb-4">Editar parceiro</h1>
+
+      <form action="{{ url_for('editar_parceiro', id_parceiro=parceiro[0]) }}" method="POST">
         <div class="form-group mb-3">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="{{ parceiro[1] }}" required>
+          <label for="nome">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" value="{{ parceiro[1] }}" required>
         </div>
         <div class="form-group mb-3">
-            <label for="celular">Celular</label>
-            <input type="text" class="form-control" id="celular" name="celular" value="{{ parceiro[2] }}" required>
+          <label for="celular">Celular</label>
+          <input type="text" class="form-control" id="celular" name="celular" value="{{ parceiro[2] }}" required>
         </div>
+
+      
         <div class="d-flex justify-content-between">
-            <a href="{{ url_for('parceiros_admin') }}" class="btn btn-secondary">Voltar</a>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="{{ url_for('parceiros_admin') }}" class="btn btn-secondary">Voltar</a>
+          <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
-    </form>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
