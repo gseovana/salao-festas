@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
 <div class="container d-flex justify-content-center mt-5">
     <form action="{{ url_for('nova_mobilia_admin') }}" method="POST" class="w-50 p-4 border rounded">
         <h1 class="text-center mb-4">Nova mobília</h1>
@@ -22,5 +23,6 @@
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
+</div>
 </div>
 {% endblock %}
