@@ -1,53 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="text-center">Eventos marcados</h1>
-<div class="container d-flex flex-column align-items-center">
-    <div class="w-100 d-flex justify-content-end mb-3">
-      <a href="{{ url_for('gerar_relatorio_eventos') }}" class="btn btn-info me-2">Gerar relatório</a>
-      <a href="{{ url_for('novo_evento') }}" class="btn btn-primary">Novo evento</a>
-      </div>
-    <table class="table table">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Nome</th>
-            <th scope="col" class="text-center">Tipo</th>
-            <th scope="col" class="text-center">Data</th>
-            <th scope="col" class="text-center">Horário</th>
-            <th scope="col" class="text-center">Cliente</th>
-            <th scope="col" class="text-center">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for evento in eventos %}
-          <tr>
-              <td class="text-center">{{ evento[2] }}</td>
-              <td class="text-center">{{ evento[3] }}</td>
-              <td class="text-center">{{ evento[0] | datetime('%d/%m/%Y') }}</td>
-              <td class="text-center">{{ evento[1] }}</td>
-              <td class="text-center">{{ evento[6] }}</td>
-              <td class="text-center">
-                <div style="display: flex; justify-content: center; gap: 10px;">
-                  <form action="{{ url_for('editar_evento', data=evento[0], horario=evento[1]) }}" method="GET">
-                    <input type="hidden" name="data_evento" value="{{ evento[0] }}">
-                    <input type="hidden" name="horario_evento" value="{{ evento[1] }}">
-                    <input type="hidden" name="nome_evento" value="{{ evento[2] }}">
-                    <input type="hidden" name="tipo_evento" value="{{ evento[3] }}">
-                    <input type="hidden" name="cliente_cpf" value="{{ evento[4] }}">
-                    <button type="submit" class="btn btn-primary">Editar</button>
-                  </form>
-                  <form action="{{ url_for('deletar_evento', data=evento[0], horario=evento[1]) }}" method="POST" onsubmit="return confirmCancel('{{ evento[2] }}')">
-                    <input type="hidden" name="data_evento" value="{{ evento[0] }}">
-                    <input type="hidden" name="horario_evento" value="{{ evento[1] }}">
-                    <button type="submit" class="btn btn-danger">Cancelar</button>
-                  </form>
-                </div>
-              </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container bg-white rounded shadow p-5" style="max-width: 1000px;">
+     
+        <h1 class="text-center mb-4" style="font-size: 2.5rem;">Eventos marcados</h1>
+
+   
+        <div class="d-flex justify-content-end mb-4">
+            <a href="{{ url_for('gerar_relatorio_eventos') }}" class="btn btn-info me-2" style="font-size: 1.2rem;">Gerar relatório</a>
+            <a href="{{ url_for('novo_evento') }}" class="btn btn-primary" style="font-size: 1.2rem;">Novo evento</a>
+        </div>
+
+    
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center" style="font-size: 1.2rem;">Nome</th>
+                    <th scope="col" class="text-center" style="font-size: 1.2rem;">Tipo</th>
+                    <th scope="col" class="text-center" style="font-size: 1.2rem;">Data</th>
+                    <th scope="col" class="text-center" style="font-size: 1.2rem;">Horário</th>
+                    <th scope="col" class="text-center" style="font-size: 1.2rem;">Cliente</th>
+                    <th scope="col" class="text-center" style="font-size: 1.2rem;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evento in eventos %}
+                <tr>
+                    <td class="text-center" style="font-size: 1.2rem;">{{ evento[2] }}</td>
+                    <td class="text-center" style="font-size: 1.2rem;">{{ evento[3] }}</td>
+                    <td class="text-center" style="font-size: 1.2rem;">{{ evento[0] | datetime('%d/%m/%Y') }}</td>
+                    <td class="text-center" style="font-size: 1.2rem;">{{ evento[1] }}</td>
+                    <td class="text-center" style="font-size: 1.2rem;">{{ evento[6] }}</td>
+                    <td class="text-center" style="font-size: 1.2rem;">
+                        <div class="d-flex justify-content-center gap-2">
+                            <form action="{{ url_for('editar_evento', data=evento[0], horario=evento[1]) }}" method="GET">
+                                <input type="hidden" name="data_evento" value="{{ evento[0] }}">
+                                <input type="hidden" name="horario_evento" value="{{ evento[1] }}">
+                                <input type="hidden" name="nome_evento" value="{{ evento[2] }}">
+                                <input type="hidden" name="tipo_evento" value="{{ evento[3] }}">
+                                <input type="hidden" name="cliente_cpf" value="{{ evento[4] }}">
+                                <button type="submit" class="btn btn-primary">Editar</button>
+                            </form>
+                            <form action="{{ url_for('deletar_evento', data=evento[0], horario=evento[1]) }}" method="POST" onsubmit="return confirmCancel('{{ evento[2] }}')">
+                                <input type="hidden" name="data_evento" value="{{ evento[0] }}">
+                                <input type="hidden" name="horario_evento" value="{{ evento[1] }}">
+                                <button type="submit" class="btn btn-danger">Cancelar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <script>
   function confirmCancel(eventName) {
       return confirm("Você tem certeza que deseja cancelar o evento " + eventName + "?");
