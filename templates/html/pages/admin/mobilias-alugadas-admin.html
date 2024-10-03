@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h1 class="text-center">Mobílias alugadas</h1>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
 <div class="container d-flex flex-column align-items-center">
     <div class="w-100 d-flex justify-content-end mb-3">
         <a href="{{ url_for('mobilias_admin') }}" class="btn btn-info">Voltar</a>
@@ -39,6 +40,8 @@
         </table>
     </div>
 </div>
+</div>
+
 <script>
     function confirmDelete() {
         return confirm('Tem certeza que deseja excluir esse aluguel?');
