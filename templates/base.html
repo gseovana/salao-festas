@@ -91,7 +91,7 @@
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-      <div class="modal{{ category }}" tabindex="-1">
+     <!-- <div class="modal{{ category }}" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -101,15 +101,16 @@
             <div class="modal-body">
             {% for message in messages %}
               <p>{{ message }}</p>
-              {% endfor %}
+              {% endfor %}-->
+              <!--
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+             
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     {% endif %}
   {% endwith %}
     
@@ -121,11 +122,11 @@
     <script>
         // Hide flash messages after 5 seconds
         setTimeout(function() {
-            let alert = document.querySelector('.alert');
-            if (alert) {
+            let alerts = document.querySelectorAll('.alert.flash-message');
+            alerts.forEach(function(alert) {
                 alert.classList.remove('show');
                 alert.classList.add('fade');
-            }
+            });
         }, 5000);
     </script>
 

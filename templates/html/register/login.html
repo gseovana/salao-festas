@@ -6,24 +6,28 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
-    <div class="modal{{ category }} mb-4" tabindex="-1"> <!-- Margem inferior adicionada -->
+    <!--<div class="modal{{ category }} mb-4" tabindex="-1"> 
       <div class="modal-dialog">
         <div class="modal-content bg-white rounded shadow p-4" style="border-radius: 15px; max-width: 450px;">
           <div class="modal-header border-0">
-            <h5 class="modal-title text-danger" style="font-weight: bold;">⚠️ Senha Incorreta</h5> <!-- Ícone adicionado -->
+            <h5 class="modal-title text-danger" style="font-weight: bold;">⚠️ Senha Incorreta</h5> 
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
             <p>{{ message }}</p>
-            <p>Tente novamente ou <a href="{{ url_for('cadastrar') }}" class="text-decoration-underline">Cadastre-se</a></p> <!-- Link para cadastro -->
+            <p>Tente novamente ou <a href="{{ url_for('cadastrar') }}" class="text-decoration-underline">Cadastre-se</a></p> 
           </div>
           <div class="modal-footer border-0 d-flex justify-content-center">
             <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>
       </div>
+    </div>-->
+    <div class="alert flash-message alert-{{ category }} mb-4" role="alert">
+      {{ message }}
     </div>
-    {% endfor %}
+
+  {% endfor %}
     {% endif %}
     {% endwith %}
 
@@ -32,15 +36,15 @@
         <h1 class="mb-4">Faça seu Login</h1>
         <div class="mb-3">
           <label for="cpf" class="form-label">CPF:</label>
-          <input type="text" class="form-control rounded" id="cpf" placeholder="CPF" name="cpf">
+          <input type="text" class="form-control rounded" id="cpf" placeholder="CPF" name="cpf" required>
         </div>
         <div class="mb-3">
           <label for="senha" class="form-label">Senha:</label>
-          <input type="password" class="form-control rounded" id="senha" placeholder="Senha" name="senha">
+          <input type="password" class="form-control rounded" id="senha" placeholder="Senha" name="senha" required>
         </div>
         <div class="btn-cadastre d-flex justify-content-between align-items-center mt-3">
-          <button type="submit" class="btn btn-login btn-primary rounded">Entrar</button>
           <a href="{{ url_for('cadastrar') }}" class="btn btn-link">Cadastre-se</a>
+          <button type="submit" class="btn btn-login rounded">Entrar</button>
         </div>
       </fieldset>
     </form>

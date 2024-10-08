@@ -3,6 +3,11 @@
     font-family: "Roboto", sans-serif !important;
   }
 
+.custom-card-header {
+    background-color: #d9863e; /* Custom color */
+    color: black; /* Text color */
+}
+
 .navbar{
     background-color: #ffffff;
     color: #fff;

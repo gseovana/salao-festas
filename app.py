@@ -153,7 +153,7 @@ def login():
         password_file_path = 'instance/passwords.txt'
 
         if not os.path.exists(password_file_path):
-            flash('Erro ao fazer login. Tente novamente!')
+            flash('Erro ao fazer login. Tente novamente!', 'danger')
             return redirect(url_for('login'))
 
         stored_password = None
@@ -165,7 +165,7 @@ def login():
                     break
 
         if stored_password is None or not bcrypt.checkpw(senha.encode('utf-8'), stored_password.encode('utf-8')):
-            flash('Cliente não existe ou credenciais incorretas. Tente novamente!')
+            flash('Credenciais incorretas. Tente novamente!', 'warning')
             return redirect(url_for('login'))
 
         with get_connection() as conn:

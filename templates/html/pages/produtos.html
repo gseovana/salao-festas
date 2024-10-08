@@ -3,7 +3,7 @@
 {% block content %}
 <body>
     <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
-        <div class="w-75">
+        <div class="w-75 m-4">
             <div class="bg-white border p-4 rounded">
                 <h2 class="text-center mb-4">Nossos Kits</h2>
                 <div class="row">
@@ -31,12 +31,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Botão de Voltar -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
+                 <!-- Botão de Voltar -->
+            <div class="d-flex justify-content-between align-items-center mt-2">
                 <a id="redirection" href="{{ url_for('dashboard') }}" class="btn btn btn-login">Voltar</a>
             </div>
+            </div>
+
+           
         </div>
     </div>
 
