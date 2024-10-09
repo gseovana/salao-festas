@@ -2,27 +2,38 @@
 
 {% block content %}
 <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
-<div class="container d-flex justify-content-center mt-5">
-    <form action="{{ url_for('nova_mobilia_admin') }}" method="POST" class="w-50 p-4 border rounded">
-        <h1 class="text-center mb-4">Nova mobília</h1>
-        <div class="form-group mb-3">
-            <label for="quantidade">Quantidade disponível:</label>
-            <input type="number" class="form-control" id="quantidade" name="quantidade" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="tipo_mobilia">Tipo: </label>
+    <div class="container d-flex flex-column justify-content-center mt-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="w-50 mb-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('nova_mobilia_admin') }}" method="POST" class="w-50 p-4 border rounded bg-white shadow">
+            <h1 class="text-center mb-4">Nova mobília</h1>
+            <div class="form-group mb-3">
+                <label for="quantidade">Quantidade disponível:</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="tipo_mobilia">Tipo: </label>
                 <input type="text" class="form-control" id="tipo_mobilia" name="tipo_mobilia" required>
-            </select>
-        </div>
-        <div class="form-group mb-3">
-            <label for="valor">Preço:</label>
-            <input type="text" class="form-control" id="valor" name="valor" required>
-        </div>
-        <div class="d-flex justify-content-between">
-            <a href="{{ url_for('mobilias_admin') }}" class="btn btn-secondary">Voltar</a>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-    </form>
-</div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="valor">Preço:</label>
+                <input type="text" class="form-control" id="valor" name="valor" required>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('mobilias_admin') }}" class="btn btn-secondary">Voltar</a>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<body>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="border p-4" style="width: 100%; max-width: 600px;">
-            <h1 class="text-center">Alugar mobília</h1>
+        <div class="card p-4 shadow" style="width: 100%; max-width: 600px;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="w-100 mb-4">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <h1 class="text-center mb-4">Alugar mobília</h1>
             <form method="POST" action="{{ url_for('nova_mobilia_cliente') }}">
                 <div class="form-group mb-3">
                     <label for="tipo_mobilia">Escolha o tipo:</label>
@@ -29,9 +41,8 @@
             </form>
         </div>
     </div>
-    <script>
-        document.getElementById('data_aluguel').valueAsDate = new Date();
-    </script>
-</body>
-</html>
+</div>
+<script>
+    document.getElementById('data_aluguel').valueAsDate = new Date();
+</script>
 {% endblock %}

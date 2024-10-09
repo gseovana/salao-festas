@@ -2,18 +2,29 @@
 
 {% block content %}
 <div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
-  <div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="container d-flex flex-column align-items-center" style="min-height: calc(100vh - 56px); margin-top: 20px;"> <!-- Adjusted height to account for navbar and added top margin -->
     
-    <div class="card p-5" style="width: 50%;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="alert-container mb-2" style="width: 50%;"> <!-- Set width to match the card and adjusted bottom margin -->
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    
+    <div class="card p-5" style="width: 50%; margin-top: 20px; margin-bottom: 46px;"> <!-- Adjusted top margin to be smaller and bottom margin to be larger -->
       
-     
       {% if evento %}
-        <h1 class="text-center mb-5" style="font-size: 2.5rem;">Atualizar evento</h1>
+        <h1 class="text-center mb-3" style="font-size: 2.5rem;">Atualizar evento</h1>
       {% else %}
-        <h1 class="text-center mb-5" style="font-size: 2.5rem;">Novo evento</h1>
+        <h1 class="text-center mb-3" style="font-size: 2.5rem;">Novo evento</h1>
       {% endif %}
       
-   
       <form action="{{ url_for('novo_evento') }}" method="POST">
         <div class="form-group mb-4">
           <label for="nome_evento" style="font-size: 1.2rem;">Nome</label>
@@ -58,7 +69,6 @@
           </select>
         </div>
 
-    
         <div class="text-end">
           <a href="{{ url_for('eventos_admin') }}" class="btn btn-secondary" style="font-size: 1.1rem;">Voltar</a>
           <button class="btn btn-primary" type="submit" style="font-size: 1.1rem;">Salvar</button>
@@ -66,8 +76,6 @@
       </form>
       
     </div>
-   
-
   </div>
 </div>
 {% endblock %}

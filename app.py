@@ -165,7 +165,7 @@ def login():
                     break
 
         if stored_password is None or not bcrypt.checkpw(senha.encode('utf-8'), stored_password.encode('utf-8')):
-            flash('Credenciais incorretas. Tente novamente!', 'warning')
+            flash('Credenciais incorretas ou cliente não existe. Tente novamente!', 'warning')
             return redirect(url_for('login'))
 
         with get_connection() as conn:
@@ -431,6 +431,37 @@ def cancelar_agendamento():
 
     return redirect(url_for('agendamentos_cliente'))
 
+#DELETAR AGENDAMENTO ADMIN
+@app.route('/admin/agendamentos/deletar', methods=['POST'])
+def cancelar_agendamentos_admin():
+    cpf = session.get('cpf')
+    if not cpf:
+        flash('Você precisa estar logado para acessar esta página.', 'warning')
+        return redirect(url_for('login'))
+
+    data_agendamento = request.form.get('data')
+    hora_agendamento = request.form.get('horario')
+
+    if not data_agendamento or not hora_agendamento:
+        flash('Dados inválidos para cancelar o agendamento.', 'danger')
+        return redirect(url_for('agendamentos_admin'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM visitacao WHERE data=? AND horario=?', (data_agendamento, hora_agendamento))
+            conn.commit()
+
+            if cursor.rowcount == 0:
+                flash('Nenhum agendamento encontrado para deletar.', 'warning')
+            else:
+                flash('Agendamento deletado com sucesso!', 'success')
+    except Exception as e:
+        flash(f"Erro ao deletar agendamento: {e}", 'danger')
+        return redirect(url_for('agendamentos_admin'))
+
+    return redirect(url_for('agendamentos_admin'))
+
 ########################## ROTAS EVENTO ###################################
 
 @app.route('/cliente/eventos', methods=['GET'])
@@ -477,8 +508,7 @@ def novo_evento():
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('login'))
 
-    clientes = get_clientes()  # Ensure clientes is fetched before any potential return
-
+    clientes = get_clientes() 
     if request.method == 'POST':
         data = request.form['data_evento']
         horario = request.form['horario_evento']
@@ -494,9 +524,9 @@ def novo_evento():
                 flash('Evento criado com sucesso!', 'success')
                 return redirect(url_for('eventos_admin'))
         except IntegrityError as e:
-            flash('Conflito detectado: Já existe um agendamento ou evento neste horário.', 'danger')
+                flash(f'Horário indisponível. {e}', 'danger')
         except Exception as e:
-            flash(f'Erro ao criar o evento: {e}', 'danger')
+            flash(f'Erro: {e}', 'danger')
 
     return render_template('html/pages/admin/formulario-evento.html', clientes=clientes)
 
@@ -830,7 +860,10 @@ def nova_mobilia_admin():
                 flash('Mobília criada com sucesso!', 'success')
                 return redirect(url_for('mobilias_admin'))
         except Exception as e:
-            flash(f'Erro ao criar o kit mobília: {e}', 'danger')
+            if e.args[0] == 'UNIQUE constraint failed: mobilia.tipo_mobilia':
+                flash('Tipo de mobília já cadastrado. Tente novamente.', 'danger')
+            else:
+                flash(f'Erro ao criar o kit mobília: {e}', 'danger')
             return redirect(url_for('nova_mobilia_admin'))
 
     try:
@@ -993,19 +1026,26 @@ def excluir_mobilia_cliente(tipo_mobilia):
         with get_connection() as conn:
             cursor = conn.cursor()
             
+            # Fetch the quantity of rented furniture
             cursor.execute('SELECT qtd_alugada FROM cliente_aluga_mobilia WHERE cliente_cpf = ? AND tipo_mobilia = ?', 
                            (session.get('cpf'), tipo_mobilia))
             resultado = cursor.fetchone()
+            print(f'PEQGUEI A QUANTIDADE ALUGADA {resultado}')
             
             if resultado is None:
                 flash('Registro de aluguel não encontrado.', 'danger')
                 return redirect(url_for('mobilias_cliente'))
             
             qtd_alugada = resultado[0]
+            print(f'PEQGUEI A QUANTIDADE ALUGADA {qtd_alugada}')
+
             
+            # Delete the rental record
             cursor.execute('DELETE FROM cliente_aluga_mobilia WHERE cliente_cpf = ? AND tipo_mobilia = ?', 
                            (session.get('cpf'), tipo_mobilia))
+            print(f'DELETEI DO BANCO {qtd_alugada}')
             
+            # Update the quantity of the furniture
             cursor.execute('UPDATE mobilia SET quantidade = quantidade + ? WHERE tipo_mobilia = ?', 
                            (qtd_alugada, tipo_mobilia))
             

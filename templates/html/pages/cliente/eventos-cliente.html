@@ -1,27 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="text-center">Meus eventos</h1>
-<div class="container d-flex flex-column align-items-center">
-    <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Nome</th>
-            <th scope="col" class="text-center">Tipo</th>
-            <th scope="col" class="text-center">Data</th>
-            <th scope="col" class="text-center">Horário</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for evento in eventos %}
-          <tr>
-              <td class="text-center">{{ evento[2] }}</td>
-              <td class="text-center">{{ evento[3] }}</td>
-              <td class="text-center">{{ evento[0] | datetime('%d/%m/%Y') }}</td>
-              <td class="text-center">{{ evento[1] }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container d-flex justify-content-center">
+        <div class="card p-3 shadow" style="width: 90%; max-width: 1200px;">
+            <h1 class="text-center mb-4">Meus eventos</h1>
+            <div class="table-responsive mb-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Nome</th>
+                            <th scope="col" class="text-center">Tipo</th>
+                            <th scope="col" class="text-center">Data</th>
+                            <th scope="col" class="text-center">Horário</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evento in eventos %}
+                        <tr>
+                            <td class="text-center">{{ evento[2] }}</td>
+                            <td class="text-center">{{ evento[3] }}</td>
+                            <td class="text-center">{{ evento[0] | datetime('%d/%m/%Y') }}</td>
+                            <td class="text-center">{{ evento[1] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

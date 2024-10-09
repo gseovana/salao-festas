@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS `cliente_aluga_mobilia` (
     ON UPDATE RESTRICT,
   FOREIGN KEY (`tipo_mobilia`)
     REFERENCES `mobilia` (`tipo_mobilia`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `parceiro` (
@@ -79,7 +79,7 @@ BEFORE INSERT ON evento
 FOR EACH ROW
 BEGIN
   -- Verifica se existe uma visita agendada para o mesmo horário
-  SELECT RAISE(ABORT, 'Conflito de horário: Já existe uma visita agendada neste horário.')
+  SELECT RAISE(ABORT, 'Horário indisponível.')
   WHERE EXISTS (SELECT 1 FROM visitacao WHERE data = NEW.data AND horario = NEW.horario);
 END;
 
@@ -88,7 +88,7 @@ BEFORE INSERT ON visitacao
 FOR EACH ROW
 BEGIN
   -- Verifica se existe um evento agendado para o mesmo horário
-  SELECT RAISE(ABORT, 'Conflito de horário: Já existe um evento agendado neste horário.')
+  SELECT RAISE(ABORT, 'Horário insdisponível.')
   WHERE EXISTS (SELECT 1 FROM evento WHERE data = NEW.data AND horario = NEW.horario);
 END;
 

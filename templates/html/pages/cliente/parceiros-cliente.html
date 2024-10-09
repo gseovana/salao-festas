@@ -1,24 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="text-center">Contate nossos parceiros</h1>
-<div class="container d-flex flex-column align-items-center">
-    <table class="table table">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Nome</th>
-            <th scope="col" class="text-center">Celular</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for parceiro in parceiros %}
-          <tr>
-              <td class="text-center">{{ parceiro[1] }}</td>
-              <td class="text-center">{{ parceiro[2] }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+<div class="bg-img d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container d-flex justify-content-center mt-5 mb-5">
+        <div class="card p-4 shadow" style="width: 90%; max-width: 1200px;">
+            <h1 class="text-center mb-4">Contate nossos parceiros</h1>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Nome</th>
+                            <th scope="col" class="text-center">Celular</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for parceiro in parceiros %}
+                        <tr>
+                            <td class="text-center">{{ parceiro[1] }}</td>
+                            <td class="text-center">{{ parceiro[2] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
 {% endblock %}
-   
