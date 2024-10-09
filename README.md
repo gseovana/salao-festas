@@ -9,7 +9,7 @@ Protótipo do projeto: [Figma](https://www.figma.com/design/3fbXBYaMHcIvfDEajtjQ
 O objetivo geral do software proposto é auxiliar os proprietários do salão no processo de agendamento de visitas, locação e pagamentos. Atualmente esses processos trazem desafios aos donos na gestão do estabelecimento, já que ocorrem inteiramente de forma manual.
 
 ### Diagramas de classe e de atividades
-Os diagramas podem ser visualizados de duas formas, a primeira forma é no final do readme onde vai estar localizado as imagens dos diagramas de classe e os diaggramas de atividades, e a segunda forma é acessando a pasta "Diagramas" localizada na raiz do projeto.
+Os diagramas podem ser visualizados tanto no final do README, quanto na pasta "Diagramas" localizada na razis do projeto.
 
 ### Funcionalidades
 As funcionalidades do sistema incluem:
@@ -127,7 +127,7 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 - Implementar a lógica no backend
 - Integrar frontend e backend 
 
-### Diagrama de atividades
+## Diagramas de atividades
 <div style="display: flex; overflow-x: auto; white-space: nowrap; padding: 10px; gap: 10px;">
   <img src="https://github.com/user-attachments/assets/78e8f1a8-af8a-49ad-aa7d-aaa4f1f70839" width="300" alt="AgendarVisita"/>
   <img src="https://github.com/user-attachments/assets/203e2988-144a-4cb5-9bba-51d38d90f143" width="300" alt="AlterarAgendamentoAdm"/>
