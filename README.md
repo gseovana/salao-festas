@@ -6,6 +6,7 @@
 4. [Membros da equipe e papel](#membros-da-equipe-e-papel)
 5. [Tecnologias utilizadas](#tecnologias-utilizadas)
 6. [Backlog do produto](#backlog-do-produto)
+7. [Backlog da Sprint](#backlog-da-sprint)
 8. [Diagramas](#diagramas)
    - [Diagramas de atividade](#diagramas-de-atividade)
    - [Diagrama de classe](#diagrama-de-classe)
@@ -65,6 +66,73 @@ Vinicius Andrade Costa **(Front-end)**<br/>
 8. Como usuário administrador, gostaria de criar, ler, atualizar e deletar empresas parceiras.
 9. Como usuário administrador, gostaria de gerar relatório dos eventos.
 10. Como usuário administrador, gostaria de gerar relatório de pagamentos.
+
+## Backlog da Sprint
+#### História 1: Como usuário cliente, gostaria de me cadastrar, atualizar meus dados, vê-los e deletar minha conta.
+- Configurar ambientes e instalar bibliotecas
+- Instalar banco de dados e criar as tabelas
+- Testas as rotas da página inicial e de clientes
+- Criar primeira versão tela principal
+- Criar tela de cadastro de cliente
+- Criar telas de CRUD cliente 
+- Implementar lógica do backend
+- Integrar as telas com a lógica do backend
+- Integrar com banco de dados
+  
+#### História 2: Como usuário cliente, gostaria de criar, ler, atualizar e deletar meus agendamentos de visita.
+- Criar rotas de login e de agendamentos de visita
+- Criar tela de login
+- Implementar lógica no backend para logar no sistema
+- Integrar a tela de login com a lógica implementada no backend
+- Adaptar tela inicial para as views de cliente e administrador
+- Criar rotas de agendamento de visita
+- Criar telas de CRUD de agendamentos de visita
+- Implementar lógica de CRUD de agendamentos de visita no backend
+- Integrar as telas de CRUD com a lógica do backend
+- Integrar com o banco de dados
+  
+#### História 3: Como usuário cliente, gostaria de ver o calendário de agendamento de visitas.
+- Criar tela de calendário
+- Implementar no backend a lógica para mostrar os dias e horários com horários ocupados
+- Integrar a tela com a lógica do backend
+- Integrar com o banco de dados
+#### História 4: Como usuário administrador, gostaria de alterar e deletar qualquer agendamento de visita.
+- Criar tela de adiministrar agendamentos de visita
+- Implementar lógica para visualizar, alterar e deletar agendamentos de visita no backend
+- Integrar a tela com a lógica do backend
+- Integrar com o banco de dados
+  
+#### História 5: Como usuário administrador, gostaria de criar, ler, atualizar e deletar eventos.
+- Criar telas de CRUD de evento
+- Implementar lógicas de CRUD de evento no backend
+- Integrar as telas de CRUD com a lógica do backend
+- Integrar com o banco de dados
+  
+#### História 6: Como usuário administrador, gostaria de criar, ler, atualizar e deletar pagamentos.
+- Criar telas de CRUD de pagamento
+- Implementar a lógica de exclusão no backend
+- Integrar as telas com o backend e o banco de dados
+#### História 7: Como usuário administrador, gostaria de criar, ler, atualizar e deletar mobília.
+- Criar telas de CRUD de mobília
+- Criar tela de visualizar todas as mobílias alugadas pelos clientes
+- Implementar a lógica no backend
+- Integrar frontend e backend
+- Integrar com o banco de dados
+#### História 8: Como usuário administrador, gostaria de criar, ler, atualizar e deletar parceiros.
+- Criar telas de CRUD de parceiro
+- Implementar a lógica no backend
+- Integrar frontend e backend
+- Integrar com o banco de dados
+  
+#### História 9: Como usuário administrador, gostaria de gerar relatório dos eventos. 
+- Modificar tela de listar eventos pra exibir opção de relatório
+- Implementar a lógica no backend
+- Integrar frontend e backend
+  
+#### História 10: Como usuário administrador, gostaria de gerar relatório de pagamentos.
+- Modificar tela de listar pagamentos pra exibir opção de relatório
+- Implementar a lógica no backend
+- Integrar frontend e backend 
 
 ## Diagramas
 ### Diagramas de atividade
